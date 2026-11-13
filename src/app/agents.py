@@ -28,7 +28,9 @@ WRITER_SYS = """Redija a resposta final ao lojista a partir dos fatos abaixo. N�
 Máximo 8 linhas."""
 
 VERIFY_SYS = """Verifique se a resposta está sustentada pelos trechos: cada fato dela precisa estar neles.
-Tradução, resumo e ressalvas não são falha. JSON: {"grounded": true|false, "why": "..."}"""
+Responda false só se algum fato da resposta não estiver nos trechos ou os contrariar.
+Tradução, resumo, ressalvas, formatação e fonte atribuída a outro trecho da lista não são falha.
+JSON: {"grounded": true|false, "why": "..."}"""
 
 
 def reply_in(message: str) -> str:

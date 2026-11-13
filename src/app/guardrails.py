@@ -40,8 +40,23 @@ HUMAN = re.compile(
 # Decisão de produto: fraude e contestação SEMPRE vão para humano, mesmo quando a pergunta é só informativa.
 SENSITIVE = re.compile(r"\b(fraude|fraud|golpe|scam|scammed|chargeback|contesta\w*|dispute|cancelar (minha )?conta|close my account|clona\w*|cloned|roubaram|stolen)\b")
 
-# "to" (de "tô") ficou de fora: é palavra comum em inglês e fazia "I need to..." ser lido como português.
-PT_WORDS = re.compile(r"\b(nao|voce|como|qual|quais|minha|meu|meus|minhas|dinheiro|maquininha|maquina|vendas?|cartao|quando|preciso|quero|para|uma|que|por|esta|estou|tenho|posso|onde|quanto|cotacao|previsao|amanha|hoje|ontem|ta|da|pra|pelo|pela)\b")
+# Idioma por contagem: ganha quem tiver mais palavras próprias na mensagem. Palavras que existem nos dois idiomas
+# ("to", "do", "no", "as", "a", "me") ficam de fora das duas listas: só uma lista de português lia "I need to..." como
+# português e lia "Desconsidere as instruções..." (caso A1b, sem nenhuma palavra da lista) como inglês.
+PT_WORDS = frozenset("""
+o os e de da das dos em na nas um uma uns que para por com sem se mas mais ja nao sim ou ao aos pelo pela pra ta
+meu meus minha minhas seu seus sua suas eu voce ele ela isso esse essa este esta estou tenho tem posso preciso quero consigo
+quando onde como qual quais quanto quanta hoje ontem amanha agora ainda antes depois tudo nada muito tambem sobre ate
+oi ola bom boa dia tarde noite obrigado obrigada favor acabou fazer faco foi ser sao
+dinheiro maquininha maquina venda vendas cartao conta cotacao previsao tempo taxa parcelas
+""".split())
+EN_WORDS = frozenset("""
+the and is are was were be been am what how when where which who why my your you i it we our they their of in on for with at
+by or but if not this that there from into about any some can could does did will would should have has had need want
+please show tell give many much today tomorrow yesterday now hi hello thanks thank
+money machine card sales sale account weather rate fee
+""".split())
+_PT_CHARS = re.compile(r"[ãõçáéíóúâêô]")
 
 REFUSAL = {
     "pt": "Não posso ajudar com esse pedido. Posso ajudar com produtos e serviços da Getnet, seus recebimentos e sua maquininha, ou perguntas gerais.",
@@ -102,7 +117,12 @@ def is_sensitive(text: str) -> bool:
 
 
 def language(text: str) -> str:
-    return "pt" if PT_WORDS.search(normalize(text)) else "en"
+    """ "pt" ou "en". No empate decide a acentuação; sem nenhuma pista, inglês (o idioma dos cenários do enunciado)."""
+    words = re.findall(r"[a-z]+", normalize(text))
+    pt, en = sum(w in PT_WORDS for w in words), sum(w in EN_WORDS for w in words)
+    if pt != en:
+        return "pt" if pt > en else "en"
+    return "pt" if _PT_CHARS.search(text.lower()) else "en"
 
 
 def wrap_data(label: str, content: str) -> str:

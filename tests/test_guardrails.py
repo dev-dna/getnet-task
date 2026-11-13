@@ -58,3 +58,5 @@ def test_sensitive_and_language():
     assert g.is_sensitive("clonaram meu cartão") and not g.is_sensitive("qual a taxa da maquininha")
     assert g.language("Quanto tá o euro agora?") == "pt"
     assert g.language("What quality is the printer?") == "en"  # "qual" dentro de "quality" não conta
+    assert g.language("Do I need a bank account to receive my sales via Pix?") == "en"  # "to" não é "tô"
+    assert g.language("Tô sem sinal na maquininha") == "pt"

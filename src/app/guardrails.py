@@ -40,7 +40,8 @@ HUMAN = re.compile(
 # Decisão de produto: fraude e contestação SEMPRE vão para humano, mesmo quando a pergunta é só informativa.
 SENSITIVE = re.compile(r"\b(fraude|fraud|golpe|scam|scammed|chargeback|contesta\w*|dispute|cancelar (minha )?conta|close my account|clona\w*|cloned|roubaram|stolen)\b")
 
-PT_WORDS = re.compile(r"\b(nao|voce|como|qual|quais|minha|meu|meus|minhas|dinheiro|maquininha|maquina|vendas?|cartao|quando|preciso|quero|para|uma|que|por|esta|estou|tenho|posso|onde|quanto|cotacao|previsao|amanha|hoje|ontem|ta|to|da|pra|pelo|pela)\b")
+# "to" (de "tô") ficou de fora: é palavra comum em inglês e fazia "I need to..." ser lido como português.
+PT_WORDS = re.compile(r"\b(nao|voce|como|qual|quais|minha|meu|meus|minhas|dinheiro|maquininha|maquina|vendas?|cartao|quando|preciso|quero|para|uma|que|por|esta|estou|tenho|posso|onde|quanto|cotacao|previsao|amanha|hoje|ontem|ta|da|pra|pelo|pela)\b")
 
 REFUSAL = {
     "pt": "Não posso ajudar com esse pedido. Posso ajudar com produtos e serviços da Getnet, seus recebimentos e sua maquininha, ou perguntas gerais.",

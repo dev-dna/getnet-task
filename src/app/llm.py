@@ -9,6 +9,8 @@ import subprocess
 import tempfile
 from typing import Any
 
+from .guardrails import wrap_data
+
 try:  # fora do Docker (make run, evals) o .env precisa ser lido aqui; variável já definida não é sobrescrita
     from dotenv import load_dotenv
     load_dotenv()
@@ -19,6 +21,7 @@ TIMEOUT_S = float(os.getenv("LLM_TIMEOUT_S", "40"))
 PROVIDER = os.getenv("LLM_PROVIDER", "anthropic")
 MODEL_FAST = os.getenv("MODEL_FAST", "claude-haiku-5-5")
 MODEL_SMART = os.getenv("MODEL_SMART", "claude-sonnet-5-5")
+EXHAUSTED = "Não consegui concluir a consulta."  # o loop de ferramentas acabou sem resposta; o agente trata como falha
 
 _client = None
 
@@ -73,7 +76,8 @@ def _call(handlers: dict, name: str, args: dict) -> str:
         out = handlers[name](**args)
     except Exception as e:  # noqa: BLE001
         out = {"error": str(e)}
-    return json.dumps(out, ensure_ascii=False)
+    # Saída de ferramenta é conteúdo externo (API, página da web): volta ao modelo marcada como dados (D18)
+    return wrap_data("tool_result", json.dumps(out, ensure_ascii=False))
 
 
 def run_tools(system: str, user: str, tools: list[dict], handlers: dict,
@@ -129,7 +133,7 @@ def _run_tools_cli(system, user, tools, handlers, model, max_rounds):
         args = d.get("args") or {}
         called.append(d["tool"])
         user += f"\n\n[chamada já feita] {d['tool']}({json.dumps(args, ensure_ascii=False)}) devolveu:\n{_call(handlers, d['tool'], args)}"
-    return "Não consegui concluir a consulta.", called
+    return EXHAUSTED, called
 
 
 def _run_tools_anthropic(system, user, tools, handlers, model, max_rounds):
@@ -147,7 +151,7 @@ def _run_tools_anthropic(system, user, tools, handlers, model, max_rounds):
                 called.append(b.name)
                 results.append({"type": "tool_result", "tool_use_id": b.id, "content": _call(handlers, b.name, b.input)})
         messages.append({"role": "user", "content": results})
-    return "Não consegui concluir a consulta.", called
+    return EXHAUSTED, called
 
 
 def _run_tools_openai(system, user, tools, handlers, model, max_rounds):
@@ -165,7 +169,7 @@ def _run_tools_openai(system, user, tools, handlers, model, max_rounds):
             called.append(tc.function.name)
             args = json.loads(tc.function.arguments or "{}")
             messages.append({"role": "tool", "tool_call_id": tc.id, "content": _call(handlers, tc.function.name, args)})
-    return "Não consegui concluir a consulta.", called
+    return EXHAUSTED, called
 
 
 class FakeLLM:

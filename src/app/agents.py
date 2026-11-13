@@ -67,9 +67,37 @@ def knowledge(message: str, facts: list[str]) -> AgentResult:
                        evidence=evidence, tool_calls=["retrieve"])
 
 
+def _watch(handlers: dict) -> tuple[dict, list[bool]]:
+    """Embrulha as ferramentas e anota, por chamada, se ela falhou (devolveu {"error": ...} ou levantou exceção)."""
+    failed: list[bool] = []
+
+    def wrap(fn):
+        def inner(**kw):
+            try:
+                out = fn(**kw)
+            except Exception:
+                failed.append(True)
+                raise
+            failed.append(isinstance(out, dict) and "error" in out)
+            return out
+        return inner
+
+    return {name: wrap(fn) for name, fn in handlers.items()}, failed
+
+
+def _tool_failure(text: str, failed: list[bool]) -> str | None:
+    """RF21: sem dado não há resposta confiável. Loop sem resposta, ou todas as chamadas com erro, vira handoff."""
+    if text == llm.EXHAUSTED:
+        return "tool_loop_exhausted"
+    return "tool_failed" if failed and all(failed) else None
+
+
 def general(message: str, facts: list[str]) -> AgentResult:
     defs, handlers, used = tools.bind_general()
+    handlers, failed = _watch(handlers)
     text, called = llm.run_tools(GENERAL_SYS + reply_in(message), wrap_data("message", message), defs, handlers, model=llm.MODEL_FAST)
+    if error := _tool_failure(text, failed):
+        return AgentResult(agent="general", tool_calls=called, error=error)
     return AgentResult(agent="general", facts=[text], tool_calls=called, sources=sorted(set(used)))
 
 
@@ -77,7 +105,10 @@ def support(message: str, user_id: str, facts: list[str]) -> AgentResult:
     if user_id not in tools.merchants():
         return AgentResult(agent="support", error="merchant_not_found")
     defs, handlers = tools.bind(user_id)
+    handlers, failed = _watch(handlers)
     text, called = llm.run_tools(SUPPORT_SYS + reply_in(message), wrap_data("message", message), defs, handlers)
+    if error := _tool_failure(text, failed):
+        return AgentResult(agent="support", tool_calls=called, error=error)
     return AgentResult(agent="support", facts=[text], tool_calls=called)
 
 

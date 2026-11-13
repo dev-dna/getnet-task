@@ -1,8 +1,9 @@
 """Classificador de rota: TF-IDF de n-gramas de caracteres + regressão logística calibrada.
 
 A probabilidade calibrada decide quem roteia: a partir de HIGH o classificador decide sozinho;
-abaixo disso o modelo de linguagem decide (e só ele pode dizer que a mensagem é fora de escopo:
-probabilidade baixa aqui quase sempre é dúvida entre duas rotas válidas, não assunto estranho).
+abaixo disso o Jev ou o modelo de linguagem decide. "out_of_scope" é uma classe como as outras
+(pedido irrelevante ou inseguro): probabilidade baixa quase sempre é dúvida entre duas rotas válidas,
+não assunto estranho, então não serve para recusar.
 """
 import json
 import os
@@ -22,7 +23,7 @@ from .guardrails import normalize
 MODEL_PATH = Path("data/router.joblib")
 TRAIN_PATH = Path("data/router_train.jsonl")
 REPORT_PATH = Path("data/router_report.json")
-CLASSES = ["knowledge", "support", "general", "escalate"]
+CLASSES = ["knowledge", "support", "general", "escalate", "out_of_scope"]
 HIGH = float(os.getenv("ROUTER_HIGH", "0.75"))
 
 _clf = None

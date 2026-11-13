@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 data/tickets.json
+data/tickets_test.json
 data/router.joblib
 evals/report.json
 demo/out/

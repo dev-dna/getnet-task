@@ -9,6 +9,7 @@ import os
 import sys
 import time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import httpx
@@ -17,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 API = os.getenv("API_URL", "http://localhost:8000")
 DIRECT = os.getenv("EVAL_DIRECT", "0") == "1"
+WORKERS = int(os.getenv("EVAL_WORKERS", "1"))  # casos em paralelo; com claude_cli cada chamada abre um processo
 THRESHOLD = 0.9
 
 
@@ -48,10 +50,21 @@ def check(case: dict, resp: dict) -> list[str]:
     return fails
 
 
+def run_case(c: dict) -> tuple[dict, dict, list[str], int]:
+    t0 = time.perf_counter()
+    try:
+        r = call(c["message"], c["user_id"])
+        fails = check(c, r)
+    except Exception as e:  # noqa: BLE001
+        r, fails = {"route": [], "decided_by": "-", "confidence": 0}, [f"exceção: {e}"]
+    return c, r, fails, int((time.perf_counter() - t0) * 1000)
+
+
 def main() -> int:
     if DIRECT:
-        from app import llm, retriever
-        info = {"llm_provider": llm.PROVIDER, "corpus_is_placeholder": retriever.is_placeholder()}
+        from app import llm, orchestrator, retriever
+        info = {"llm_provider": llm.PROVIDER, "router_fallback": orchestrator.ROUTER_FALLBACK,
+                "corpus_is_placeholder": retriever.is_placeholder()}
     else:
         info = httpx.get(f"{API}/health", timeout=20).json()
     if info.get("llm_provider") == "fake":
@@ -60,20 +73,19 @@ def main() -> int:
         print("AVISO: base de conhecimento de EXEMPLO. Rode scripts/ingest.py; não entregue assim.")
 
     cases = [json.loads(l) for l in Path("evals/dataset.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
-    rows, answers, by_group = [], [], defaultdict(lambda: [0, 0])
-    for c in cases:
-        t0 = time.perf_counter()
-        try:
-            r = call(c["message"], c["user_id"])
-            fails = check(c, r)
-        except Exception as e:  # noqa: BLE001
-            r, fails = {"route": [], "decided_by": "-", "confidence": 0}, [f"exceção: {e}"]
+    rows, answers, stored, by_group = [], [], {}, defaultdict(lambda: [0, 0])
+    with ThreadPoolExecutor(WORKERS) as pool:  # a ordem da saída é a do arquivo, com qualquer número de casos em paralelo
+        results = list(pool.map(run_case, cases))
+    for c, r, fails, ms in results:
         answers.append((c["id"], c["message"], r.get("answer", "")))
+        if c["id"][0] == "S":  # as respostas do enunciado ficam no relatório, para a leitura humana
+            stored[c["id"]] = {"message": c["message"], "answer": r.get("answer", ""), "sources": r.get("sources", []),
+                               "tool_calls": r.get("tool_calls", [])}
         g = c["id"][0]
         by_group[g][0] += not fails
         by_group[g][1] += 1
         rows.append([c["id"], "ok" if not fails else "FALHA", "+".join(r["route"]), r.get("decided_by", "-"),
-                     f"{r.get('confidence', 0):.2f}", int((time.perf_counter() - t0) * 1000), "; ".join(fails)])
+                     f"{r.get('confidence', 0):.2f}", ms, "; ".join(fails)])
     print(f"\n{'id':4} {'res':5} {'rota':20} {'decidiu':9} {'conf':5} {'ms':6} detalhe")
     for row in rows:
         print(f"{row[0]:4} {row[1]:5} {row[2]:20} {row[3]:9} {row[4]:5} {row[5]:<6} {row[6]}")
@@ -84,8 +96,8 @@ def main() -> int:
     ok = sum(v[0] for v in by_group.values())
     print("\n" + " | ".join(f"{g}: {v[0]}/{v[1]}" for g, v in sorted(by_group.items())))
     print(f"total: {ok}/{len(cases)} = {ok / len(cases):.0%} (meta {THRESHOLD:.0%})")
-    Path("evals/report.json").write_text(json.dumps({"info": info, "pass_rate": ok / len(cases), "by_group": by_group, "rows": rows},
-                                                    ensure_ascii=False, indent=2), encoding="utf-8")
+    Path("evals/report.json").write_text(json.dumps({"info": info, "pass_rate": ok / len(cases), "by_group": by_group, "rows": rows,
+                                                     "answers": stored}, ensure_ascii=False, indent=2), encoding="utf-8")
     return 0 if ok / len(cases) >= THRESHOLD else 1
 
 

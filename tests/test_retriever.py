@@ -41,6 +41,14 @@ def test_sample_corpus_is_flagged():
         assert retriever.is_placeholder()
 
 
+def test_comparison_brings_the_section_about_each_product():
+    """S1: sem a busca por produto, 'clássica' (palavra rara) levava todos os trechos e a Get Smart ficava sem descrição."""
+    if retriever.is_placeholder():
+        pytest.skip("base de exemplo: rode scripts/ingest.py")
+    titles = [normalize(c["title"]) for c in retriever.retrieve("What's the difference between the Get Clássica and the Get Smart?")]
+    assert any("get classica" in t for t in titles) and any("get smart" in t for t in titles)
+
+
 @pytest.mark.parametrize("case_id,question,must_find", SCENARIOS, ids=[s[0] for s in SCENARIOS])
 def test_challenge_scenarios_reach_their_source(case_id, question, must_find):
     if retriever.is_placeholder():

@@ -35,6 +35,7 @@ ao aos as com como da das de do dos e ela ele em entre essa esse esta este eu fo
 no nos o os ou para pela pelo por pra qual quais quando que se sem ser seu seus sim sua suas tambem tem ter um uma umas uns voce
 """.split())
 _WIFI = re.compile(r"wi[\s\-‑]fi")  # os manuais escrevem "Wi-Fi"; sem isto vira "wi" + "fi" e não casa com "wifi"
+PRODUCTS = ("classica", "smart", "mini", "tap")  # maquininhas Get Clássica, Get Smart, Get Mini e Get Tap
 _index = None
 _docs: list[dict] = []
 _placeholder = False
@@ -66,11 +67,33 @@ def is_placeholder() -> bool:
     return _placeholder
 
 
-def retrieve(query: str, k: int = 5) -> list[dict]:
-    """Devolve até k trechos com alguma palavra em comum, do mais para o menos pontuado, em qualquer idioma."""
+def _rank(query: str) -> list[tuple[int, float]]:
+    """(posição na base, pontuação) do mais para o menos pontuado."""
     index, docs = load()
     scores = index.get_scores(tokenize(expand(query)))
     order = [i for i in sorted(range(len(docs)), key=lambda i: -scores[i]) if scores[i] > 0]
     if order:  # corta trecho que só encostou numa palavra: fica quem tem ao menos 35% da pontuação do melhor
         order = [i for i in order if scores[i] >= 0.35 * scores[order[0]]]
-    return [dict(docs[i], score=round(float(scores[i]), 2)) for i in order[:k]]
+    return [(i, float(scores[i])) for i in order]
+
+
+def retrieve(query: str, k: int = 5) -> list[dict]:
+    """Devolve até k trechos com alguma palavra em comum, do mais para o menos pontuado, em qualquer idioma.
+
+    Pergunta que cita dois ou mais produtos ("Get Clássica ou Get Smart?"): o nome mais raro levava todos os trechos
+    e o outro produto ficava sem descrição (S1). Nesse caso há uma busca por produto, intercalada com a da pergunta.
+    """
+    _, docs = load()
+    lists = [_rank(query)]
+    named = [p for p in PRODUCTS if p in tokenize(query)]
+    if len(named) >= 2:
+        for p in named:  # primeiro os trechos cujo título é o produto: são a seção que o descreve
+            lists.append(sorted(_rank("get " + p), key=lambda hit: p not in tokenize(docs[hit[0]]["title"])))
+        k = max(k, 2 * len(lists))
+    seen, out = set(), []
+    for pos in range(max(map(len, lists))):
+        for ranked in lists:
+            if pos < len(ranked) and ranked[pos][0] not in seen:
+                seen.add(ranked[pos][0])
+                out.append(dict(docs[ranked[pos][0]], score=round(ranked[pos][1], 2)))
+    return out[:k]

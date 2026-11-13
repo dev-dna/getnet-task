@@ -78,7 +78,8 @@ def handle(req: ChatRequest) -> ChatResponse:
             route.append(step.agent)
             if step.agent == "knowledge":
                 r = agents.knowledge(msg, facts)
-                if not r.error and not agents.verify(r.facts[0], r.evidence):
+                # fatos dos agentes anteriores (dados da conta) também sustentam a resposta, além dos trechos da base
+                if not r.error and not agents.verify(r.facts[0], r.evidence + facts):
                     r = AgentResult(agent="knowledge", tool_calls=r.tool_calls, error="ungrounded_answer")
             elif step.agent == "support":
                 r = agents.support(msg, req.user_id, facts)

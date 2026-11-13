@@ -42,7 +42,7 @@ def route_llm(message: str, candidates: list[str]) -> Plan:
 
 
 def knowledge(message: str, facts: list[str]) -> AgentResult:
-    chunks = retriever.retrieve(message, k=5, lang=language(message))
+    chunks = retriever.retrieve(message, k=5)
     if not chunks:
         return AgentResult(agent="knowledge", tool_calls=["retrieve"], error="no_chunks")
     ctx = "\n\n".join(f"[{c['url']}] {c['title']}\n{c['text']}" for c in chunks)

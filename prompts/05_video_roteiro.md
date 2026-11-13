@@ -1,43 +1,97 @@
-# Vídeo (12 min) — roteiro com as falas
+# Vídeo — roteiro com as falas (alvo 13 min, limite 15)
 
-Trocar cada [número] pelo valor do arquivo indicado. Não falar número que não esteja num arquivo do repositório.
+O enunciado pede que o vídeo mostre três coisas: **seu raciocínio, as decisões de arquitetura e como a orquestração funciona**.
+É uma apresentação da solução, não uma leitura do código. Código na tela: só o `orchestrator.py`. Sistema rodando: uns 3 minutos.
 
-## 0:00–1:00 — O que foi pedido
-"O desafio pede três agentes que cooperam, uma API, Docker, e desenvolvimento guiado por especificação em 60 minutos. Vou mostrar primeiro o histórico, depois o fluxo, depois os números."
+Regra: fale só o que é verdade no repositório. Cada número abaixo tem o arquivo de onde saiu; confira antes de gravar.
 
-## 1:00–3:00 — Histórico (terminal)
-`git log --date=format:%H:%M --format='%ad %s'`
-"Aqui começa a sessão e aqui termina. A especificação entra antes do código. Cada commit fecha uma tarefa do tasks.md. O que eu trouxe pronto de antes está listado na tarefa T00 e no README."
+## Antes de gravar
+1. `make setup` e `make test` (120 testes passam).
+2. Suba a API com respostas de verdade: `make run-cli` (usa o Claude Code logado na máquina) ou Docker com chave real no `.env`.
+3. Abra `http://localhost:8000/docs` e rode um exemplo para aquecer.
+4. Leia as 10 respostas do grupo S (`make eval-cli` imprime; também estão em `evals/report_claude_cli.json`, campo `answers`). Só diga "eu li as respostas" se leu.
+5. Deixe abertos: terminal com `git log --oneline --reverse`, `specs/review.md`, `src/app/orchestrator.py`, `data/router_report.json`, o Swagger.
+6. Ensaie uma vez com cronômetro. Com `make run-cli` cada resposta leva de 10 a 35 segundos: fale enquanto espera.
 
-## 3:00–5:00 — Fluxo (orchestrator.py aberto)
-"A mensagem passa por cinco etapas. Primeiro, mascaro CPF e cartão e bloqueio tentativa de manipulação com regras fixas, sem gastar modelo. Depois decido a rota. Depois os agentes rodam, cada um só com as ferramentas dele. A resposta do agente de conhecimento é verificada contra os trechos que ele usou. Qualquer falha vira chamado para humano, nunca erro 500."
+## 0:00–0:45 — Abertura
+"O desafio pede um sistema com pelo menos três agentes que cooperam: um roteador, um agente de conhecimento com busca na base da Getnet e um agente de suporte com ferramentas. Mais uma API, Docker e desenvolvimento guiado por especificação. Vou mostrar como foi feito, como a mensagem percorre o sistema, o sistema rodando e o que ficou de fora."
 
-## 5:00–7:30 — Roteamento em cascata (a parte mais importante)
-"Rotear é uma decisão, não um texto. Então eu não começo pelo modelo de linguagem. Uso uma cascata do mais barato para o mais caro, e cada degrau só entra quando o anterior não tem certeza."
+## 0:45–2:45 — Como foi feito (terminal com `git log --oneline --reverse`, depois `specs/review.md`)
+"Vou ser direto sobre o processo. Usei o Claude Code como ferramenta de desenvolvimento, e o histórico mostra cinco etapas."
+1. "Um esqueleto que eu já tinha, anterior à especificação. Está no primeiro commit, T00, e declarado no README."
+2. "Correções guiadas pela avaliação: cada commit cita o cenário que falhou."
+3. "A especificação: 22 requisitos funcionais e 13 não funcionais, cada um ligado a uma frase do enunciado, e uma lista de 19 pontos em que o código não cumpria o enunciado." (`specs/spec.md`, `specs/plan.md`)
+4. "Uma revisão por um agente sem nenhum contexto, que leu só a especificação. Ele reprovou: a especificação não decidia quem responde perguntas gerais. Corrigi os quatro pontos bloqueantes." (mostrar `specs/review.md`)
+5. "A partir daí, cada mudança de código cita o requisito que fecha. Exemplo: `fix(RF18)`."
 
-1. "Regras: fraude e pedido de humano vão direto para o atendente."
-2. "Classificador local, treinado por mim: custo zero, um milissegundo. Ele só decide quando a probabilidade passa de 0,75."
-3. "Jev, da TypeSafe: um modelo que só decide, não escreve. Devolve a opção e a probabilidade de cada uma. Entra nos casos em que o classificador ficou em dúvida."
-4. "Modelo de linguagem: último recurso, quando o Jev também não tem certeza ou está fora do ar."
+"A especificação veio depois do esqueleto, não antes. Se eu começasse hoje, ela seria o primeiro commit."
 
-Mostrar `data/router_report.json`:
-"Meu primeiro número era 98,7% e estava errado: frases quase iguais caíam no treino e no teste. Separando por molde, o classificador acerta [accuracy_all]. Mas quando ele decide sozinho acerta [decides_alone.accuracy], e isso cobre [decides_alone.share] das mensagens."
+## 2:45–5:00 — Arquitetura e fluxo (`src/app/orchestrator.py`)
+"Toda mensagem entra por uma função só, de umas cem linhas."
+- "Primeiro mascaro cartão, CPF, CNPJ, e-mail e telefone, e barro tentativa de manipulação com regras fixas, sem chamar modelo."
+- "Depois o roteador devolve um plano: um agente ou uma sequência de agentes."
+- "Os agentes rodam em ordem. Cada um recebe a mensagem original e os fatos que os anteriores encontraram."
+- "A resposta do agente de conhecimento passa por um verificador, que confere se cada fato está nos trechos usados."
+- "Qualquer erro vira chamado para um humano, com protocolo. Nunca erro 500."
 
-Mostrar `evals/router_comparison.json` (saída de `make compare`):
-"Nas mesmas [n] mensagens, que não estão no treino: classificador [x], Jev [y], modelo de linguagem [z], cascata [w]. Latência mediana e custo de cada um estão na tabela. São poucos casos; serve para escolher o padrão, não é prova estatística."
+"Os agentes se comunicam por chamada de função, trocando dois objetos tipados: o plano do roteador e o resultado de cada agente. Não usei framework de agentes porque o fluxo tem no máximo três passos: assim ele cabe numa função que se lê de cima a baixo e se testa com um modelo falso."
 
-"Limitação que eu encontrei: o Jev não tem resposta 'nenhuma das opções'. Por isso 'fora de escopo' é uma opção escrita por mim. E a documentação não fala de português, então eu medi."
+"Uma diferença para o enunciado: ele coloca a busca web dentro do agente de conhecimento. Eu separei. O agente de conhecimento só responde com trechos da base; clima, câmbio e busca web ficam num agente geral. Assim uma resposta sobre produto nunca mistura fonte da web."
 
-## 7:30–9:30 — Rodando (terminal, ou tocar demo/out/demo.mp4 e narrar por cima)
-`docker compose up -d && python evals/run.py`
-Comentar: S3 (suporte chama a ferramenta de repasses), S5 (sequência suporte → conhecimento), A1 (ataque bloqueado sem modelo), B1 (parece ataque e passa), A2 (não dá para ver dados de outro lojista), A4 (humano com protocolo).
-"Olhem o campo decided_by em cada resposta: ele diz qual degrau da cascata decidiu."
+## 5:00–7:00 — Roteamento em cascata (`data/router_report.json`)
+"Rotear é uma decisão, não um texto. Por isso não começo pelo modelo de linguagem: uso uma cascata do mais barato para o mais caro, e cada degrau só entra quando o anterior não tem certeza."
+1. "Regras: fraude, contestação e pedido de atendente vão direto para um humano."
+2. "Um classificador treinado dentro do projeto, com cinco classes: os quatro agentes e 'fora de escopo'. Ele só decide com probabilidade de 0,75 ou mais."
+3. "O Jev, um modelo de decisão. Está implementado e testado com respostas simuladas. Eu não o chamei com chave real, então não afirmo nada sobre o desempenho dele. Se falhar, o fluxo segue."
+4. "O modelo de linguagem, por último."
 
-## 9:30–10:30 — Base de conhecimento
-"As fontes estão em data/sources.txt: páginas e PDFs oficiais. Busca por palavras com um glossário inglês–português. Escolhi não usar vetores para caber no tempo; está nos próximos passos. Se a base não tem a resposta, o agente devolve NOT_FOUND e o caso vai para humano em vez de inventar."
+"Os números: 1.288 frases de 322 moldes. O classificador acerta 87,0% no geral. Decide sozinho em 50,9% das frases, e nessas acerta 98,8%. Separei treino e teste por molde, porque variações da mesma frase nos dois lados inflam o resultado."
 
-## 10:30–11:15 — Segurança
-"O modelo nunca escolhe o user_id: ele vem da requisição e fica preso no código das ferramentas. Tudo que vem de fora entra no prompt marcado como dado."
+"Um exemplo da especificação guiando o código: ela apontou que o classificador não sabia dizer 'fora de escopo', e 'Conte uma piada' abria chamado humano. O commit `fix(RF18)` criou a quinta classe. O custo: ele passou a decidir sozinho em menos mensagens."
 
-## 11:15–12:00 — O que ficou de fora
-"O eval confere rota, ferramenta e vazamento; a correção do texto eu li à mão. Dados do lojista são simulados. Com mais uma semana: vetores na busca, limiares calibrados com conversas reais e chamados numa fila."
+"O campo `decided_by` de cada resposta mostra qual degrau decidiu."
+
+## 7:00–10:00 — Sistema rodando (Swagger, `POST /chat` → Examples)
+Em cada resposta, aponte `route`, `decided_by`, `tool_calls` e `sources`.
+1. **S3** (quando cai o dinheiro): "Rota suporte. O agente chamou a ferramenta de repasses. Os valores são dados simulados."
+2. **S5** (maquininha não conecta): "Dois agentes em sequência, decididos por regra: o suporte vê que a máquina está offline com sinal fraco, e o conhecimento traz o passo a passo dos manuais, com as fontes."
+3. **S9** (parcelas no crediário): "Rota conhecimento. A resposta cita o folheto oficial do Crediário."
+4. **A1** (ignore as instruções): "Bloqueado pelo filtro, em zero milissegundo, sem chamar modelo."
+5. **A4** (quero um atendente): "Passagem para humano, com número de protocolo."
+6. Digite **"Conte uma piada"**: "Fora de escopo, decidido pelo classificador. Nenhum agente roda e nenhum chamado é aberto."
+7. Se sobrar tempo, **A2** (vendas de outro cliente): "O agente não consegue: as ferramentas só enxergam a conta de quem fez a requisição."
+
+## 10:00–11:30 — Base de conhecimento (`data/sources.txt`)
+"São 502 trechos de 64 fontes: os manuais da Get Smart e da Get Clássica, o folheto do Crediário, páginas de ajuda da Getnet do Brasil e o site em inglês. O texto fica no repositório, então o contêiner sobe sem depender do site."
+
+"A busca é por palavras, com um glossário inglês–português, porque os cenários são em inglês e os produtos do Brasil só existem em páginas em português. Não usei vetores: evita um modelo e um serviço a mais. O preço é perder sinônimos fora do glossário."
+
+"O defeito mais útil que eu achei: com a base real, a busca punha primeiro os trechos no idioma da pergunta e escondia a página certa em português. Medi nos seis cenários de produto, corrigi e deixei um teste para cada um."
+
+"Se os trechos não respondem, o agente devolve NOT_FOUND e o caso vai para um humano, em vez de inventar."
+
+## 11:30–12:30 — Segurança e confiabilidade
+"O modelo nunca escolhe o `user_id`: ele vem da requisição e fica preso no código das ferramentas. Cada agente só recebe as próprias ferramentas. Tudo que vem de fora, incluindo o resultado das ferramentas, entra no prompt marcado como dado."
+
+"Se uma API externa cai, há novas tentativas; se todas falham, o caso vira chamado, não uma resposta sem dado."
+
+## 12:30–13:30 — Testes e avaliação (`evals/report_claude_cli.json`)
+"São 120 testes que rodam sem chave, com um modelo falso que só confere o encanamento. A avaliação tem 30 casos em cinco grupos: os dez do enunciado, as mesmas perguntas com outra redação, ataques, perguntas legítimas que parecem ataque e usuário desconhecido."
+
+"Com modelo real passaram 29 de 30, e os dez do enunciado passaram. O que falha é 'a máquina tá recusando tudo desde cedo': o agente de conhecimento não acha resposta na base e o caso vai para um humano."
+
+"A avaliação confere rota, ferramenta, vazamento de dados e passagem para humano. Ela não confere se o texto está certo: isso eu li." (só se leu)
+
+## 13:30–14:30 — O que ficou de fora
+"O que eu não verifiquei: a avaliação com modelo real rodou pelo Claude Code em linha de comando. Os provedores da Anthropic e do OpenRouter estão implementados, mas não foram executados com chave real, e o Jev também não. A busca web funcionou numa execução e falhou em outra."
+
+"Limitações: os dados do lojista são simulados, os chamados ficam num arquivo e não há autenticação."
+
+"Com mais tempo: rodar com chave real e comparar os roteadores, busca com vetores junto com a busca por palavras, e a especificação antes do primeiro commit."
+
+## Perguntas prováveis na entrevista, e onde está a resposta
+- Por que não LangGraph ou outro framework? `specs/plan.md`, decisão D02.
+- Por que não vetores? `specs/plan.md`, decisão D05; README, seção 12.
+- Como você sabe que o classificador não está inflado? README, seção 4; `data/router_report.json`.
+- O que acontece se o provedor do modelo cair? `tests/test_orchestrator.py::test_provider_failure_becomes_handoff_not_http_500`.
+- O que a especificação mudou no código? `specs/review.md`, seção 3.

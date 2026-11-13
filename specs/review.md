@@ -31,3 +31,6 @@ Each commit cites the requirement or gap it closes.
 | G19 | RF14 | `8b98c42` | Language by word count for Portuguese and English; A1b gets its refusal in Portuguese. |
 | G10 (report) | RNF08 | `00d490c` | `evals/run.py` writes the stored report format and runs cases in parallel. |
 | found by G14 | RF08 | `9a674bd` | A rate-limited external API is tried again before the tool fails (S2). |
+| G12 | RF18 | `7d087c4`, `cac01eb` | The classifier has a fifth class, `out_of_scope`; a joke or a request to attack a card machine is declined instead of reaching an agent or opening a ticket. |
+
+After these commits: 120 tests pass and `make eval-cli` gives 29 of 30 (`evals/report_claude_cli.json`); H6 still ends in a handoff after the knowledge step (G09).

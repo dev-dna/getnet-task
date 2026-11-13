@@ -101,3 +101,4 @@ The code of every task below already existed in the skeleton commit `519f83b`; n
 - done: T01, T03, T05, T06, T07, T08, T09, T10.
 - partial: T02, T04, T11, T12. What is missing needs a real credential (T02, T11, T12) or a Docker daemon (T04), plus the reading of the S answers and the README review in T12.
 - Finishing these tasks does not close G01, G05, G07, G09 and G12 to G19: they are differences between the statement, or the project rules, and the existing design or behavior, outside every done-criterion above. G06 also needs the video.
+- After this check: the review of `specs/review.md` (`855d670`) and the gap commits `f9ce408` (G14), `8b98c42` (G19), `00d490c` (G10), `9a674bd` (S2), `7d087c4` and `cac01eb` (G12). The suite has 120 tests at `cac01eb`, and `make eval-cli` gives 29/30 (H6 fails, G09).

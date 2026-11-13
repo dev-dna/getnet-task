@@ -93,18 +93,18 @@ Confusion matrix, all sentences, no threshold (row = true class, column = predic
 | out_of_scope | 21 | 0 | 0 | 1 | 266 | 92.4% |
 
 - `escalate` has the lowest recall. Rule 1 of the flow (fraud, dispute, request for a human) runs before the classifier and covers cases A4 and A5.
-- On the 30 cases of `evals/report_claude_cli.json` (`ROUTER_FALLBACK=llm`) the route was decided by: classifier 12, language model 13, rule 3, guardrail 2.
+- On the 30 cases of `evals/report_claude_cli.json` (`ROUTER_FALLBACK=llm`, five-class classifier) the route was decided by: classifier 13, language model 12, rule 3, guardrail 2.
 - Not measured: the Jev step, and the comparison classifier × Jev × language model × cascade (gaps G03, G04).
 
 ## 4. Evaluation with a real model
 
-Source: `evals/report_claude_cli.json` (commit `a2bbfea`), provider `claude_cli`, `corpus_is_placeholder: false`. Not re-run for this plan.
+Source: `evals/report_claude_cli.json`, written by `make eval-cli` on the code of `cac01eb`, after the gap commits of section 5; provider `claude_cli`, `corpus_is_placeholder: false`. The run before them (commit `a2bbfea`) also gave 29/30.
 
 | Group | S | H | A | B | U | Total |
 |---|---|---|---|---|---|---|
 | Passed | 10/10 | 7/8 | 7/7 | 4/4 | 1/1 | 29/30 = 96.7% |
 
-Latency of the 26 cases that called a model: median 12.5 s, from 5.3 s (U1) to 40.7 s (S5). Each model call starts one `claude -p` process.
+Latency of the 25 cases that called a model: median 12.9 s, from 4.5 s (U1) to 33.5 s (S5). Each model call starts one `claude -p` process.
 
 ## 5. Gaps
 
@@ -112,7 +112,7 @@ Not met, or not verified. "For this plan" means a check run on 2026-11-13 on the
 
 Checked and not a gap (RF06): `scripts/ingest.py` was re-run (exit 0, 502 passages, 64 sources). `https://www.getnet.net/` returns 2 passages equal to passages of `https://www.getnet.net/en`, so de-duplication stores them under the `/en` URL.
 
-- G01 (RF07). The web search tool belongs to a separate `general` agent; `knowledge` has only `retrieve`. No eval case and no agent-level test calls `web_search`; only `scripts/smoke_tools.py` does. It returned results for this plan and none in the run reported in README section 8.
+- G01 (RF07). Resolved in the spec as a normative split after the review (`855d670`): `general` owns web search and non-Getnet facts, `knowledge` only retrieves. It remains a deviation from the statement's wording, which places the web search tool inside the Knowledge Agent. No eval case and no agent-level test calls `web_search`; `scripts/smoke_tools.py` got results from it in one run and none in another.
 - G02 (RNF11). Providers `anthropic` and `openrouter` were never run with real credentials. The real-model evaluation used `LLM_PROVIDER=claude_cli`, where a tool call is JSON inside the text, so the tool-call formats of both APIs and the model names in `.env.example` are untested. `scripts/smoke_llm.py` was not run.
 - G03 (RF04). The Jev step was never called with a real key (`scripts/smoke_jev.py` not run); `tests/test_jev.py` uses a simulated response in the documented format. `.env.example` sets `LLM_PROVIDER=openrouter` and `ROUTER_FALLBACK=jev`: the default container configuration is the unverified one.
 - G04 (RNF08). `make compare` was not run and `evals/router_comparison.json` does not exist. Cost and latency of the cascade against a language-model-only router are not measured; D08 rests on the cross-validation of section 3.
@@ -121,7 +121,7 @@ Checked and not a gap (RF06): `scripts/ingest.py` was re-run (exit 0, 502 passag
 - G07 (RNF12). These spec files were written after the skeleton; the code was not derived from them. `specs/tasks.md` records what was verified, not what was built from the spec.
 - G08 (RNF01). `docker compose build` was not run for this plan (no Docker daemon). README section 8 reports a build and a run of the container with the fake model and a base image from a registry mirror; no build log is in the repository. `claude_cli` does not work inside the image, so no run of the container with a real model is recorded. The 99 tests were run for this plan on Python 3.13, not on the 3.12 of D01.
 - G09 (RNF08, RF05). H6 fails: route `["support","knowledge","escalate"]`, the knowledge step ended in handoff. B1 passes its check (`route not ["guardrail"]`) but its route is `["knowledge","escalate"]`: a request for update instructions gets a ticket, not an answer.
-- G10 (RNF08). The only real-model path, `make eval-cli`, sets `EVAL_DIRECT=1`: the orchestrator is called in process, and the HTTP layer is covered only by fake-model tests. The stored report has fields (`answers`, `info.router_fallback`) that `evals/run.py` does not write in that mode, so the repository cannot reproduce the file as stored. README section 8 reports three runs (30, 28 and 29 of 30); only the last is stored.
+- G10 (RNF08). Closed in part by `00d490c`: `evals/run.py` now writes the stored report (`answers`, `info.router_fallback`), so `make eval-cli` reproduces the file. Still open: that path sets `EVAL_DIRECT=1`, the orchestrator is called in process, and the HTTP layer is covered only by fake-model tests and by the container run reported in README section 8.
 - G11 (RNF08). No record of a person reading the ten S answers. Spot check for this plan: the figures of the S1 and S9 answers are in passages of `data/corpus.jsonl` from URLs listed in `sources`; in S1 one figure is attributed inline to a different URL of that list. S2 to S8 and S10 were not checked.
 - G12 (RF18). Fixed in part on 2026-11-13. Before, only the Jev and language-model steps could answer "out of scope": the classifier had four classes, so "Conte uma piada" went to `escalate` at 0.95 (a ticket) and "How do I hack a card machine to steal card numbers?" to `knowledge` at 0.80. Now the classifier has a fifth class, `out_of_scope`, with 72 templates (jokes, recipes, homework, coding, creative writing, horoscope, small talk; cloning or stealing cards, hacking a card machine, fraud, getting around limits). At 0.75 or more `plan_for` returns a plan with no steps: the fixed out-of-scope text, no agent. `route_llm` returns the same empty plan when the model call fails and `out_of_scope` is the classifier's first guess, or when the model names it as an agent. Measured with `router_clf.predict`: the joke → `out_of_scope` 0.89, the hack sentence → `out_of_scope` 0.84, A6 → `out_of_scope` 0.83; no S or H case is `out_of_scope` at 0.75 or more. Templates paraphrase the two sentences, so they do not measure generalization; section 3 does. Sports results stay in `general`, where a template already had them. 12 `knowledge` and 2 `escalate` templates were added at the boundary (cancel or refund a sale, bank details, password, sales limit, card data; a merchant whose account was hacked): without them such legitimate questions scored `out_of_scope` at 0.60 to 0.74. What remains:
   - Cost. On the 1000 sentences of the four agent classes the classifier decides alone on 50.2% (before: 61.8% of 944), so more messages pay for the next step. The split seed moves the share over all sentences: 46.9% to 51.6% in five seeds (before: 54.3% to 61.8%).
@@ -131,9 +131,9 @@ Checked and not a gap (RF06): `scripts/ingest.py` was re-run (exit 0, 502 passag
   - The evaluation with a real model (section 4) was not re-run with the five-class classifier.
   - The injection list is unchanged (G13).
 - G13 (RF17). Injection detection is a fixed list of Portuguese and English patterns. Other phrasings reach the model, where only D17, D18 and D19 apply. Measured only on A1, A1b and the lists in `tests/test_guardrails.py`.
-- G14 (RF21, RNF07). `verify()` returns true when the verifier call itself fails. `general` never sets `AgentResult.error` and `support` sets it only for an unknown user: a tool that returns `{"error": ...}` or a tool loop that ends without an answer does not cause a handoff.
+- G14 (RF21, RNF07). Second half closed by `f9ce408` and `9a674bd`: a tool loop without an answer, or a run where every tool call failed (after retries on 429 and 5xx), sets `AgentResult.error` in `general` and `support` and becomes a handoff. Still open, accepted: `verify()` returns true when the verifier call itself fails.
 - G15 (RF04). `support` and `general` receive `facts` but do not use them; only `knowledge` and `write_final` read facts of earlier agents.
 - G16 (RNF10). Observability is one log line per request and `/health`. No metrics endpoint, token or cost count, dashboard or alert exists; README section 8 describes the dashboards and alerts that would be built. Latency is measured only through `claude_cli` (section 4).
 - G17 (RF11). `user_id` is trusted as sent; the statement defines no authentication and none exists.
 - G18 (RF12). No state between requests, yet the S5 and S8 answers in the report offer a follow-up (S5: "Just tell me the priority you'd like") that a later message cannot refer to.
-- G19 (RF14). No eval case checks the language of the answer. Detection is a list of Portuguese words: `guardrails.language` returns `en` for A1b, a Portuguese message, so its refusal is written in English; the same happens for "Boa tarde, a bobina acabou".
+- G19 (RF14). Closed by `8b98c42`: language is decided by counting words of a Portuguese and an English list; A1b and "Boa tarde, a bobina acabou" are detected as Portuguese, and all 30 eval messages get their language. Still open: no eval case checks the language of the answer text, and a message with no word of either list defaults to English.

@@ -53,8 +53,9 @@ make eval-cli   # the 30 evaluation cases, in process, and the answers of groups
 - Configuration, all in `.env`: `LLM_PROVIDER` (`openrouter`, `anthropic`, `claude_cli`, `fake`), `MODEL_FAST`, `MODEL_SMART`, `ROUTER_FALLBACK` (`jev` or `llm`), `ROUTER_HIGH` (0.75), `JEV_MIN` (0.5), `JEV_MODEL`, `LLM_TIMEOUT_S` (40), `TICKETS_PATH`. `GET /health` returns the provider, the router fallback, the chunk count and `corpus_is_placeholder` (false in this repository). `.env.example` sets `ROUTER_FALLBACK=jev`, which uses the OpenRouter key. The Jev step was not run against the real endpoint (section 8); a failed Jev call falls through to the LLM router. Set `ROUTER_FALLBACK=llm` to skip it; with the `anthropic` provider Jev has no key unless `OPENROUTER_API_KEY` or `JEV_API_KEY` is also set.
 
 ## 3. Architecture
+Diagrams of the request flow and of the routing cascade, and where a queue would enter in production: [`docs/architecture.md`](docs/architecture.md).
 ```text
-POST /chat -> orchestrator.handle(req)                            src/app/orchestrator.py, 98 lines
+POST /chat -> orchestrator.handle(req)                            src/app/orchestrator.py, 100 lines
  1 guardrails.mask(message)     card (Luhn), CPF, CNPJ, e-mail and phone become placeholders
  2 detect_injection(msg)        match -> fixed refusal, route ["guardrail"], no model call
  3 plan_for(msg) -> Plan        rules -> local classifier -> Jev (optional) -> LLM router; no steps -> out-of-scope text

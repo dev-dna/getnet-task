@@ -70,3 +70,28 @@ def test_external_failure_returns_error_not_exception(monkeypatch):
 
     monkeypatch.setattr(httpx, "get", boom)
     assert "error" in tools.weather("Porto Alegre") and "error" in tools.fx_rate("EUR-BRL")
+
+
+def test_rate_limited_api_is_tried_again_before_failing(monkeypatch):
+    """S2: a Open-Meteo devolve 429 de vez em quando; a segunda tentativa resolve sem virar handoff."""
+    calls = []
+
+    def flaky_get(url, **kw):
+        calls.append(url)
+        req = httpx.Request("GET", url)
+        if len(calls) == 1:
+            return httpx.Response(429, request=req)
+        if "geocoding" in url:
+            return httpx.Response(200, request=req, json={"results": [{"name": "Porto Alegre", "latitude": -30.03, "longitude": -51.23}]})
+        return httpx.Response(200, request=req, json={"daily": {"time": ["d0", "d1"], "temperature_2m_max": [20, 25],
+                                                                 "temperature_2m_min": [10, 15], "precipitation_probability_max": [5, 60]}})
+
+    monkeypatch.setattr(httpx, "get", flaky_get)
+    monkeypatch.setattr(tools.time, "sleep", lambda s: None)
+    assert tools.weather("Porto Alegre")["t_max_c"] == 25 and len(calls) == 3
+
+
+def test_api_that_stays_down_returns_error_after_the_retries(monkeypatch):
+    monkeypatch.setattr(httpx, "get", lambda url, **kw: httpx.Response(503, request=httpx.Request("GET", url)))
+    monkeypatch.setattr(tools.time, "sleep", lambda s: None)
+    assert "error" in tools.weather("Porto Alegre")

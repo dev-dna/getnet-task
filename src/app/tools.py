@@ -6,6 +6,7 @@ calculadas na hora da consulta, então "ontem" e "amanhã" continuam certos em q
 import json
 import os
 import threading
+import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -14,23 +15,33 @@ import httpx
 MERCHANTS = Path("data/merchants.json")
 TICKETS = Path(os.getenv("TICKETS_PATH", "data/tickets.json"))
 TIMEOUT = 8
+RETRY_STATUS = (429, 500, 502, 503, 504)
 _ticket_lock = threading.Lock()
 
 
 # ---------- gerais ----------
+def _get(url: str, **kw) -> httpx.Response:
+    """GET com até duas novas tentativas (1 s e 2 s depois). A Open-Meteo devolve 429 a chamadas seguidas;
+    sem isto um limite passageiro virava falha de ferramenta e o cenário S2 ia para atendimento humano."""
+    for wait in (1, 2, None):
+        r = httpx.get(url, timeout=TIMEOUT, **kw)
+        try:
+            r.raise_for_status()
+            return r
+        except httpx.HTTPStatusError as e:
+            if wait is None or e.response is None or e.response.status_code not in RETRY_STATUS:
+                raise
+            time.sleep(wait)
 def weather(city: str, day: str = "tomorrow") -> dict:
     """Open-Meteo: acha a cidade pelo nome e devolve a previsão. Sem chave."""
     try:
-        g = httpx.get("https://geocoding-api.open-meteo.com/v1/search", timeout=TIMEOUT,
-                      params={"name": city, "count": 1, "language": "pt"})
-        g.raise_for_status()
+        g = _get("https://geocoding-api.open-meteo.com/v1/search", params={"name": city, "count": 1, "language": "pt"})
         hits = g.json().get("results") or []
         if not hits:
             return {"error": f"cidade não encontrada: {city}"}
-        r = httpx.get("https://api.open-meteo.com/v1/forecast", timeout=TIMEOUT, params={
+        r = _get("https://api.open-meteo.com/v1/forecast", params={
             "latitude": hits[0]["latitude"], "longitude": hits[0]["longitude"], "timezone": "auto", "forecast_days": 2,
             "daily": "temperature_2m_max,temperature_2m_min,precipitation_probability_max"})
-        r.raise_for_status()
         d = r.json()["daily"]
         i = 1 if day == "tomorrow" else 0
         return {"city": hits[0].get("name", city), "date": d["time"][i], "t_max_c": d["temperature_2m_max"][i],
@@ -45,18 +56,14 @@ def fx_rate(pair: str = "EUR-BRL") -> dict:
     base, _, quote = pair.replace("/", "-").upper().partition("-")
     quote = quote or "BRL"
     try:
-        r = httpx.get(f"https://api.frankfurter.dev/v2/rate/{base.lower()}/{quote.lower()}", timeout=TIMEOUT)
-        r.raise_for_status()
-        d = r.json()
+        d = _get(f"https://api.frankfurter.dev/v2/rate/{base.lower()}/{quote.lower()}").json()
         if isinstance(d, dict) and d.get("rate"):
             return {"pair": f"{base}-{quote}", "rate": float(d["rate"]), "date": d.get("date"), "source": "frankfurter.dev"}
     except Exception:  # noqa: BLE001
         pass
     try:
         params = {"token": os.environ["AWESOMEAPI_TOKEN"]} if os.getenv("AWESOMEAPI_TOKEN") else None
-        r = httpx.get(f"https://economia.awesomeapi.com.br/json/last/{base}-{quote}", timeout=TIMEOUT, params=params)
-        r.raise_for_status()
-        item = next(iter(r.json().values()))
+        item = next(iter(_get(f"https://economia.awesomeapi.com.br/json/last/{base}-{quote}", params=params).json().values()))
         return {"pair": f"{base}-{quote}", "rate": float(item["bid"]), "date": item.get("create_date"), "source": "awesomeapi.com.br"}
     except Exception as e:  # noqa: BLE001
         return {"error": f"fx_rate indisponível: {e}"}

@@ -1,6 +1,12 @@
-"""Única porta de saída para o modelo. LLM_PROVIDER = anthropic | openrouter | fake."""
+"""Única porta de saída para o modelo. LLM_PROVIDER = anthropic | openrouter | claude_cli | fake.
+
+claude_cli não usa chave de API: chama o Claude Code instalado e logado na máquina (`claude -p`).
+Serve para desenvolver e rodar a avaliação sem chave. Não funciona dentro do Docker (o contêiner não tem o Claude Code).
+"""
 import json
 import os
+import subprocess
+import tempfile
 from typing import Any
 
 try:  # fora do Docker (make run, evals) o .env precisa ser lido aqui; variável já definida não é sobrescrita
@@ -39,6 +45,8 @@ def _client_for():
 def complete(system: str, user: str, model: str = MODEL_SMART, max_tokens: int = 700) -> str:
     if PROVIDER == "fake":
         return FakeLLM.complete(system, user)
+    if PROVIDER == "claude_cli":
+        return _cli(system, user, model)
     if PROVIDER == "anthropic":
         r = _client_for().messages.create(model=model, max_tokens=max_tokens, system=system,
                                           messages=[{"role": "user", "content": user}])
@@ -73,9 +81,55 @@ def run_tools(system: str, user: str, tools: list[dict], handlers: dict,
     """Loop de tool use. Devolve (texto final, nomes das ferramentas chamadas)."""
     if PROVIDER == "fake":
         return FakeLLM.run_tools(user, handlers)
+    if PROVIDER == "claude_cli":
+        return _run_tools_cli(system, user, tools, handlers, model, max_rounds)
     if PROVIDER == "anthropic":
         return _run_tools_anthropic(system, user, tools, handlers, model, max_rounds)
     return _run_tools_openai(system, user, tools, handlers, model, max_rounds)
+
+
+# ---------- claude_cli ----------
+CLI_PROTOCOL = """
+
+Ferramentas disponíveis (JSON Schema):
+{tools}
+
+Protocolo: responda com UM objeto JSON e nada mais.
+- Para usar uma ferramenta: {{"tool": "<nome>", "args": {{...}}}}
+- Para dar a resposta final: {{"final": "<texto>"}}
+As chamadas que você já fez aparecem no fim da mensagem, cada uma com o resultado. Não repita chamada que já tem resultado:
+use o resultado e, quando tiver o que precisa, dê a resposta final."""
+
+
+def _cli(system: str, user: str, model: str) -> str:
+    """Uma chamada ao Claude Code, sem as ferramentas dele e fora da pasta do projeto (para não carregar o CLAUDE.md)."""
+    alias = "haiku" if model == MODEL_FAST else "sonnet"  # apelidos do Claude Code; os nomes do .env são de outro provedor
+    r = subprocess.run(["claude", "-p", "--system-prompt", system, "--tools", "", "--strict-mcp-config", "--model", alias,
+                        "--output-format", "json"], input=user, capture_output=True, text=True,
+                       timeout=TIMEOUT_S * 3, cwd=tempfile.gettempdir())
+    d = json.loads(r.stdout)
+    if d.get("is_error"):
+        raise RuntimeError(f"claude -p falhou: {str(d.get('result'))[:200]}")
+    return d.get("result") or ""
+
+
+def _run_tools_cli(system, user, tools, handlers, model, max_rounds):
+    """O Claude Code não recebe ferramentas nossas pela linha de comando, então o pedido de ferramenta vem como JSON no texto.
+    É uma imitação da chamada de ferramenta das APIs: confere agentes e prompts, não o formato de rede dos outros provedores."""
+    system += CLI_PROTOCOL.format(tools=json.dumps(tools, ensure_ascii=False))
+    called: list[str] = []
+    for _ in range(max_rounds):
+        text = _cli(system, user, model)
+        try:
+            d = json.loads(text[text.index("{"): text.rindex("}") + 1])
+        except ValueError:  # respondeu em texto puro: vale como resposta final
+            return text, called
+        if "tool" not in d:
+            return str(d.get("final", text)), called
+        args = d.get("args") or {}
+        called.append(d["tool"])
+        user += f"\n\n[chamada já feita] {d['tool']}({json.dumps(args, ensure_ascii=False)}) devolveu:\n{_call(handlers, d['tool'], args)}"
+    return "Não consegui concluir a consulta.", called
 
 
 def _run_tools_anthropic(system, user, tools, handlers, model, max_rounds):

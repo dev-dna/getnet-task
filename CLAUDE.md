@@ -4,7 +4,8 @@ Sessão cronometrada de 60 minutos. As decisões abaixo já estão tomadas. Não
 
 ## Stack (fixa)
 - Python 3.12, FastAPI, pydantic v2, httpx, scikit-learn, rank-bm25, beautifulsoup4, pypdf, pytest.
-- Modelo por variável de ambiente: `LLM_PROVIDER=anthropic|openrouter|fake`, `MODEL_FAST` (roteador-reserva, verificador, agente geral), `MODEL_SMART` (conhecimento, suporte, redação final).
+- Modelo por variável de ambiente: `LLM_PROVIDER=anthropic|openrouter|claude_cli|fake`, `MODEL_FAST` (roteador-reserva, verificador, agente geral), `MODEL_SMART` (conhecimento, suporte, redação final).
+- `claude_cli` usa o Claude Code logado na máquina, sem chave de API (`make run-cli`, `make eval-cli`). Só fora do Docker; a chamada de ferramenta é imitada em JSON.
 - Sem LangChain, LangGraph, ADK, Chroma, embeddings. Se parecer necessário, anotar em "Next steps" do README e seguir.
 
 ## Estrutura (fixa)

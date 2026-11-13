@@ -339,7 +339,7 @@
           "llm_provider": {
             "type": "string",
             "title": "Llm Provider",
-            "description": "`anthropic`, `openrouter` or `fake` (tests)."
+            "description": "`anthropic`, `openrouter`, `claude_cli` (local, no API key) or `fake` (tests)."
           },
           "router_fallback": {
             "type": "string",

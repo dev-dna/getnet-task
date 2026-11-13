@@ -53,7 +53,7 @@ class ChatResponse(BaseModel):
 
 class Health(BaseModel):
     status: str
-    llm_provider: str = Field(description="`anthropic`, `openrouter` or `fake` (tests).")
+    llm_provider: str = Field(description="`anthropic`, `openrouter`, `claude_cli` (local, no API key) or `fake` (tests).")
     router_fallback: str = Field(description="Who decides when the local classifier is unsure: `jev` or `llm`.")
     corpus_chunks: int
     corpus_is_placeholder: bool = Field(description="True means the knowledge base is still the sample file. Run scripts/ingest.py.")

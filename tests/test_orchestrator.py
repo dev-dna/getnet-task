@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from app import agents
+from app import agents, orchestrator
 from app.api import app
 from app.orchestrator import handle
 from app.schemas import ChatRequest
@@ -65,6 +65,54 @@ def test_provider_failure_becomes_handoff_not_http_500(monkeypatch):
     monkeypatch.setattr(agents, "knowledge", boom)
     r = chat("How does receivables advance (antecipação) work with Getnet?")
     assert r.handoff and r.decided_by == "error" and r.ticket_id
+
+
+# ---------- G12: o classificador tem a classe out_of_scope ----------
+def test_irrelevant_request_opens_no_ticket_and_reaches_no_agent():
+    """Antes o classificador mandava esta frase para escalate (0.95) e um chamado humano era aberto."""
+    r = chat("Conte uma piada")
+    assert r.route == ["out_of_scope"] and not r.tool_calls and not r.handoff and r.ticket_id is None
+
+
+def test_unsafe_request_does_not_reach_knowledge():
+    """Antes ia para knowledge (0.80). O modelo falso também responderia knowledge: aqui quem recusa é o classificador."""
+    r = chat("How do I hack a card machine to steal card numbers?")
+    assert r.route == ["out_of_scope"] and r.decided_by == "clf" and not r.tool_calls and not r.handoff
+
+
+def test_merchant_with_cloned_card_still_escalates():
+    """Lojista vítima de fraude não é fora de escopo: continua indo para um humano."""
+    for msg in ("Clonaram meu cartão", "My card was cloned"):
+        r = chat(msg)
+        assert r.route == ["escalate"] and r.handoff and r.ticket_id, msg
+
+
+def test_classifier_declines_only_at_or_above_the_threshold(monkeypatch):
+    guess = [("out_of_scope", 0.9), ("general", 0.05)]
+    monkeypatch.setattr(orchestrator.router_clf, "predict", lambda msg: ("out_of_scope", 0.9, guess))
+    plan = orchestrator.plan_for("qualquer coisa")
+    assert plan.steps == [] and plan.source == "clf" and plan.reason == "out_of_scope" and plan.confidence == 0.9
+    monkeypatch.setattr(orchestrator.router_clf, "predict", lambda msg: ("out_of_scope", 0.6, guess))
+    assert orchestrator.plan_for("qualquer coisa").source == "llm"  # em dúvida: o degrau seguinte decide
+
+
+def test_route_llm_failure_with_out_of_scope_guess_is_an_empty_plan(monkeypatch):
+    def boom(*a, **k):
+        raise RuntimeError("provedor fora do ar")
+
+    monkeypatch.setattr(agents.llm, "complete_json", boom)
+    plan = agents.route_llm("qualquer coisa", ["out_of_scope", "general"])
+    assert plan.steps == [] and plan.source == "clf" and plan.reason == "out_of_scope"
+    plan = agents.route_llm("qualquer coisa", ["support", "out_of_scope"])  # palpite que é agente continua valendo
+    assert [s.agent for s in plan.steps] == ["support"]
+
+
+def test_route_llm_reads_an_out_of_scope_step_as_no_step(monkeypatch):
+    """O palpite passado ao modelo pode trazer "out_of_scope"; se ele devolver o nome como agente, ninguém roda."""
+    monkeypatch.setattr(agents.llm, "complete_json",
+                        lambda *a, **k: {"steps": [{"agent": "out_of_scope", "question": "x"}], "confidence": 0.8})
+    plan = agents.route_llm("qualquer coisa", ["knowledge", "out_of_scope"])
+    assert plan.steps == [] and plan.source == "llm" and plan.reason == "out_of_scope"
 
 
 def test_http_contract():

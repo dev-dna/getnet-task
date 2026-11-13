@@ -1,77 +1,89 @@
 {
-  "n": 944,
-  "n_templates": 236,
+  "n": 1288,
+  "n_templates": 322,
   "split": "StratifiedGroupKFold(5) por molde",
-  "accuracy_all": 0.858,
+  "accuracy_all": 0.87,
   "decides_alone": {
-    "share": 0.618,
-    "accuracy": 0.966
+    "share": 0.509,
+    "accuracy": 0.988
   },
   "goes_to_llm": {
-    "share": 0.382
+    "share": 0.491
   },
   "thresholds": [
     {
       "threshold": 0.5,
-      "coverage": 0.935,
-      "accuracy": 0.888
+      "coverage": 0.898,
+      "accuracy": 0.907
     },
     {
       "threshold": 0.6,
-      "coverage": 0.815,
-      "accuracy": 0.928
+      "coverage": 0.762,
+      "accuracy": 0.951
     },
     {
       "threshold": 0.7,
-      "coverage": 0.694,
-      "accuracy": 0.948
+      "coverage": 0.606,
+      "accuracy": 0.981
     },
     {
       "threshold": 0.75,
-      "coverage": 0.618,
-      "accuracy": 0.966
+      "coverage": 0.509,
+      "accuracy": 0.988
     },
     {
       "threshold": 0.8,
-      "coverage": 0.511,
-      "accuracy": 0.977
+      "coverage": 0.384,
+      "accuracy": 0.992
     },
     {
       "threshold": 0.9,
-      "coverage": 0.253,
-      "accuracy": 0.979
+      "coverage": 0.15,
+      "accuracy": 0.984
     }
   ],
   "labels": [
     "knowledge",
     "support",
     "general",
-    "escalate"
+    "escalate",
+    "out_of_scope"
   ],
   "confusion": [
     [
-      249,
-      10,
-      5,
-      8
+      282,
+      12,
+      6,
+      4,
+      16
     ],
     [
-      9,
-      214,
-      20,
-      13
-    ],
-    [
-      5,
-      8,
-      179,
+      11,
+      222,
+      12,
+      11,
       0
     ],
     [
-      19,
-      27,
-      10,
-      168
+      2,
+      8,
+      178,
+      0,
+      4
+    ],
+    [
+      9,
+      18,
+      8,
+      172,
+      25
+    ],
+    [
+      21,
+      0,
+      0,
+      1,
+      266
     ]
   ]
 }

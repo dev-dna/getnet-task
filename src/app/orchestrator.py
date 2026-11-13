@@ -31,6 +31,8 @@ def plan_for(msg: str) -> Plan:
                     confidence=1.0, source="rule", reason="account_problem_plus_howto")
     label, p, top2 = router_clf.predict(msg)
     if p >= router_clf.HIGH:
+        if label == "out_of_scope":  # plano vazio: handle() responde o texto fixo e nenhum agente roda
+            return Plan(steps=[], confidence=p, source="clf", reason="out_of_scope")
         return Plan(steps=[Step(agent=label, question=msg)], confidence=p, source="clf", reason="clf_high")
     if ROUTER_FALLBACK == "jev":
         plan = jev.route(msg)

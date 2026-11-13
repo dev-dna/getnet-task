@@ -43,11 +43,14 @@ def route_llm(message: str, candidates: list[str]) -> Plan:
     sys = ROUTER_SYS + f"\nPalpite de um classificador (pode estar errado): {candidates}."
     try:
         d = llm.complete_json(sys, wrap_data("message", message))
-        steps = [Step(**s) for s in d.get("steps", [])][:3]
+        # o palpite pode trazer "out_of_scope", que não é agente: se o modelo repetir o nome, vale como steps vazio
+        steps = [Step(**s) for s in d.get("steps", []) if s.get("agent") != "out_of_scope"][:3]
         return Plan(steps=steps, confidence=float(d.get("confidence", 0.6)), source="llm",
                     reason=d.get("reason", "") if steps else "out_of_scope")
     except Exception as e:  # noqa: BLE001  # roteador falhou: segue o palpite do classificador
         log.warning("route_llm falhou: %s", e)
+        if candidates[0] == "out_of_scope":  # não é agente: plano vazio, nenhum agente roda
+            return Plan(steps=[], confidence=0.5, source="clf", reason="out_of_scope")
         return Plan(steps=[Step(agent=candidates[0], question=message)], confidence=0.5, source="clf", reason="router_llm_failed")
 
 

@@ -36,3 +36,20 @@ def test_ingest_chunkers():
     assert [c["title"] for c in chunks] == ["Pix", "Link"] and all("menu" not in c["text"] for c in chunks)
     parts = ingest.split_text("Frase um. " * 400)
     assert len(parts) > 1 and all(len(p) <= ingest.CHUNK_CHARS + 20 for p in parts)
+
+
+def test_sitemap_can_be_limited_to_one_country_site():
+    import ingest
+
+    class Page:
+        text = "<loc>https://x/en/payment-link</loc><loc>https://x/es/link-de-pago</loc><loc>https://x/en/careers</loc>"
+
+        def raise_for_status(self):
+            pass
+
+    class Client:
+        def get(self, url):
+            return Page()
+
+    assert ingest.expand_sitemap(Client(), "https://x/sitemap", only="/en/") == ["https://x/en/payment-link"]
+    assert len(ingest.expand_sitemap(Client(), "https://x/sitemap")) == 2

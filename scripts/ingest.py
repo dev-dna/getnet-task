@@ -3,6 +3,7 @@
 Formato de data/sources.txt, uma entrada por linha:
     <idioma> <url>                 ex.: pt https://site.getnet.com.br/contato/
     sitemap <idioma> <url>         expande o mapa do site e fica só com URLs que casem com KEYWORDS
+    sitemap <idioma> <url> <texto> idem, e só URLs que contenham <texto> (ex.: /en/ deixa de fora os sites de outros países)
 
 Sai com código 1 se vierem menos de MIN_CHUNKS trechos: melhor quebrar aqui do que entregar a base de exemplo.
 """
@@ -71,7 +72,7 @@ def chunks_from_pdf(url: str, lang: str, content: bytes) -> list[dict]:
     return out
 
 
-def expand_sitemap(client: httpx.Client, url: str, depth: int = 0) -> list[str]:
+def expand_sitemap(client: httpx.Client, url: str, depth: int = 0, only: str = "") -> list[str]:
     r = client.get(url)
     r.raise_for_status()
     locs = re.findall(r"<loc>\s*(.*?)\s*</loc>", r.text)
@@ -79,10 +80,10 @@ def expand_sitemap(client: httpx.Client, url: str, depth: int = 0) -> list[str]:
     for loc in locs:
         if loc.endswith(".xml") and depth < 1:
             try:
-                pages += expand_sitemap(client, loc, depth + 1)
+                pages += expand_sitemap(client, loc, depth + 1, only)
             except Exception as e:  # noqa: BLE001
                 print(f"ERR  sitemap {loc}: {e}")
-        elif any(k in loc.lower() for k in KEYWORDS):
+        elif only in loc and any(k in loc.lower() for k in KEYWORDS):
             pages.append(loc)
     return pages[:MAX_SITEMAP_PAGES]
 
@@ -93,9 +94,9 @@ def read_sources(client: httpx.Client) -> list[tuple[str, str]]:
         parts = line.split("#")[0].split()
         if len(parts) == 2:
             items.append((parts[0], parts[1]))
-        elif len(parts) == 3 and parts[0] == "sitemap":
+        elif len(parts) in (3, 4) and parts[0] == "sitemap":
             try:
-                found = expand_sitemap(client, parts[2])
+                found = expand_sitemap(client, parts[2], only=parts[3] if len(parts) == 4 else "")
                 print(f"ok   sitemap {parts[2]} -> {len(found)} páginas")
                 items += [(parts[1], u) for u in found]
             except Exception as e:  # noqa: BLE001

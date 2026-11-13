@@ -1,23 +1,24 @@
-# Fontes da base de conhecimento. Formato: <idioma> <url>   ou   sitemap <idioma> <url>
-# Confira cada linha no navegador antes da sessão e apague o que não abrir.
+# Fontes da base de conhecimento. Formato: <idioma> <url>   ou   sitemap <idioma> <url> [texto que a URL precisa conter]
+# Todas as linhas abaixo abriram e renderam trechos em 13/nov/2026 (saída de scripts/ingest.py).
 
-# --- abertas e lidas em 11/nov/2026 ---
+# --- manuais e folhetos oficiais (PDF) ---
 pt https://site.getnet.com.br/wp-content/uploads/2025/09/Manul-GetSmart.pdf
-pt https://www.santander.com.br/blog/seus-negocios/como-usar-getnet-vender-mais/
-
-# --- apareceram na busca, NÃO foram abertas ---
 pt https://sitehml.getnet.com.br/wp-content/uploads/2024/01/Manul_GetClassica.pdf
 pt https://site.getnet.com.br/wp-content/uploads/2024/09/Folder_Credirio.pdf
 pt https://site.getnet.com.br/wp-content/uploads/2025/09/termos_e_condicoes_aluguel.pdf
+
+# --- páginas do Santander (dono da Getnet) sobre os produtos ---
+pt https://www.santander.com.br/blog/seus-negocios/como-usar-getnet-vender-mais/
 pt https://www.santander.com.br/blog/seus-negocios/link-de-pagamento/
 pt https://www.santander.com.br/blog/seus-negocios/solucoes-getnet/
 pt https://www.santander.com.br/blog/seus-negocios/ativacao-maquininha-getnet/
-pt https://site.getnet.com.br/contato/
 
-# --- do enunciado; não consegui abrir do meu ambiente ---
+# --- sites da Getnet ---
+pt https://site.getnet.com.br/contato/
 en https://www.getnet.net/en
 pt https://www.getnet.net/
 
-# --- tentativa de achar mais páginas pelo mapa do site; endereços NÃO verificados ---
+# --- mais páginas pelo mapa do site (até 40 por mapa, filtradas pelas palavras de KEYWORDS em scripts/ingest.py) ---
 sitemap pt https://site.getnet.com.br/wp-sitemap.xml
-sitemap en https://www.getnet.net/sitemap.xml
+# /en/ deixa de fora os sites da Getnet de outros países (es, ar, mx, uy): outro mercado, outros produtos
+sitemap en https://www.getnet.net/sitemap.xml /en/

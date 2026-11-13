@@ -1,0 +1,944 @@
+{"text": "hey, which bank account is set for my payouts?", "label": "support", "group": "support:en:24"}
+{"text": "por favor, minha maquininha mostra erro de transação", "label": "support", "group": "support:pt:20"}
+{"text": "qual a capital da França por favor", "label": "general", "group": "general:pt:9"}
+{"text": "por favor, meu extato de sábado está errado", "label": "support", "group": "support:pt:18"}
+{"text": "quero fazr uma denúncia obrigado", "label": "escalate", "group": "escalate:pt:22"}
+{"text": "hey, how many installments can I offer with meal vouchers", "label": "knowledge", "group": "knowledge:en:16"}
+{"text": "this is unacceptable, let me speak to a manager", "label": "escalate", "group": "escalate:en:14"}
+{"text": "me ajuda: como está o clima em Porto Alegre?", "label": "general", "group": "general:pt:3"}
+{"text": "bom dia, o que é antecipação de recebíveis?", "label": "knowledge", "group": "knowledge:pt:1"}
+{"text": "não quero falar com robô obrigado", "label": "escalate", "group": "escalate:pt:20"}
+{"text": "how much will I receive today?", "label": "support", "group": "support:en:3"}
+{"text": "hey, connect me with customer service staff!", "label": "escalate", "group": "escalate:en:19"}
+{"text": "urgente: que temperatura faz em Belo Horizonte hoje?", "label": "general", "group": "general:pt:2"}
+{"text": "vale a pena usar vale-refeição obrigado", "label": "knowledge", "group": "knowledge:pt:6"}
+{"text": "me ajuda: vai fazer frio e Florianópolis essa semana?", "label": "general", "group": "general:pt:18"}
+{"text": "olá, quero atendiment ohumano agora!", "label": "escalate", "group": "escalate:pt:3"}
+{"text": "por favor, va fazer frio em Porto Alegre hoje!", "label": "general", "group": "general:pt:18"}
+{"text": "hello, where can I read the terms for terminal rental?", "label": "knowledge", "group": "knowledge:en:19"}
+{"text": "oi, minha última venda foi recusada, por quê?", "label": "support", "group": "support:pt:10"}
+{"text": "what is the settlemnt time for terminal rental?", "label": "knowledge", "group": "knowledge:en:17"}
+{"text": "quick question: which account do receivables advance sales go to?", "label": "knowledge", "group": "knowledge:en:23"}
+{"text": "hello, convert one yen to Brazilan real?", "label": "general", "group": "general:en:17"}
+{"text": "hey, has my advance request been approved?", "label": "support", "group": "support:en:16"}
+{"text": "which card machine is best for a new business please", "label": "knowledge", "group": "knowledge:en:32"}
+{"text": "posso receber Pix em conta de outro banco!", "label": "knowledge", "group": "knowledge:pt:24"}
+{"text": "qual maquniinha é melhor para quem está começando obrigado", "label": "knowledge", "group": "knowledge:pt:32"}
+{"text": "I got scammed through the card machine?", "label": "escalate", "group": "escalate:en:6"}
+{"text": "bom dia, preciso de ajuda urgente dealguém da Getnet obrigado", "label": "escalate", "group": "escalate:pt:25"}
+{"text": "bom dia, qual a cotação do dólar hoje", "label": "general", "group": "general:pt:4"}
+{"text": "quem é o presidente da Japão por favor", "label": "general", "group": "general:pt:13"}
+{"text": "hi, where is my payout from today thanks", "label": "support", "group": "support:en:1"}
+{"text": "oi, como ativa rPix", "label": "knowledge", "group": "knowledge:pt:12"}
+{"text": "hey, I've tried eerything, pass me to someone!", "label": "escalate", "group": "escalate:en:18"}
+{"text": "bom dia, como conecto a maquininha no wifi?", "label": "knowledge", "group": "knowledge:pt:25"}
+{"text": "hi, how can I get isntallment sales paid sooner", "label": "knowledge", "group": "knowledge:en:31"}
+{"text": "olá, como funciona vale-refeição", "label": "knowledge", "group": "knowledge:pt:0"}
+{"text": "quick question: connect me with customer service staff?", "label": "escalate", "group": "escalate:en:19"}
+{"text": "hey, how do I sell with terminal rental!", "label": "knowledge", "group": "knowledge:en:15"}
+{"text": "qual é o meu plano?", "label": "support", "group": "support:pt:15"}
+{"text": "me ajuda: quanto vale um peso argentino em reais?", "label": "general", "group": "general:pt:6"}
+{"text": "what's the yen rate today please", "label": "general", "group": "general:en:4"}
+{"text": "onde vejo as condições de Get Smart?", "label": "knowledge", "group": "knowledge:pt:19"}
+{"text": "quanto está o peso argentino!", "label": "general", "group": "general:pt:5"}
+{"text": "quick question: has my advance request been approved thanks", "label": "support", "group": "support:en:16"}
+{"text": "olá, preciso de ajuda urgente de alguém da Getnet?", "label": "escalate", "group": "escalate:pt:25"}
+{"text": "quick question: I want to close my account thanks", "label": "escalate", "group": "escalate:en:11"}
+{"text": "quick question: what is the status of my terminal thanks", "label": "support", "group": "support:en:14"}
+{"text": "hey, is terminal rental worth it?", "label": "knowledge", "group": "knowledge:en:6"}
+{"text": "what are the benefits ofi nstallments please", "label": "knowledge", "group": "knowledge:en:7"}
+{"text": "minha última venda foi recusada, por quê obrigado", "label": "support", "group": "support:pt:10"}
+{"text": "quick question: someone accessed my account iwthout permission!", "label": "escalate", "group": "escalate:en:16"}
+{"text": "hello, I need to speak with  real person", "label": "escalate", "group": "escalate:en:2"}
+{"text": "quem descobri o Brasil", "label": "general", "group": "general:pt:20"}
+{"text": "hi, I urgently need someone form Getnet", "label": "escalate", "group": "escalate:en:25"}
+{"text": "olá, minha maquininha está recusando todos os cartões por favor", "label": "support", "group": "support:pt:27"}
+{"text": "my payment from Monday is late", "label": "support", "group": "support:en:26"}
+{"text": "quem pode contratar Pix?", "label": "knowledge", "group": "knowledge:pt:21"}
+{"text": "my payment from Saturday is late!", "label": "support", "group": "support:en:26"}
+{"text": "olá, meu terminal não está aceitando cartão?", "label": "support", "group": "support:pt:21"}
+{"text": "oi, qual o fuso horário de Manaus", "label": "general", "group": "general:pt:16"}
+{"text": "vai fazer frio em Curitbia hoje!", "label": "general", "group": "general:pt:18"}
+{"text": "oi, debitaram um valor que eu não autrizei", "label": "escalate", "group": "escalate:pt:27"}
+{"text": "oi, Get Clássica funciona sem internet", "label": "knowledge", "group": "knowledge:pt:9"}
+{"text": "por favor, a bateria da minha maquininha não carrega?", "label": "support", "group": "support:pt:8"}
+{"text": "bom dia, qual o fuso horário de São Paulo?", "label": "general", "group": "general:pt:16"}
+{"text": "urgente: como está o clima em Curiiba!", "label": "general", "group": "general:pt:3"}
+{"text": "olá, caí em um golpe com a maquininha", "label": "escalate", "group": "escalate:pt:7"}
+{"text": "bom dia, alguém acessou minha conta sema utorização obrigado", "label": "escalate", "group": "escalate:pt:17"}
+{"text": "bom dia, chama umsupervisor?", "label": "escalate", "group": "escalate:pt:4"}
+{"text": "qual a vantagem de Get Clássica!", "label": "knowledge", "group": "knowledge:pt:7"}
+{"text": "hey, how far is Belo Horizonte from Recife please", "label": "general", "group": "general:en:14"}
+{"text": "tem uma venda que eu não reconheço, acho que é fraude obrigado", "label": "escalate", "group": "escalate:pt:8"}
+{"text": "meu terminal não está aceitando cartão?", "label": "support", "group": "support:pt:21"}
+{"text": "hello, my machine is frozen on the home screen", "label": "support", "group": "support:en:7"}
+{"text": "quick question: my machine is declining every card!", "label": "support", "group": "support:en:27"}
+{"text": "quem pode contratar Get Clássica", "label": "knowledge", "group": "knowledge:pt:21"}
+{"text": "por favor, Pix tem mensalidade", "label": "knowledge", "group": "knowledge:pt:5"}
+{"text": "oi, comof aço para receber antes o crédito parcelado?", "label": "knowledge", "group": "knowledge:pt:31"}
+{"text": "which card machine is best for a new business!", "label": "knowledge", "group": "knowledge:en:32"}
+{"text": "vou entrar na justiça contra vocês!", "label": "escalate", "group": "escalate:pt:24"}
+{"text": "what are the fees for Get Smart thanks", "label": "knowledge", "group": "knowledge:en:3"}
+{"text": "qual a vantagem de vale-refeição?", "label": "knowledge", "group": "knowledge:pt:7"}
+{"text": "olá, meu repasse de hoje não caiu?", "label": "support", "group": "support:pt:2"}
+{"text": "please, get me a supervisor please", "label": "escalate", "group": "escalate:en:3"}
+{"text": "urgente: tem algum chamado aberto no meu nome?", "label": "support", "group": "support:pt:30"}
+{"text": "clonaram meu cartão por favor", "label": "escalate", "group": "escalate:pt:6"}
+{"text": "bom dia, quero ver minhas últimas vendas!", "label": "support", "group": "support:pt:13"}
+{"text": "hello, what' the weather like in Curitiba this week?", "label": "general", "group": "general:en:0"}
+{"text": "quantos habitantes tem Florianópolis?", "label": "general", "group": "general:pt:10"}
+{"text": "hey, what timezone isM anaus in", "label": "general", "group": "general:en:16"}
+{"text": "hi, which plan am I on please", "label": "support", "group": "support:en:15"}
+{"text": "hello, my terminal battery won't charge", "label": "support", "group": "support:en:8"}
+{"text": "olá, recebi um chargeback indevido?", "label": "escalate", "group": "escalate:pt:10"}
+{"text": "quero contestar uma cobrança obrigado", "label": "escalate", "group": "escalate:pt:9"}
+{"text": "how many installments can I offer wit hthe payment link?", "label": "knowledge", "group": "knowledge:en:16"}
+{"text": "what is inflaion", "label": "general", "group": "general:en:22"}
+{"text": "como configuro o chip da maquiinha!", "label": "knowledge", "group": "knowledge:pt:26"}
+{"text": "hey, what timezone is Florianópolis in?", "label": "general", "group": "general:en:16"}
+{"text": "hey, do I need a company to use Pix?", "label": "knowledge", "group": "knowledge:en:8"}
+{"text": "how many days are in February this year?", "label": "general", "group": "general:en:21"}
+{"text": "can I sell on social media", "label": "knowledge", "group": "knowledge:en:28"}
+{"text": "please, how do I enable the card machine", "label": "knowledge", "group": "knowledge:en:12"}
+{"text": "me ajuda: como ativr Get Clássica obrigado", "label": "knowledge", "group": "knowledge:pt:12"}
+{"text": "hey, will it raini n Manaus today?", "label": "general", "group": "general:en:1"}
+{"text": "my termnial is not accepting cards please", "label": "support", "group": "support:en:21"}
+{"text": "me ajuda: minha última venda foi recusada, por quê!", "label": "support", "group": "support:pt:10"}
+{"text": "quis formas de pagamento a Getnet aceita por favor", "label": "knowledge", "group": "knowledge:pt:30"}
+{"text": "cadê meu repasse desemana passada?", "label": "support", "group": "support:pt:1"}
+{"text": "urgente: apareceu erro na minha venda de segunda obrigado", "label": "support", "group": "support:pt:12"}
+{"text": "meu Pix de segunda não apareceu no xtrato", "label": "support", "group": "support:pt:31"}
+{"text": "how does receivables advance work!", "label": "knowledge", "group": "knowledge:en:0"}
+{"text": "por favor, vou entrar na justiça contar vocês?", "label": "escalate", "group": "escalate:pt:24"}
+{"text": "how do I sell with Get Smart", "label": "knowledge", "group": "knowledge:en:15"}
+{"text": "link de pagamento funciona sem internet obrigado", "label": "knowledge", "group": "knowledge:pt:9"}
+{"text": "a Getent oferece Get Smart", "label": "knowledge", "group": "knowledge:pt:20"}
+{"text": "hi, what is the card achine thanks", "label": "knowledge", "group": "knowledge:en:1"}
+{"text": "wh is the president of France please", "label": "general", "group": "general:en:13"}
+{"text": "quick question: has my advance request been approved please", "label": "support", "group": "support:en:16"}
+{"text": "please, what is Get Smart?", "label": "knowledge", "group": "knowledge:en:1"}
+{"text": "please, how do I sell online without a card machine?", "label": "knowledge", "group": "knowledge:en:29"}
+{"text": "urgente: o que é inflação?", "label": "general", "group": "general:pt:22"}
+{"text": "hi, what currency does Japan use?", "label": "general", "group": "general:en:19"}
+{"text": "hi, do I have any open tickets?", "label": "support", "group": "support:en:30"}
+{"text": "minh amaquininha está atualizada por favor", "label": "support", "group": "support:pt:29"}
+{"text": "quick question: who won the game las night please", "label": "general", "group": "general:en:8"}
+{"text": "bom dia, quero ver minhas úlitmas vendas?", "label": "support", "group": "support:pt:13"}
+{"text": "quick question: how many reais is one dollar?", "label": "general", "group": "general:en:6"}
+{"text": "does the card machine work offline?", "label": "knowledge", "group": "knowledge:en:9"}
+{"text": "onde vejo as condiçõse de antecipação de recebíveis?", "label": "knowledge", "group": "knowledge:pt:19"}
+{"text": "why was my last sale declined?", "label": "support", "group": "support:en:10"}
+{"text": "hi, what tim eis it in Florianópolis thanks", "label": "general", "group": "general:en:11"}
+{"text": "hi, how far is Curitiba from São Paulo thanks", "label": "general", "group": "general:en:14"}
+{"text": "minha maquininha não conceta no wifi", "label": "support", "group": "support:pt:22"}
+{"text": "hey, that didn't help, I want a person", "label": "escalate", "group": "escalate:en:21"}
+{"text": "olá, fui vítima de frude obrigado", "label": "escalate", "group": "escalate:pt:5"}
+{"text": "por favor, como faço para vender com Get Clássica?", "label": "knowledge", "group": "knowledge:pt:15"}
+{"text": "minha maquininha não liga por favor", "label": "support", "group": "support:pt:6"}
+{"text": "please, my Pix from Monday is missing from the statement?", "label": "support", "group": "support:en:31"}
+{"text": "oi, quanto e vendi semana passada!", "label": "support", "group": "support:pt:28"}
+{"text": "please, how hot is it in Recife this week?", "label": "general", "group": "general:en:2"}
+{"text": "please, wht's the climate in Recife?", "label": "general", "group": "general:en:3"}
+{"text": "quick question: you charged an amount I never authorized!", "label": "escalate", "group": "escalate:en:27"}
+{"text": "bom dia, qual a distância entre Curitiba e São Paulo obrigado", "label": "general", "group": "general:pt:14"}
+{"text": "bom dia, qual é o meu plano", "label": "support", "group": "support:pt:15"}
+{"text": "bom dia, qual o fuso horário de Porto legre?", "label": "general", "group": "general:pt:16"}
+{"text": "hey, does installments work offline?", "label": "knowledge", "group": "knowledge:en:9"}
+{"text": "bom dia, quais formas de pagamento a Getnet aceita!", "label": "knowledge", "group": "knowledge:pt:30"}
+{"text": "please, what timezone is Forianópolis in please", "label": "general", "group": "general:en:16"}
+{"text": "me ajuda: quais bandeiras mauininha aceita", "label": "knowledge", "group": "knowledge:pt:11"}
+{"text": "me ajuda: minha maquininha está ercusando todos os cartões?", "label": "support", "group": "support:pt:27"}
+{"text": "olá, quero encerrar meucontrato", "label": "escalate", "group": "escalate:pt:18"}
+{"text": "my card machine was stolen", "label": "escalate", "group": "escalate:en:15"}
+{"text": "bom dia, vai chover e Manaus hoje", "label": "general", "group": "general:pt:1"}
+{"text": "vale a pena usar Get Smart!", "label": "knowledge", "group": "knowledge:pt:6"}
+{"text": "não quero falar com robô!", "label": "escalate", "group": "escalate:pt:20"}
+{"text": "please, my machine is frozen on the home screen please", "label": "support", "group": "support:en:7"}
+{"text": "urgente: qual maquininha é melhor para quem está começando obrigado", "label": "knowledge", "group": "knowledge:pt:32"}
+{"text": "me ajuda: o que é anteciação de recebíveis por favor", "label": "knowledge", "group": "knowledge:pt:1"}
+{"text": "please, my card reader shows a transaction error", "label": "support", "group": "support:en:20"}
+{"text": "minha maquininha prdeu a conexão com a internet por favor", "label": "support", "group": "support:pt:23"}
+{"text": "hi, I want my money back, I was deceived thanks", "label": "escalate", "group": "escalate:en:26"}
+{"text": "hi, my machine is frozen on the home screen?", "label": "support", "group": "support:en:7"}
+{"text": "olá, vou acionar o Procon", "label": "escalate", "group": "escalate:pt:14"}
+{"text": "quando é o próximo feriado nacional?", "label": "general", "group": "general:pt:15"}
+{"text": "I want to report a crime?", "label": "escalate", "group": "escalate:en:22"}
+{"text": "please, what's today's economic news", "label": "general", "group": "general:en:12"}
+{"text": "hi, how many reais is one ibtcoin please", "label": "general", "group": "general:en:6"}
+{"text": "quick question: how do I sell online ithout a card machine", "label": "knowledge", "group": "knowledge:en:29"}
+{"text": "urgente: isso não resolveu, quero uma pessoa?", "label": "escalate", "group": "escalate:pt:21"}
+{"text": "olá, qal a moeda da Argentina!", "label": "general", "group": "general:pt:19"}
+{"text": "hello, I'm going to report you to the regulator", "label": "escalate", "group": "escalate:en:13"}
+{"text": "me ajuda: quantos habitantes tem São Paulo por favor", "label": "general", "group": "general:pt:10"}
+{"text": "does Getnet offer Pix?", "label": "knowledge", "group": "knowledge:en:20"}
+{"text": "isso é um absurdo, quero falar co o gerente obrigado", "label": "escalate", "group": "escalate:pt:15"}
+{"text": "que horas são em Salvador!", "label": "general", "group": "general:pt:11"}
+{"text": "quando éo  próximo feriado nacional!", "label": "general", "group": "general:pt:15"}
+{"text": "hey, who discovreed Brazil!", "label": "general", "group": "general:en:20"}
+{"text": "hey, where can I read the terms for rediário please", "label": "knowledge", "group": "knowledge:en:19"}
+{"text": "quick question: ope a ticket for my card machine?", "label": "support", "group": "support:en:17"}
+{"text": "hey, can I use Get Clássica on my pohne thanks", "label": "knowledge", "group": "knowledge:en:10"}
+{"text": "when will my sales from Saturay be paid out", "label": "support", "group": "support:en:0"}
+{"text": "urgente: minha maquininha está atualizada!", "label": "support", "group": "support:pt:29"}
+{"text": "bom dia, preciso de CNPJ para ter crediário!", "label": "knowledge", "group": "knowledge:pt:8"}
+{"text": "what currency does France use?", "label": "general", "group": "general:en:19"}
+{"text": "olá, quem ganhou o jogo de ontem", "label": "general", "group": "general:pt:8"}
+{"text": "bom dia, isso é um absurdo, quero falar com o gerente", "label": "escalate", "group": "escalate:pt:15"}
+{"text": "how much di I sell last week please", "label": "support", "group": "support:en:28"}
+{"text": "me ajuda: isso é um absurdo, quero falar com og erente", "label": "escalate", "group": "escalate:pt:15"}
+{"text": "please, my card machine won't connect to wifi?", "label": "support", "group": "support:en:22"}
+{"text": "que horas são m Recife!", "label": "general", "group": "general:pt:11"}
+{"text": "please, how many installments can I offer with Get Clássica?", "label": "knowledge", "group": "knowledge:en:16"}
+{"text": "parcelamento funciona sem internet por favor", "label": "knowledge", "group": "knowledge:pt:9"}
+{"text": "I want to talk to a human?", "label": "escalate", "group": "escalate:en:0"}
+{"text": "olá, dá para cobrar um cliente à distância?", "label": "knowledge", "group": "knowledge:pt:27"}
+{"text": "por favor, tem uma venda que eu nãor econheço, acho que é fraude?", "label": "escalate", "group": "escalate:pt:8"}
+{"text": "hi, what time is it in Belo Horizonte thanks", "label": "general", "group": "general:en:11"}
+{"text": "there's a sale I on't recognize, I think it's fraud", "label": "escalate", "group": "escalate:en:7"}
+{"text": "hi, what is the largest cityin France", "label": "general", "group": "general:en:23"}
+{"text": "how do I sell online without a card machine!", "label": "knowledge", "group": "knowledge:en:29"}
+{"text": "quick question: my settlement from last week hasn't arrived?", "label": "support", "group": "support:en:2"}
+{"text": "does Getnet offer terminal rental?", "label": "knowledge", "group": "knowledge:en:20"}
+{"text": "what's the weather like in Manaus on Friday", "label": "general", "group": "general:en:0"}
+{"text": "you charged an amount I ever authorized?", "label": "escalate", "group": "escalate:en:27"}
+{"text": "quero contestar uma cobrança?", "label": "escalate", "group": "escalate:pt:9"}
+{"text": "olá, não recebi o valor da venda de semana passada obrigado", "label": "support", "group": "support:pt:19"}
+{"text": "hello, thatd idn't help, I want a person?", "label": "escalate", "group": "escalate:en:21"}
+{"text": "urgente: por que minha transação fi negada", "label": "support", "group": "support:pt:11"}
+{"text": "quanto é bitcoin convertido para real!", "label": "general", "group": "general:pt:17"}
+{"text": "quick question: my terminal lost its internet connection thanks", "label": "support", "group": "support:en:23"}
+{"text": "hey, how much is the bitcoin?", "label": "general", "group": "general:en:5"}
+{"text": "alguém acessou mina conta sem autorização", "label": "escalate", "group": "escalate:pt:17"}
+{"text": "hi, how many reais is one bitcoin!", "label": "general", "group": "general:en:6"}
+{"text": "como vnedo online sem maquininha", "label": "knowledge", "group": "knowledge:pt:29"}
+{"text": "hello, has the money from yesterday reached my account!", "label": "support", "group": "support:en:25"}
+{"text": "hey, can I get terminal rental paid into another bank please", "label": "knowledge", "group": "knowledge:en:24"}
+{"text": "can a sole trader use the payment link please", "label": "knowledge", "group": "knowledge:en:14"}
+{"text": "por favor, quando cai o dinheiro das minhas vendas de segunda", "label": "support", "group": "support:pt:0"}
+{"text": "which payment methods does Getnet accept?", "label": "knowledge", "group": "knowledge:en:30"}
+{"text": "who is the president of France", "label": "general", "group": "general:en:13"}
+{"text": "quais bandeiras antecipação de rcebíveis aceita por favor", "label": "knowledge", "group": "knowledge:pt:11"}
+{"text": "me ajuda: o dólar subiu ou caiu hoje", "label": "general", "group": "general:pt:7"}
+{"text": "olá, fui vítima de fraude", "label": "escalate", "group": "escalate:pt:5"}
+{"text": "quick question: is Pix worth it", "label": "knowledge", "group": "knowledge:en:6"}
+{"text": "quero cancelar minha conta?", "label": "escalate", "group": "escalate:pt:12"}
+{"text": "hi, how do I set up the data chip on the termial", "label": "knowledge", "group": "knowledge:en:26"}
+{"text": "minha maquininha travou na tela inicial", "label": "support", "group": "support:pt:7"}
+{"text": "please, what is inflation thanks", "label": "general", "group": "general:en:22"}
+{"text": "quick question: who won the game last night please", "label": "general", "group": "general:en:8"}
+{"text": "my Pix from Monday is missign from the statement?", "label": "support", "group": "support:en:31"}
+{"text": "my terminal battery won't charge?", "label": "support", "group": "support:en:8"}
+{"text": "hello, this is unacceptable, let mes peak to a manager?", "label": "escalate", "group": "escalate:en:14"}
+{"text": "urgente: meu Pix de hoje não apareceun o extrato", "label": "support", "group": "support:pt:31"}
+{"text": "posso usarc rediário sendo MEI", "label": "knowledge", "group": "knowledge:pt:14"}
+{"text": "hi, I want to talk to a human please", "label": "escalate", "group": "escalate:en:0"}
+{"text": "olá, como troco a bobina da maquininha obrigado", "label": "knowledge", "group": "knowledge:pt:33"}
+{"text": "how does the payment link work!", "label": "knowledge", "group": "knowledge:en:0"}
+{"text": "which plan a I on?", "label": "support", "group": "support:en:15"}
+{"text": "oi, te malgum chamado aberto no meu nome", "label": "support", "group": "support:pt:30"}
+{"text": "como conecto a maquininha no wifi?", "label": "knowledge", "group": "knowledge:pt:25"}
+{"text": "who won the game last night?", "label": "general", "group": "general:en:8"}
+{"text": "please, I received an unfair chargeback?", "label": "escalate", "group": "escalate:en:9"}
+{"text": "por favor, quero fazer uma denúncia por favor", "label": "escalate", "group": "escalate:pt:22"}
+{"text": "did the bitcoin go up or down today!", "label": "general", "group": "general:en:7"}
+{"text": "urgente: posso usar antecipação de recebíveis sendo MEI?", "label": "knowledge", "group": "knowledge:pt:14"}
+{"text": "hi, m machine has no signal", "label": "support", "group": "support:en:9"}
+{"text": "urgente: quero encerrar meu contrato por favor", "label": "escalate", "group": "escalate:pt:18"}
+{"text": "olá, o que é inflação!", "label": "general", "group": "general:pt:22"}
+{"text": "open a ticke tfor my card machine?", "label": "support", "group": "support:en:17"}
+{"text": "me transfere para um humano!", "label": "escalate", "group": "escalate:pt:1"}
+{"text": "I am taking legal action against you", "label": "escalate", "group": "escalate:en:24"}
+{"text": "hi, why aws my last sale declined!", "label": "support", "group": "support:en:10"}
+{"text": "what is the status ofmy terminal thanks", "label": "support", "group": "support:en:14"}
+{"text": "why was my transaction refused please", "label": "support", "group": "support:en:11"}
+{"text": "por favor, quanto é dólar convertido para rael?", "label": "general", "group": "general:pt:17"}
+{"text": "como contratar Get Clássica!", "label": "knowledge", "group": "knowledge:pt:4"}
+{"text": "o que é inflação?", "label": "general", "group": "general:pt:22"}
+{"text": "me ajuda: qual a moeda da Austrália", "label": "general", "group": "general:pt:19"}
+{"text": "I want to close my acconut?", "label": "escalate", "group": "escalate:en:11"}
+{"text": "hi, how is receivables advance different from the card machine thanks", "label": "knowledge", "group": "knowledge:en:13"}
+{"text": "hi, what's the capital of Argentina thanks", "label": "general", "group": "general:en:9"}
+{"text": "hello, you charged an amount I never authorized", "label": "escalate", "group": "escalate:en:27"}
+{"text": "hey, I got scammed through the card machine?", "label": "escalate", "group": "escalate:en:6"}
+{"text": "me ajuda: minha maquininha está offline", "label": "support", "group": "support:pt:5"}
+{"text": "meu extrato de ontem está errado?", "label": "support", "group": "support:pt:18"}
+{"text": "bom dia, quanto custa maquininha obrigado", "label": "knowledge", "group": "knowledge:pt:2"}
+{"text": "oi, quais as notícias de economia de hoje?", "label": "general", "group": "general:pt:12"}
+{"text": "what's the bitcoin rate today!", "label": "general", "group": "general:en:4"}
+{"text": "quick question: can I charge a customer remotely please", "label": "knowledge", "group": "knowledge:en:27"}
+{"text": "hey, my card was cloned!", "label": "escalate", "group": "escalate:en:5"}
+{"text": "transfer me to a live gent please", "label": "escalate", "group": "escalate:en:1"}
+{"text": "como troco a bobina da maquininha", "label": "knowledge", "group": "knowledge:pt:33"}
+{"text": "por que minhatransação foi negada?", "label": "support", "group": "support:pt:11"}
+{"text": "olá, qual conta está cadastrada para o meu repasse?", "label": "support", "group": "support:pt:24"}
+{"text": "me ajuda: o que é inflação por favor", "label": "general", "group": "general:pt:22"}
+{"text": "quick question: I want to terminate my contract thanks", "label": "escalate", "group": "escalate:en:17"}
+{"text": "me ajuda: quanto cutsa Get Clássica?", "label": "knowledge", "group": "knowledge:pt:2"}
+{"text": "quais as taxas de parcelamento", "label": "knowledge", "group": "knowledge:pt:3"}
+{"text": "bom dia, minha maquininha está sem sinal?", "label": "support", "group": "support:pt:9"}
+{"text": "hey, I dno't want to talk to a bot thanks", "label": "escalate", "group": "escalate:en:20"}
+{"text": "me ajuda: link de pagamento aceita aproximação?", "label": "knowledge", "group": "knowledge:pt:18"}
+{"text": "hello, my Pix from today is missing from the statement please", "label": "support", "group": "support:en:31"}
+{"text": "my card machine won't connect to wifi?", "label": "support", "group": "support:en:22"}
+{"text": "hi, what's the population of Belo Horizonte?", "label": "general", "group": "general:en:10"}
+{"text": "how many days are in February this year", "label": "general", "group": "general:en:21"}
+{"text": "my card was cloned?", "label": "escalate", "group": "escalate:en:5"}
+{"text": "my card was cloned", "label": "escalate", "group": "escalate:en:5"}
+{"text": "quick question: can I sell on social media thanks", "label": "knowledge", "group": "knowledge:en:28"}
+{"text": "hi, my machine is declining every card", "label": "support", "group": "support:en:27"}
+{"text": "meu extrato de sábado está errado", "label": "support", "group": "support:pt:18"}
+{"text": "oi, minha maquininha está sem sinal", "label": "support", "group": "support:pt:9"}
+{"text": "please, what currency does France use please", "label": "general", "group": "general:en:19"}
+{"text": "minha maquniinha perdeu a conexão com a internet!", "label": "support", "group": "support:pt:23"}
+{"text": "what are the benefits of Get Clássica please", "label": "knowledge", "group": "knowledge:en:7"}
+{"text": "me ajuda: quero atendimento humano agora?", "label": "escalate", "group": "escalate:pt:3"}
+{"text": "bom dia, quanto vou receber aanhã?", "label": "support", "group": "support:pt:3"}
+{"text": "qual a diferença de Pix para parcelamento", "label": "knowledge", "group": "knowledge:pt:13"}
+{"text": "can a sole trader use terminal rental", "label": "knowledge", "group": "knowledge:en:14"}
+{"text": "por favor, como configuro o chip da maquininha obrigado", "label": "knowledge", "group": "knowledge:pt:26"}
+{"text": "I want to talk to a human thanks", "label": "escalate", "group": "escalate:en:0"}
+{"text": "bom dia, como está o clima em Curitiba por favor", "label": "general", "group": "general:pt:3"}
+{"text": "qual a previsão do tempo em Belo Horizonte amanhã!", "label": "general", "group": "general:pt:0"}
+{"text": "how hot is it in Porto Alegre today?", "label": "general", "group": "general:en:2"}
+{"text": "hey, which plan am I on", "label": "support", "group": "support:en:15"}
+{"text": "please, convert one yen to Brazilian real please", "label": "general", "group": "general:en:17"}
+{"text": "olá, querover minhas últimas vendas obrigado", "label": "support", "group": "support:pt:13"}
+{"text": "o que é aluguel da maquininha?", "label": "knowledge", "group": "knowledge:pt:1"}
+{"text": "oi, isso não resolveu, quero uma pessoa", "label": "escalate", "group": "escalate:pt:21"}
+{"text": "por favor, quanto é bitcoin convertido para real!", "label": "general", "group": "general:pt:17"}
+{"text": "quais formas de pagamento a Getnet aceita", "label": "knowledge", "group": "knowledge:pt:30"}
+{"text": "abriram uma disputa contra a minah loja?", "label": "escalate", "group": "escalate:pt:11"}
+{"text": "urgente: não quro falar com robô!", "label": "escalate", "group": "escalate:pt:20"}
+{"text": "recebi um chargeback indevido", "label": "escalate", "group": "escalate:pt:10"}
+{"text": "oi, parcelamento aceita aproximação", "label": "knowledge", "group": "knowledge:pt:18"}
+{"text": "por favor, quem ganou o jogo de ontem", "label": "general", "group": "general:pt:8"}
+{"text": "minhamaquininha travou na tela inicial", "label": "support", "group": "support:pt:7"}
+{"text": "por favor, quanto está o bitcoin", "label": "general", "group": "general:pt:5"}
+{"text": "what rae the fees for crediário?", "label": "knowledge", "group": "knowledge:en:3"}
+{"text": "oi, quais bandeiras Pix aceita?", "label": "knowledge", "group": "knowledge:pt:11"}
+{"text": "get me a supervisor thanks", "label": "escalate", "group": "escalate:en:3"}
+{"text": "hey, can I use Get Clássica on my phone thanks", "label": "knowledge", "group": "knowledge:en:10"}
+{"text": "which plan am I on", "label": "support", "group": "support:en:15"}
+{"text": "oi, preciso de conta em banco para usar parcelamento obrigado", "label": "knowledge", "group": "knowledge:pt:22"}
+{"text": "por favor, preciso de CNPJ para ter Get Clássica", "label": "knowledge", "group": "knowledge:pt:8"}
+{"text": "quick question: does Get Smart accept ocntactless", "label": "knowledge", "group": "knowledge:en:18"}
+{"text": "por favor, preciso de conta em banco para usar antecipação de recebíveis obrigado", "label": "knowledge", "group": "knowledge:pt:22"}
+{"text": "which paymet methods does Getnet accept", "label": "knowledge", "group": "knowledge:en:30"}
+{"text": "em qual conta recebo asvendas de link de pagamento", "label": "knowledge", "group": "knowledge:pt:23"}
+{"text": "minha maquininha está recusando todos os cartões", "label": "support", "group": "support:pt:27"}
+{"text": "quick question: I was a victim of fraud thanks", "label": "escalate", "group": "escalate:en:4"}
+{"text": "hello, does the card machine have a monthly fee", "label": "knowledge", "group": "knowledge:en:5"}
+{"text": "me ajuda: qual a distância entre Recife  Belo Horizonte?", "label": "general", "group": "general:pt:14"}
+{"text": "por favor, a bateria da imnha maquininha não carrega", "label": "support", "group": "support:pt:8"}
+{"text": "me ajuda: quanto está o peso argentino?", "label": "general", "group": "general:pt:5"}
+{"text": "urgente: quero abrir um chamado para minha maquininha", "label": "support", "group": "support:pt:17"}
+{"text": "someone accessed my account wthout permission", "label": "escalate", "group": "escalate:en:16"}
+{"text": "bom dia, como contratar Pix", "label": "knowledge", "group": "knowledge:pt:4"}
+{"text": "hey, a dispute was opened against my store please", "label": "escalate", "group": "escalate:en:10"}
+{"text": "me ajuda: estão usando minha maquininha sem eu saber?", "label": "escalate", "group": "escalate:pt:23"}
+{"text": "hello, do I have any open tickets?", "label": "support", "group": "support:en:30"}
+{"text": "hey, how much does installmnts cost?", "label": "knowledge", "group": "knowledge:en:2"}
+{"text": "não recebi o valor da venda de segunda obrigado", "label": "support", "group": "support:pt:19"}
+{"text": "please, will it rain in Porto Alegre on Friday thanks", "label": "general", "group": "general:en:1"}
+{"text": "oi, qual a distância entre Flroianópolis e São Paulo", "label": "general", "group": "general:pt:14"}
+{"text": "did the pound go up or down today", "label": "general", "group": "general:en:7"}
+{"text": "olá, quero falar com um atendente obrigado", "label": "escalate", "group": "escalate:pt:0"}
+{"text": "oi, qual a diferença de Pix para Get Clássica por favor", "label": "knowledge", "group": "knowledge:pt:13"}
+{"text": "hi, what is my next payout amount", "label": "support", "group": "support:en:4"}
+{"text": "quanto vou receber essa semana", "label": "support", "group": "support:pt:3"}
+{"text": "how many reais is one pound", "label": "general", "group": "general:en:6"}
+{"text": "oi, roubaram minha maquininha?", "label": "escalate", "group": "escalate:pt:16"}
+{"text": "hi, my machine is declining every card?", "label": "support", "group": "support:en:27"}
+{"text": "where is my payout from Monday please", "label": "support", "group": "support:en:1"}
+{"text": "olá, como vendo online sem maquininha", "label": "knowledge", "group": "knowledge:pt:29"}
+{"text": "please, how much did I sell last week!", "label": "support", "group": "support:en:28"}
+{"text": "hi, how much is the euro", "label": "general", "group": "general:en:5"}
+{"text": "já tentei de tudo, me passa para alguém", "label": "escalate", "group": "escalate:pt:19"}
+{"text": "quick question: which card brands does Pix accept!", "label": "knowledge", "group": "knowledge:en:11"}
+{"text": "oi, alguém acessou minha conta sem autorização!", "label": "escalate", "group": "escalate:pt:17"}
+{"text": "hi, I was a victim of fraud please", "label": "escalate", "group": "escalate:en:4"}
+{"text": "I've tried everything, pass me to someone thanks", "label": "escalate", "group": "escalate:en:18"}
+{"text": "hello, my terminla won't turn on", "label": "support", "group": "support:en:6"}
+{"text": "oi, apareceu erro na minha venda de ontem por favor", "label": "support", "group": "support:pt:12"}
+{"text": "hello, how do I connect the card machnie to wifi please", "label": "knowledge", "group": "knowledge:en:25"}
+{"text": "quick question: I urgently need someone from Getnet", "label": "escalate", "group": "escalate:en:25"}
+{"text": "bom dia, quanto vale um euro em reais", "label": "general", "group": "general:pt:6"}
+{"text": "oi, quais a notícias de economia de hoje!", "label": "general", "group": "general:pt:12"}
+{"text": "urgente: vai chover em Salvador sexta?", "label": "general", "group": "general:pt:1"}
+{"text": "urgente: tem uma venda que e não reconheço, acho que é fraude obrigado", "label": "escalate", "group": "escalate:pt:8"}
+{"text": "I need to speak with a real person?", "label": "escalate", "group": "escalate:en:2"}
+{"text": "hi, does meal vouches accept contactless?", "label": "knowledge", "group": "knowledge:en:18"}
+{"text": "quero cancelar minha conta obrigado", "label": "escalate", "group": "escalate:pt:12"}
+{"text": "quick question: is Get Clássica worth it", "label": "knowledge", "group": "knowledge:en:6"}
+{"text": "hi, someone accessed my account wihout permission?", "label": "escalate", "group": "escalate:en:16"}
+{"text": "hey, my machine is declining every card", "label": "support", "group": "support:en:27"}
+{"text": "hello, what's the weather like in São Paulo on Friday?", "label": "general", "group": "general:en:0"}
+{"text": "I am tkaing legal action against you thanks", "label": "escalate", "group": "escalate:en:24"}
+{"text": "antecipação de recebívei tem mensalidade", "label": "knowledge", "group": "knowledge:pt:5"}
+{"text": "bom dia, vou entrar na justiça contra vocês obrigado", "label": "escalate", "group": "escalate:pt:24"}
+{"text": "quick question: which bank account is set for my payouts?", "label": "support", "group": "support:en:24"}
+{"text": "olá, qual o valor do meu próximo repasse obrigado", "label": "support", "group": "support:pt:4"}
+{"text": "em quantas vezes dá para arcelar com parcelamento?", "label": "knowledge", "group": "knowledge:pt:16"}
+{"text": "olá, meu repsse de semana passada não caiu por favor", "label": "support", "group": "support:pt:2"}
+{"text": "olá, preciso de CNPJ para ter vale-refeição obrigado", "label": "knowledge", "group": "knowledge:pt:8"}
+{"text": "quatnos habitantes tem Salvador?", "label": "general", "group": "general:pt:10"}
+{"text": "urgente: quais as notícias de economia de hoje!", "label": "general", "group": "general:pt:12"}
+{"text": "me ajuda: já tentei de tudo, e passa para alguém", "label": "escalate", "group": "escalate:pt:19"}
+{"text": "hey, can I charge a customerr emotely please", "label": "knowledge", "group": "knowledge:en:27"}
+{"text": "olá, qual a maior cidade da Argentina por favor", "label": "general", "group": "general:pt:23"}
+{"text": "hi, I want to dispute a charge?", "label": "escalate", "group": "escalate:en:8"}
+{"text": "hello, can I get terminal rental paid into another bank thanks", "label": "knowledge", "group": "knowledge:en:24"}
+{"text": "o que é vale-refeição", "label": "knowledge", "group": "knowledge:pt:1"}
+{"text": "hi, will it rain in Manaus this week?", "label": "general", "group": "general:en:1"}
+{"text": "what are the benefits of the payment link!", "label": "knowledge", "group": "knowledge:en:7"}
+{"text": "what time is it in oPrto Alegre", "label": "general", "group": "general:en:11"}
+{"text": "quick question: how do I enable Get Clássica", "label": "knowledge", "group": "knowledge:en:12"}
+{"text": "is my terminal up to date please", "label": "support", "group": "support:en:29"}
+{"text": "quick question: transfer me to a live agent?", "label": "escalate", "group": "escalate:en:1"}
+{"text": "por favor, posso receber aluguel da maquininha em conta de outro banco por favor", "label": "knowledge", "group": "knowledge:pt:24"}
+{"text": "how o I sell with Get Smart", "label": "knowledge", "group": "knowledge:en:15"}
+{"text": "bom dia, meu terminal não está aceitando cartão obrigado", "label": "support", "group": "support:pt:21"}
+{"text": "olá, minha maquininha estáoffline?", "label": "support", "group": "support:pt:5"}
+{"text": "minha maquininha estáo ffline", "label": "support", "group": "support:pt:5"}
+{"text": "oi, meu pagamento de hoje está atrasado por favor", "label": "support", "group": "support:pt:26"}
+{"text": "o dinheiro de ontem já caiu na minha conta!", "label": "support", "group": "support:pt:25"}
+{"text": "bom dia, recebi um chargeback indevido", "label": "escalate", "group": "escalate:pt:10"}
+{"text": "quanto vou receber amanhã obrigado", "label": "support", "group": "support:pt:3"}
+{"text": "oi, qua lconta está cadastrada para o meu repasse obrigado", "label": "support", "group": "support:pt:24"}
+{"text": "olá, o dólar subiu ou caiuhoje?", "label": "general", "group": "general:pt:7"}
+{"text": "what's teh climate in Salvador!", "label": "general", "group": "general:en:3"}
+{"text": "hello, open a ticket for my card machine?", "label": "support", "group": "support:en:17"}
+{"text": "I need to sepak with a real person", "label": "escalate", "group": "escalate:en:2"}
+{"text": "please, someone is using my card machine without my knowledge please", "label": "escalate", "group": "escalate:en:23"}
+{"text": "quem ganhou o jogo de ontem?", "label": "general", "group": "general:pt:8"}
+{"text": "urgente: minha maquininha está recusando todso os cartões obrigado", "label": "support", "group": "support:pt:27"}
+{"text": "hello, my terminal los its internet connection!", "label": "support", "group": "support:en:23"}
+{"text": "por favor, o libra subiu ou caiu hoje?", "label": "general", "group": "general:pt:7"}
+{"text": "why was my transactionr efused?", "label": "support", "group": "support:en:11"}
+{"text": "which card machine is ebst for a new business please", "label": "knowledge", "group": "knowledge:en:32"}
+{"text": "does Get Smart have a monthly fee please", "label": "knowledge", "group": "knowledge:en:5"}
+{"text": "qual a diferença de aluguel da maquininha para maquininha?", "label": "knowledge", "group": "knowledge:pt:13"}
+{"text": "hey, which account do meal vouchers sales go to", "label": "knowledge", "group": "knowledge:en:23"}
+{"text": "bom dia, quem ganhou o jogo de ontem!", "label": "general", "group": "general:pt:8"}
+{"text": "I got scammed through the card machine", "label": "escalate", "group": "escalate:en:6"}
+{"text": "roubaram miha maquininha obrigado", "label": "escalate", "group": "escalate:pt:16"}
+{"text": "bom dia, qual am oeda da Argentina obrigado", "label": "general", "group": "general:pt:19"}
+{"text": "hey, my erminal lost its internet connection!", "label": "support", "group": "support:en:23"}
+{"text": "quick question: I'm going to report you to the regulator", "label": "escalate", "group": "escalate:en:13"}
+{"text": "please, I ant my money back, I was deceived!", "label": "escalate", "group": "escalate:en:26"}
+{"text": "someone is using my card machine without my knowledge?", "label": "escalate", "group": "escalate:en:23"}
+{"text": "hello, my terminal lost its internet connection please", "label": "support", "group": "support:en:23"}
+{"text": "urgente: qual a maior cidade da Argentina obrigado", "label": "general", "group": "general:pt:23"}
+{"text": "please, what's the climate in Curitiba?", "label": "general", "group": "general:en:3"}
+{"text": "please, who is eligible for Get Clássica!", "label": "knowledge", "group": "knowledge:en:21"}
+{"text": "hi, I don't want to talk to a ot?", "label": "escalate", "group": "escalate:en:20"}
+{"text": "me ajuda: psso usar link de pagamento sendo MEI?", "label": "knowledge", "group": "knowledge:pt:14"}
+{"text": "olá, qual o stauts da minha maquininha obrigado", "label": "support", "group": "support:pt:14"}
+{"text": "my card was cloned thanks", "label": "escalate", "group": "escalate:en:5"}
+{"text": "por favor, não quero falar com robô?", "label": "escalate", "group": "escalate:pt:20"}
+{"text": "me ajuda: em qual conta recebo as vendas de vale-refeição", "label": "knowledge", "group": "knowledge:pt:23"}
+{"text": "is crediário worth it", "label": "knowledge", "group": "knowledge:en:6"}
+{"text": "hello, can I use the payment link on my phone", "label": "knowledge", "group": "knowledge:en:10"}
+{"text": "hello, I want to repot a crime?", "label": "escalate", "group": "escalate:en:22"}
+{"text": "urgente: quero fazer uma denúncia por favor", "label": "escalate", "group": "escalate:pt:22"}
+{"text": "hi, how many installments can I offer with Pix!", "label": "knowledge", "group": "knowledge:en:16"}
+{"text": "me ajuda: preciso de CNJ para ter Pix", "label": "knowledge", "group": "knowledge:pt:8"}
+{"text": "hello, there's a sale I don't recognize, I think it's fraud!", "label": "escalate", "group": "escalate:en:7"}
+{"text": "please, my Pix from Saturday is missing from the statement", "label": "support", "group": "support:en:31"}
+{"text": "hi, how far is Porto Alegre from Florianópolis!", "label": "general", "group": "general:en:14"}
+{"text": "como troco a bobina da maquininha obrigado", "label": "knowledge", "group": "knowledge:pt:33"}
+{"text": "please, who si the president of Japan!", "label": "general", "group": "general:en:13"}
+{"text": "hi, do I have any open tickets!", "label": "support", "group": "support:en:30"}
+{"text": "please, how do I change the paper roll", "label": "knowledge", "group": "knowledge:en:33"}
+{"text": "por favor, quantoshabitantes tem Salvador?", "label": "general", "group": "general:pt:10"}
+{"text": "me ajuda: meu repasse de semana passada não ciu", "label": "support", "group": "support:pt:2"}
+{"text": "olá, meu pagamento de hoje está atrasado por favor", "label": "support", "group": "support:pt:26"}
+{"text": "hi, how many days are in February this year please", "label": "general", "group": "general:en:21"}
+{"text": "do I need a bank account to use installments thanks", "label": "knowledge", "group": "knowledge:en:22"}
+{"text": "quero abrir um chamado para minha maquininha", "label": "support", "group": "support:pt:17"}
+{"text": "what's the weather like in Salvador today", "label": "general", "group": "general:en:0"}
+{"text": "quero falar com m atendente?", "label": "escalate", "group": "escalate:pt:0"}
+{"text": "a Getnet oferece aluuel da maquininha obrigado", "label": "knowledge", "group": "knowledge:pt:20"}
+{"text": "what are the fees for meal vouchers?", "label": "knowledge", "group": "knowledge:en:3"}
+{"text": "how is Pix different from mela vouchers", "label": "knowledge", "group": "knowledge:en:13"}
+{"text": "is it going to be cold in Belo Horizonte on Friday", "label": "general", "group": "general:en:18"}
+{"text": "please, my card machine is offline?", "label": "support", "group": "support:en:5"}
+{"text": "bom dia, quero meu dinheiro de volta, fui enganado obrigado", "label": "escalate", "group": "escalate:pt:26"}
+{"text": "oi, vai chover em Mnaaus hoje", "label": "general", "group": "general:pt:1"}
+{"text": "is it going ot be cold in Belo Horizonte tomorrow!", "label": "general", "group": "general:en:18"}
+{"text": "whcih card brands does crediário accept", "label": "knowledge", "group": "knowledge:en:11"}
+{"text": "please, does installments accept contactless", "label": "knowledge", "group": "knowledge:en:18"}
+{"text": "hello, how can I get installment sales paid sooner!", "label": "knowledge", "group": "knowledge:en:31"}
+{"text": "hey, what is meal vouchers!", "label": "knowledge", "group": "knowledge:en:1"}
+{"text": "por favor, qual conta está cadastrada para o meu repasse", "label": "support", "group": "support:pt:24"}
+{"text": "hi, a dispute was opened gaainst my store please", "label": "escalate", "group": "escalate:en:10"}
+{"text": "debitaram um valor qe eu não autorizei obrigado", "label": "escalate", "group": "escalate:pt:27"}
+{"text": "oi, apareceu ero na minha venda de semana passada", "label": "support", "group": "support:pt:12"}
+{"text": "hello, my terminal won't turn on!", "label": "support", "group": "support:en:6"}
+{"text": "hello, what is inflation?", "label": "general", "group": "general:en:22"}
+{"text": "how much does installments cost!", "label": "knowledge", "group": "knowledge:en:2"}
+{"text": "get me a supervisor please", "label": "escalate", "group": "escalate:en:3"}
+{"text": "caí em um golpe com a maquininha por favor", "label": "escalate", "group": "escalate:pt:7"}
+{"text": "please, which bank account is set for my payouts?", "label": "support", "group": "support:en:24"}
+{"text": "who is eligible for installments", "label": "knowledge", "group": "knowledge:en:21"}
+{"text": "qual maquininha é melhor para quem está começando", "label": "knowledge", "group": "knowledge:pt:32"}
+{"text": "how much does the card machine cost thanks", "label": "knowledge", "group": "knowledge:en:2"}
+{"text": "quick question: when wlil my sales from last week be paid out", "label": "support", "group": "support:en:0"}
+{"text": "my card reader shows a transaction error!", "label": "support", "group": "support:en:20"}
+{"text": "hello, I wsa a victim of fraud!", "label": "escalate", "group": "escalate:en:4"}
+{"text": "where is my payout from yesterday?", "label": "support", "group": "support:en:1"}
+{"text": "can I sell on social media?", "label": "knowledge", "group": "knowledge:en:28"}
+{"text": "bom dia, preciso de conta em banco para usar Pix por favor", "label": "knowledge", "group": "knowledge:pt:22"}
+{"text": "hello, how do I sell onlin without a card machine please", "label": "knowledge", "group": "knowledge:en:29"}
+{"text": "I wantto report a crime?", "label": "escalate", "group": "escalate:en:22"}
+{"text": "urgente: onde vejo as condições de parcelamento", "label": "knowledge", "group": "knowledge:pt:19"}
+{"text": "which card machine is best for a new business", "label": "knowledge", "group": "knowledge:en:32"}
+{"text": "woh is eligible for the payment link", "label": "knowledge", "group": "knowledge:en:21"}
+{"text": "cadê meu repasse ed hoje", "label": "support", "group": "support:pt:1"}
+{"text": "I want to terminate my conract?", "label": "escalate", "group": "escalate:en:17"}
+{"text": "what is the status of my terminal please", "label": "support", "group": "support:en:14"}
+{"text": "por favor, minha maquininha perdeu a conexão com a internet?", "label": "support", "group": "support:pt:23"}
+{"text": "mnha maquininha está atualizada", "label": "support", "group": "support:pt:29"}
+{"text": "quem descobriu o Basil", "label": "general", "group": "general:pt:20"}
+{"text": "quick question: m terminal is not accepting cards thanks", "label": "support", "group": "support:en:21"}
+{"text": "hello, when will my sales from yesterday be paid out", "label": "support", "group": "support:en:0"}
+{"text": "urgente: qual o prazo de recebimento de parcelamento por favor", "label": "knowledge", "group": "knowledge:pt:17"}
+{"text": "oi, pareclamento tem mensalidade", "label": "knowledge", "group": "knowledge:pt:5"}
+{"text": "can a sole trader use Get Clsásica", "label": "knowledge", "group": "knowledge:en:14"}
+{"text": "hey, which bank account is set for my payouts", "label": "support", "group": "support:en:24"}
+{"text": "I want to close my account thanks", "label": "escalate", "group": "escalate:en:11"}
+{"text": "this is unacceptable, let me speak to a manager please", "label": "escalate", "group": "escalate:en:14"}
+{"text": "oi, qual a cotação do libra hoje", "label": "general", "group": "general:pt:4"}
+{"text": "estão usando minha maquininha sem eu saber", "label": "escalate", "group": "escalate:pt:23"}
+{"text": "estão usando minha maquininha sem eu saber obrigado", "label": "escalate", "group": "escalate:pt:23"}
+{"text": "oi, como faço para vender com antecipaçã ode recebíveis por favor", "label": "knowledge", "group": "knowledge:pt:15"}
+{"text": "me ajuda: minha mqauininha não liga por favor", "label": "support", "group": "support:pt:6"}
+{"text": "can I sell on social media thanks", "label": "knowledge", "group": "knowledge:en:28"}
+{"text": "por favor, te algum chamado aberto no meu nome", "label": "support", "group": "support:pt:30"}
+{"text": "I need to speak with a real person", "label": "escalate", "group": "escalate:en:2"}
+{"text": "hi, when is the next public holiday!", "label": "general", "group": "general:en:15"}
+{"text": "oi, me transfere para um humano obrigado", "label": "escalate", "group": "escalate:pt:1"}
+{"text": "please, what's the population of Salvador!", "label": "general", "group": "general:en:10"}
+{"text": "a etnet oferece link de pagamento por favor", "label": "knowledge", "group": "knowledge:pt:20"}
+{"text": "como faço para receber antes o crédito parcelado", "label": "knowledge", "group": "knowledge:pt:31"}
+{"text": "hello, I want my money back, I was deceived?", "label": "escalate", "group": "escalate:en:26"}
+{"text": "bom dia, quero fazer uma denúncia?", "label": "escalate", "group": "escalate:pt:22"}
+{"text": "hey, how does Pix work please", "label": "knowledge", "group": "knowledge:en:0"}
+{"text": "qual o prazo de recebimento de antecipação de recebíveis!", "label": "knowledge", "group": "knowledge:pt:17"}
+{"text": "what's today's economic news?", "label": "general", "group": "general:en:12"}
+{"text": "bom dia, posso vender pelas redes sociais por favor", "label": "knowledge", "group": "knowledge:pt:28"}
+{"text": "olá, quero contestar uma cobrança!", "label": "escalate", "group": "escalate:pt:9"}
+{"text": "please, can a sole trader uset erminal rental thanks", "label": "knowledge", "group": "knowledge:en:14"}
+{"text": "hey, cna I charge a customer remotely?", "label": "knowledge", "group": "knowledge:en:27"}
+{"text": "quick question: my card machine was stolen please", "label": "escalate", "group": "escalate:en:15"}
+{"text": "oi, como faço para receber antes o crédito parcelado obrigado", "label": "knowledge", "group": "knowledge:pt:31"}
+{"text": "quick question: how do I change the paper roll?", "label": "knowledge", "group": "knowledge:en:33"}
+{"text": "hi, what are the fees for the card machine please", "label": "knowledge", "group": "knowledge:en:3"}
+{"text": "do I need a bank account to use terminal rental?", "label": "knowledge", "group": "knowledge:en:22"}
+{"text": "oi, quero abrir um chamado para minha maquininha!", "label": "support", "group": "support:pt:17"}
+{"text": "por favor, qual conta está acdastrada para o meu repasse?", "label": "support", "group": "support:pt:24"}
+{"text": "how do I sign up for the card machine?", "label": "knowledge", "group": "knowledge:en:4"}
+{"text": "I received an unfair chargbeack?", "label": "escalate", "group": "escalate:en:9"}
+{"text": "quero registrar uma reclamação formal!", "label": "escalate", "group": "escalate:pt:13"}
+{"text": "olá, como vendo online sem maquininha!", "label": "knowledge", "group": "knowledge:pt:29"}
+{"text": "urgente: roubaram minha maquininha", "label": "escalate", "group": "escalate:pt:16"}
+{"text": "what is my next payout amount", "label": "support", "group": "support:en:4"}
+{"text": "I've tried everything, pass me to someone please", "label": "escalate", "group": "escalate:en:18"}
+{"text": "oi, posso receber antecipação de recebíveis em conta de outro banco por favor", "label": "knowledge", "group": "knowledge:pt:24"}
+{"text": "that didn't help, I want a person", "label": "escalate", "group": "escalate:en:21"}
+{"text": "quantoeu vendi sábado por favor", "label": "support", "group": "support:pt:28"}
+{"text": "hi, ho is Get Clássica different from the payment link!", "label": "knowledge", "group": "knowledge:en:13"}
+{"text": "olá, minha ntecipação já foi aprovada obrigado", "label": "support", "group": "support:pt:16"}
+{"text": "quick question: there's a sale I don't recognize, I think it's fraud?", "label": "escalate", "group": "escalate:en:7"}
+{"text": "what is the largest city in Japan?", "label": "general", "group": "general:en:23"}
+{"text": "me ajuda: posso vender pelas redes sociais", "label": "knowledge", "group": "knowledge:pt:28"}
+{"text": "oi, quanto é peso argentino convertido para real!", "label": "general", "group": "general:pt:17"}
+{"text": "you charged an amount I nver authorized?", "label": "escalate", "group": "escalate:en:27"}
+{"text": "urgente: dá para usar vale-refeição pelo celular?", "label": "knowledge", "group": "knowledge:pt:10"}
+{"text": "quick question: do I need a comany to use crediário", "label": "knowledge", "group": "knowledge:en:8"}
+{"text": "hey, I'm going to report you to the regulator", "label": "escalate", "group": "escalate:en:13"}
+{"text": "bom dia, como contratar aluguel da maquininha", "label": "knowledge", "group": "knowledge:pt:4"}
+{"text": "hey, how do I sign upfor Pix", "label": "knowledge", "group": "knowledge:en:4"}
+{"text": "olá, minha antecipação já foi aprovada", "label": "support", "group": "support:pt:16"}
+{"text": "I've tried everything, pass me to someone", "label": "escalate", "group": "escalate:en:18"}
+{"text": "urgente: qual a cotaçã do peso argentino hoje por favor", "label": "general", "group": "general:pt:4"}
+{"text": "hey, my statement for today looks wrong thanks", "label": "support", "group": "support:en:18"}
+{"text": "urgente: quero registrar uma reclamação formal por favor", "label": "escalate", "group": "escalate:pt:13"}
+{"text": "olá, como troco a bbina da maquininha", "label": "knowledge", "group": "knowledge:pt:33"}
+{"text": "my statement for last week looks wrong!", "label": "support", "group": "support:en:18"}
+{"text": "quick question: my card machine is offline thanks", "label": "support", "group": "support:en:5"}
+{"text": "vou acionar o Procon?", "label": "escalate", "group": "escalate:pt:14"}
+{"text": "por favor, alguém acessou minha conta sem autorização?", "label": "escalate", "group": "escalate:pt:17"}
+{"text": "me ajuda: clonaram meu cartão?", "label": "escalate", "group": "escalate:pt:6"}
+{"text": "urgente: quantos dias tem fevereiro este ano", "label": "general", "group": "general:pt:21"}
+{"text": "hello, my cadr machine was stolen thanks", "label": "escalate", "group": "escalate:en:15"}
+{"text": "por favor, quem pode contratar parcelamento por favor", "label": "knowledge", "group": "knowledge:pt:21"}
+{"text": "isso não resolveu, quro uma pessoa?", "label": "escalate", "group": "escalate:pt:21"}
+{"text": "my card reader shows a transaction error?", "label": "support", "group": "support:en:20"}
+{"text": "my payment from today is late", "label": "support", "group": "support:en:26"}
+{"text": "por favor, qual é o meu plano?", "label": "support", "group": "support:pt:15"}
+{"text": "bom dia, minha maquininha não conecta no wifi", "label": "support", "group": "support:pt:22"}
+{"text": "onde vejo as condições de maquininha", "label": "knowledge", "group": "knowledge:pt:19"}
+{"text": "olá, quero cancelar minha conta?", "label": "escalate", "group": "escalate:pt:12"}
+{"text": "olá, quem pode contratarPix", "label": "knowledge", "group": "knowledge:pt:21"}
+{"text": "me ajuda: dá para cobrar um cliente à distância?", "label": "knowledge", "group": "knowledge:pt:27"}
+{"text": "my terminal battery won't hcarge", "label": "support", "group": "support:en:8"}
+{"text": "oi, qual a previsão do tempoe m Curitiba sexta", "label": "general", "group": "general:pt:0"}
+{"text": "please, my sttement for last week looks wrong please", "label": "support", "group": "support:en:18"}
+{"text": "por favor, abriram uma disputa contra a minha loja", "label": "escalate", "group": "escalate:pt:11"}
+{"text": "urgente: vale a pena usar Get Smart por favor", "label": "knowledge", "group": "knowledge:pt:6"}
+{"text": "quick question: do I need a company to use receivables davance!", "label": "knowledge", "group": "knowledge:en:8"}
+{"text": "I want to dispute a charge", "label": "escalate", "group": "escalate:en:8"}
+{"text": "meu repasse de sábado não caiu!", "label": "support", "group": "support:pt:2"}
+{"text": "quanto vou receber sexta!", "label": "support", "group": "support:pt:3"}
+{"text": "urgente: isso é um absurdo, quero falar com o gerente!", "label": "escalate", "group": "escalate:pt:15"}
+{"text": "hi, des Getnet offer Get Clássica?", "label": "knowledge", "group": "knowledge:en:20"}
+{"text": "who won the game last night thanks", "label": "general", "group": "general:en:8"}
+{"text": "olá, quero contestar uma cobrança?", "label": "escalate", "group": "escalate:pt:9"}
+{"text": "how much is the yen!", "label": "general", "group": "general:en:5"}
+{"text": "hey, I want to terminate my contract?", "label": "escalate", "group": "escalate:en:17"}
+{"text": "oi, minha maquininha travou na tela inicial", "label": "support", "group": "support:pt:7"}
+{"text": "chama um supervisor!", "label": "escalate", "group": "escalate:pt:4"}
+{"text": "hi, why was my last sale dcelined", "label": "support", "group": "support:en:10"}
+{"text": "how do I set up the data chip on the terminal please", "label": "knowledge", "group": "knowledge:en:26"}
+{"text": "hello, how much is the pound", "label": "general", "group": "general:en:5"}
+{"text": "do I need a bank account to use the cardmachine thanks", "label": "knowledge", "group": "knowledge:en:22"}
+{"text": "oi, qual a previsão do tempo em Recife hoje!", "label": "general", "group": "general:pt:0"}
+{"text": "chamau m supervisor!", "label": "escalate", "group": "escalate:pt:4"}
+{"text": "bom dia, como faço para vender com antecipação de recebíveis por favor", "label": "knowledge", "group": "knowledge:pt:15"}
+{"text": "quero encerrar meu conrato", "label": "escalate", "group": "escalate:pt:18"}
+{"text": "oi, qual o status da minha maquininha obrigado", "label": "support", "group": "support:pt:14"}
+{"text": "hello, has the money frmo today reached my account please", "label": "support", "group": "support:en:25"}
+{"text": "please, I want to dispute a charge thanks", "label": "escalate", "group": "escalate:en:8"}
+{"text": "olá, preciso falar com uma pessoa de verdade?", "label": "escalate", "group": "escalate:pt:2"}
+{"text": "bom dia, como fuciona maquininha?", "label": "knowledge", "group": "knowledge:pt:0"}
+{"text": "please, what is the largest city in Japan?", "label": "general", "group": "general:en:23"}
+{"text": "urgente: qual a vantagem de Pix", "label": "knowledge", "group": "knowledge:pt:7"}
+{"text": "por favor, minha maquininha não liga por favor", "label": "support", "group": "support:pt:6"}
+{"text": "hello, show me my recent sales!", "label": "support", "group": "support:en:13"}
+{"text": "I didn't receive the money for the sale on yesterday?", "label": "support", "group": "support:en:19"}
+{"text": "hi, my card machine won't connect to wifi please", "label": "support", "group": "support:en:22"}
+{"text": "urgente: preciso falar com uma pessoa de verdade", "label": "escalate", "group": "escalate:pt:2"}
+{"text": "oi, caí em umg olpe com a maquininha", "label": "escalate", "group": "escalate:pt:7"}
+{"text": "what is inflation?", "label": "general", "group": "general:en:22"}
+{"text": "olá, como vedno online sem maquininha por favor", "label": "knowledge", "group": "knowledge:pt:29"}
+{"text": "me ajuda: quero registrar uma reclamação formal?", "label": "escalate", "group": "escalate:pt:13"}
+{"text": "my card machine is offline", "label": "support", "group": "support:en:5"}
+{"text": "this is uncaceptable, let me speak to a manager please", "label": "escalate", "group": "escalate:en:14"}
+{"text": "por favor, qual a maior cdiade da Japão!", "label": "general", "group": "general:pt:23"}
+{"text": "por favor, minha maquininha travou na tela inicial por favor", "label": "support", "group": "support:pt:7"}
+{"text": "olá, minha maquininha não conceta no wifi?", "label": "support", "group": "support:pt:22"}
+{"text": "por favor, qula a maior cidade da Japão!", "label": "general", "group": "general:pt:23"}
+{"text": "why was my last sale declined please", "label": "support", "group": "support:en:10"}
+{"text": "quick question: which payment methods does Getnet accept!", "label": "knowledge", "group": "knowledge:en:30"}
+{"text": "por favor, já tentei de tudo, me passa para alguém obrigado", "label": "escalate", "group": "escalate:pt:19"}
+{"text": "hey, my terminal is not acceptign cards", "label": "support", "group": "support:en:21"}
+{"text": "maquininha tem mensalidade?", "label": "knowledge", "group": "knowledge:pt:5"}
+{"text": "what's the population of Savador?", "label": "general", "group": "general:en:10"}
+{"text": "me ajuda: caí em um golpe com a maquininha", "label": "escalate", "group": "escalate:pt:7"}
+{"text": "hello, convert one pound to Brazilian real", "label": "general", "group": "general:en:17"}
+{"text": "por favor, quem desocbriu o Brasil", "label": "general", "group": "general:pt:20"}
+{"text": "hey, who discovered Brazil?", "label": "general", "group": "general:en:20"}
+{"text": "quick question: does receivables advance accept contactless?", "label": "knowledge", "group": "knowledge:en:18"}
+{"text": "hey, what is the largest city in France thanks", "label": "general", "group": "general:en:23"}
+{"text": "I'm going to report you to the regulator please", "label": "escalate", "group": "escalate:en:13"}
+{"text": "me ajuda: a bateria da minham aquininha não carrega por favor", "label": "support", "group": "support:pt:8"}
+{"text": "hi, how much did I sell last week?", "label": "support", "group": "support:en:28"}
+{"text": "me ajuda: quantos dias tem fevereiro este ano obrigado", "label": "general", "group": "general:pt:21"}
+{"text": "please, why was my transaction refused?", "label": "support", "group": "support:en:11"}
+{"text": "hey, I am taking legal action against you", "label": "escalate", "group": "escalate:en:24"}
+{"text": "quais as taxas de vale-refeição?", "label": "knowledge", "group": "knowledge:pt:3"}
+{"text": "minha antecipação já foi aprovada", "label": "support", "group": "support:pt:16"}
+{"text": "olá, tem algum chamado aberto no meu nome por favor", "label": "support", "group": "support:pt:30"}
+{"text": "como ativar crediário", "label": "knowledge", "group": "knowledge:pt:12"}
+{"text": "bom dia, como faço para receber antes o crédito parcelado obrigado", "label": "knowledge", "group": "knowledge:pt:31"}
+{"text": "hello, a dispute was opened against my store?", "label": "escalate", "group": "escalate:en:10"}
+{"text": "meu pagamento de ontem está atrasado", "label": "support", "group": "support:pt:26"}
+{"text": "bom dia, qual o status da minha maquininha", "label": "support", "group": "support:pt:14"}
+{"text": "urgente: que temperatura faz em Florianópolis essa semana por favor", "label": "general", "group": "general:pt:2"}
+{"text": "how do I connect the card machine to wifi?", "label": "knowledge", "group": "knowledge:en:25"}
+{"text": "hey, I got scammed through the card machine", "label": "escalate", "group": "escalate:en:6"}
+{"text": "bom dia, quero meu dinheiro de volta, fui enganado?", "label": "escalate", "group": "escalate:pt:26"}
+{"text": "olá, quais bandeiras Pix aceita por favor", "label": "knowledge", "group": "knowledge:pt:11"}
+{"text": "what's the capital of Australia?", "label": "general", "group": "general:en:9"}
+{"text": "please, did the pound go up or down today?", "label": "general", "group": "general:en:7"}
+{"text": "what's the capital of Argentina?", "label": "general", "group": "general:en:9"}
+{"text": "bom dia, em qual conta recebo as vendas de Pix", "label": "knowledge", "group": "knowledge:pt:23"}
+{"text": "please, what is meal vouchers", "label": "knowledge", "group": "knowledge:en:1"}
+{"text": "hello, how does installments work!", "label": "knowledge", "group": "knowledge:en:0"}
+{"text": "how hot is it in Recife today thanks", "label": "general", "group": "general:en:2"}
+{"text": "hi, where is my payout from Saturday?", "label": "support", "group": "support:en:1"}
+{"text": "who is the president of Australia please", "label": "general", "group": "general:en:13"}
+{"text": "hello, what's today's economic news please", "label": "general", "group": "general:en:12"}
+{"text": "urgente: clonaram meu cartão?", "label": "escalate", "group": "escalate:pt:6"}
+{"text": "quick question: that didn't help, I want a person", "label": "escalate", "group": "escalate:en:21"}
+{"text": "oi, qual a capital da França?", "label": "general", "group": "general:pt:9"}
+{"text": "hey, what is the settlement time for terminal rental", "label": "knowledge", "group": "knowledge:en:17"}
+{"text": "não recebi o valor da venda de sábado", "label": "support", "group": "support:pt:19"}
+{"text": "oi, quanto eu vendi ontem", "label": "support", "group": "support:pt:28"}
+{"text": "oi, quem é o president da Argentina?", "label": "general", "group": "general:pt:13"}
+{"text": "hello, do I need a company to use receivables advance thanks", "label": "knowledge", "group": "knowledge:en:8"}
+{"text": "hey, do I have any open tickets", "label": "support", "group": "support:en:30"}
+{"text": "por favor, o dinheiro de segunda já caiu na minha conta?", "label": "support", "group": "support:pt:25"}
+{"text": "bom dia, cadê meur epasse de segunda", "label": "support", "group": "support:pt:1"}
+{"text": "quick question: what is the status of my terminal", "label": "support", "group": "support:en:14"}
+{"text": "quanto vale umd ólar em reais por favor", "label": "general", "group": "general:pt:6"}
+{"text": "I want to close my account", "label": "escalate", "group": "escalate:en:11"}
+{"text": "hi, I reeived an unfair chargeback please", "label": "escalate", "group": "escalate:en:9"}
+{"text": "hello, transfer me to a live agnt!", "label": "escalate", "group": "escalate:en:1"}
+{"text": "is it going to be cold in Porto Alegre tomorrow?", "label": "general", "group": "general:en:18"}
+{"text": "vai chover em Recife hoje", "label": "general", "group": "general:pt:1"}
+{"text": "olá, o dinheiro de sábado já caiu na minha conta", "label": "support", "group": "support:pt:25"}
+{"text": "I want to file a formal complaint please", "label": "escalate", "group": "escalate:en:12"}
+{"text": "olá, vou entrar na justiça contra vocês", "label": "escalate", "group": "escalate:pt:24"}
+{"text": "does Pix work offline", "label": "knowledge", "group": "knowledge:en:9"}
+{"text": "urgente: quero abrir um cahmado para minha maquininha!", "label": "support", "group": "support:pt:17"}
+{"text": "olá, roubaram minha maquinniha?", "label": "escalate", "group": "escalate:pt:16"}
+{"text": "how hot is it in Savlador on Friday please", "label": "general", "group": "general:en:2"}
+{"text": "hey, howdo I set up the data chip on the terminal!", "label": "knowledge", "group": "knowledge:en:26"}
+{"text": "me ajuda: fui vítima de fraude", "label": "escalate", "group": "escalate:pt:5"}
+{"text": "me ajuda: meu pagamento de sábado está atrasado obrigado", "label": "support", "group": "support:pt:26"}
+{"text": "oi, quero falar com um atendente", "label": "escalate", "group": "escalate:pt:0"}
+{"text": "I was a victim of fraud", "label": "escalate", "group": "escalate:en:4"}
+{"text": "qual a capital da Argentina por favor", "label": "general", "group": "general:pt:9"}
+{"text": "please, convert one bitconi to Brazilian real", "label": "general", "group": "general:en:17"}
+{"text": "oi, minha maquininha mostra erro de transação por favor", "label": "support", "group": "support:pt:20"}
+{"text": "minha maquinniha mostra erro de transação?", "label": "support", "group": "support:pt:20"}
+{"text": "oi, como está o clima em Curitiba", "label": "general", "group": "general:pt:3"}
+{"text": "urgente: dá para uar antecipação de recebíveis pelo celular por favor", "label": "knowledge", "group": "knowledge:pt:10"}
+{"text": "hey, how do I change the paper roll?", "label": "knowledge", "group": "knowledge:en:33"}
+{"text": "olá, qual é o meu plano", "label": "support", "group": "support:pt:15"}
+{"text": "hey, when is the next public holiday?", "label": "general", "group": "general:en:15"}
+{"text": "my terminal won't turn on thanks", "label": "support", "group": "support:en:6"}
+{"text": "where can I read the terms for the pament link thanks", "label": "knowledge", "group": "knowledge:en:19"}
+{"text": "posso vender pelas redes sociais!", "label": "knowledge", "group": "knowledge:pt:28"}
+{"text": "what currency does France use", "label": "general", "group": "general:en:19"}
+{"text": "qual mquininha é melhor para quem está começando por favor", "label": "knowledge", "group": "knowledge:pt:32"}
+{"text": "what's the capital of France?", "label": "general", "group": "general:en:9"}
+{"text": "olá, dá para usar parcelamento pelo celular por favor", "label": "knowledge", "group": "knowledge:pt:10"}
+{"text": "oi, chaam um supervisor!", "label": "escalate", "group": "escalate:pt:4"}
+{"text": "bom dia, estão usando minha maquininha sem eu saber?", "label": "escalate", "group": "escalate:pt:23"}
+{"text": "hello, when will my sales from today be paid out thanks", "label": "support", "group": "support:en:0"}
+{"text": "hey, why was my transaction efused please", "label": "support", "group": "support:en:11"}
+{"text": "oi, qual o valor do meu próximo repasse", "label": "support", "group": "support:pt:4"}
+{"text": "do I need a bank account to use Get Smart please", "label": "knowledge", "group": "knowledge:en:22"}
+{"text": "olá, minha maquininha perdeu a conexão com a internet", "label": "support", "group": "support:pt:23"}
+{"text": "hey, where can I read the terms fro crediário!", "label": "knowledge", "group": "knowledge:en:19"}
+{"text": "qual o prazo de recebimento de parcelamento?", "label": "knowledge", "group": "knowledge:pt:17"}
+{"text": "oi, quando cai o dinheiro das minhas vendas de sábado?", "label": "support", "group": "support:pt:0"}
+{"text": "já tentei de tudo, me passa para alguém!", "label": "escalate", "group": "escalate:pt:19"}
+{"text": "hi, I want to report a crime!", "label": "escalate", "group": "escalate:en:22"}
+{"text": "bom dia, quanto eu venid hoje", "label": "support", "group": "support:pt:28"}
+{"text": "hey, someone is using my card machine without my knowledge?", "label": "escalate", "group": "escalate:en:23"}
+{"text": "oi, qual o prazo de reecbimento de link de pagamento por favor", "label": "knowledge", "group": "knowledge:pt:17"}
+{"text": "I want to file a formal complaint?", "label": "escalate", "group": "escalate:en:12"}
+{"text": "quanto vale um libra em reis obrigado", "label": "general", "group": "general:pt:6"}
+{"text": "please, how can I get installment sales paid sooner", "label": "knowledge", "group": "knowledge:en:31"}
+{"text": "what's the climate in Recife?", "label": "general", "group": "general:en:3"}
+{"text": "oi, em qual conta recebo as vendas de Get Smart", "label": "knowledge", "group": "knowledge:pt:23"}
+{"text": "qual a distância entre Curitiba e Belo Horizonte?", "label": "general", "group": "general:pt:14"}
+{"text": "me ajuda: como configuro o chip da maquininha por favor", "label": "knowledge", "group": "knowledge:pt:26"}
+{"text": "me ajuda: como conecto a maquininha no wifi obrigado", "label": "knowledge", "group": "knowledge:pt:25"}
+{"text": "bom dia, minha maquininha mostra erro de transação!", "label": "support", "group": "support:pt:20"}
+{"text": "hello, has the money from last week reached my account please", "label": "support", "group": "support:en:25"}
+{"text": "please, there's a sale I don't recognize, I think it's fraud?", "label": "escalate", "group": "escalate:en:7"}
+{"text": "por favor, como funciona Get Smart!", "label": "knowledge", "group": "knowledge:pt:0"}
+{"text": "bom dia, qual o valor do meu próximo repasse?", "label": "support", "group": "support:pt:4"}
+{"text": "hey, I urgently need someone from Getnet!", "label": "escalate", "group": "escalate:en:25"}
+{"text": "hey, which account do crediário sales go to", "label": "knowledge", "group": "knowledge:en:23"}
+{"text": "dá para cobrar um cliente à distância!", "label": "knowledge", "group": "knowledge:pt:27"}
+{"text": "my terminal battery won't charge thanks", "label": "support", "group": "support:en:8"}
+{"text": "quais as taxas de antecipação de ercebíveis por favor", "label": "knowledge", "group": "knowledge:pt:3"}
+{"text": "please, connec tme with customer service staff", "label": "escalate", "group": "escalate:en:19"}
+{"text": "please, what's the poundrate today!", "label": "general", "group": "general:en:4"}
+{"text": "how ar is São Paulo from Belo Horizonte please", "label": "general", "group": "general:en:14"}
+{"text": "quick question: I ot an error on my sale from today?", "label": "support", "group": "support:en:12"}
+{"text": "please, does Get Clássica work offline!", "label": "knowledge", "group": "knowledge:en:9"}
+{"text": "quick question: I got an error on my sale from last week?", "label": "support", "group": "support:en:12"}
+{"text": "bom dia, minha maquininha não liga", "label": "support", "group": "support:pt:6"}
+{"text": "I didn't receive the mone for the sale on today please", "label": "support", "group": "support:en:19"}
+{"text": "I am taking legal ation against you thanks", "label": "escalate", "group": "escalate:en:24"}
+{"text": "olá, qual a previsão do tempo em Florianópolis amanhã obrigado", "label": "general", "group": "general:pt:0"}
+{"text": "cadê meu repases de sábado por favor", "label": "support", "group": "support:pt:1"}
+{"text": "me ajuda: qual o fuso horário de Maaus?", "label": "general", "group": "general:pt:16"}
+{"text": "me ajuda: como configuro o chip da maquininha!", "label": "knowledge", "group": "knowledge:pt:26"}
+{"text": "hi, how do I sign up for receivables advance?", "label": "knowledge", "group": "knowledge:en:4"}
+{"text": "does Pix have a monthly fee", "label": "knowledge", "group": "knowledge:en:5"}
+{"text": "olá, dá para usar link de pagamento pelo celular", "label": "knowledge", "group": "knowledge:pt:10"}
+{"text": "I want to terminate my contract!", "label": "escalate", "group": "escalate:en:17"}
+{"text": "I got an error on my sal from today", "label": "support", "group": "support:en:12"}
+{"text": "bom dia, vou acionar o Procon por favor", "label": "escalate", "group": "escalate:pt:14"}
+{"text": "quero meu dinheiro de volta, fui enganado por favor", "label": "escalate", "group": "escalate:pt:26"}
+{"text": "quick question: my settlement from last week hasn't arrived", "label": "support", "group": "support:en:2"}
+{"text": "me ajuda: minha última venda ofi recusada, por quê?", "label": "support", "group": "support:pt:10"}
+{"text": "por favor, como funciona Get Clássica", "label": "knowledge", "group": "knowledge:pt:0"}
+{"text": "que horas são em Curitiba", "label": "general", "group": "general:pt:11"}
+{"text": "is my terminal up to adte thanks", "label": "support", "group": "support:en:29"}
+{"text": "qual a cotação do libra hoje obrigado", "label": "general", "group": "general:pt:4"}
+{"text": "por que minha transação foi negada?", "label": "support", "group": "support:pt:11"}
+{"text": "open a ticket for my card machine", "label": "support", "group": "support:en:17"}
+{"text": "please, connect m ewith customer service staff?", "label": "escalate", "group": "escalate:en:19"}
+{"text": "olá, abriram uma disputa contra a minha loja obrigado", "label": "escalate", "group": "escalate:pt:11"}
+{"text": "oi, vale a pena usar Pix?", "label": "knowledge", "group": "knowledge:pt:6"}
+{"text": "can I get meal vouchers paid into another bank?", "label": "knowledge", "group": "knowledge:en:24"}
+{"text": "urgente: qual a vantagem de Pix?", "label": "knowledge", "group": "knowledge:pt:7"}
+{"text": "please, shwo me my recent sales please", "label": "support", "group": "support:en:13"}
+{"text": "hello, someone is using my card machine without my knowledge", "label": "escalate", "group": "escalate:en:23"}
+{"text": "has the money fom Saturday reached my account", "label": "support", "group": "support:en:25"}
+{"text": "I want to file a formal complaint!", "label": "escalate", "group": "escalate:en:12"}
+{"text": "por favor, quero atendimetno humano agora?", "label": "escalate", "group": "escalate:pt:3"}
+{"text": "quick question: I urgently need someone from Getnet!", "label": "escalate", "group": "escalate:en:25"}
+{"text": "hello, my card machnie was stolen please", "label": "escalate", "group": "escalate:en:15"}
+{"text": "hello, which card brands does meal vouchers accept?", "label": "knowledge", "group": "knowledge:en:11"}
+{"text": "preciso de ajuda urgenet de alguém da Getnet por favor", "label": "escalate", "group": "escalate:pt:25"}
+{"text": "olá, em quantas vezes dá para parcelar com aluguel da maquininha?", "label": "knowledge", "group": "knowledge:pt:16"}
+{"text": "hello, is it going to be cold in Manaus on Friday", "label": "general", "group": "general:en:18"}
+{"text": "quick question: my card machine is offline?", "label": "support", "group": "support:en:5"}
+{"text": "hi, my machine has no signal", "label": "support", "group": "support:en:9"}
+{"text": "quick question: my card machine won't connect to wifi thanks", "label": "support", "group": "support:en:22"}
+{"text": "I wan to file a formal complaint?", "label": "escalate", "group": "escalate:en:12"}
+{"text": "my settlement from last week hasn't arrived", "label": "support", "group": "support:en:2"}
+{"text": "fui vtima de fraude?", "label": "escalate", "group": "escalate:pt:5"}
+{"text": "olá, que temperatura faz em Porto Alegre amanhã?", "label": "general", "group": "general:pt:2"}
+{"text": "quando cai o dinheiro das minhas vendas de sábado?", "label": "support", "group": "support:pt:0"}
+{"text": "my machine is frozen on the home screen?", "label": "support", "group": "support:en:7"}
+{"text": "please, how is meal vouchers different from the card machine?", "label": "knowledge", "group": "knowledge:en:13"}
+{"text": "hey, my payment from Mondya is late?", "label": "support", "group": "support:en:26"}
+{"text": "a bateria da minha maquininha não carrega por favor", "label": "support", "group": "support:pt:8"}
+{"text": "me ajuda: link de pagamento aceita aproximação por favor", "label": "knowledge", "group": "knowledge:pt:18"}
+{"text": "how many days are in February this year!", "label": "general", "group": "general:en:21"}
+{"text": "please, my terminal is not acceptingc ards", "label": "support", "group": "support:en:21"}
+{"text": "minha antecipação já foi aprovada por favor", "label": "support", "group": "support:pt:16"}
+{"text": "por favor, tem uma venda que eu não reconheço, acho que é fraude", "label": "escalate", "group": "escalate:pt:8"}
+{"text": "hi, did the pound go up o down today?", "label": "general", "group": "general:en:7"}
+{"text": "bom dia, posso vender pelas redes sociais", "label": "knowledge", "group": "knowledge:pt:28"}
+{"text": "has my advance request been approved thanks", "label": "support", "group": "support:en:16"}
+{"text": "por favor, isso não resolveu, uqero uma pessoa", "label": "escalate", "group": "escalate:pt:21"}
+{"text": "is ym terminal up to date", "label": "support", "group": "support:en:29"}
+{"text": "I didn't receive the money for the sale on last week", "label": "support", "group": "support:en:19"}
+{"text": "please, what time is it in São Paulo", "label": "general", "group": "general:en:11"}
+{"text": "bom dia, debitaram um valor que eu não autorizei?", "label": "escalate", "group": "escalate:pt:27"}
+{"text": "who discovered Brazil?", "label": "general", "group": "general:en:20"}
+{"text": "when is the next public holiday?", "label": "general", "group": "general:en:15"}
+{"text": "por favor, no recebi o valor da venda de hoje!", "label": "support", "group": "support:pt:19"}
+{"text": "hi, my settlement from today hasn't arrived", "label": "support", "group": "support:en:2"}
+{"text": "quick question: what are the benefits of installments thanks", "label": "knowledge", "group": "knowledge:en:7"}
+{"text": "por favor, minha maquininha está sem sinal?", "label": "support", "group": "support:pt:9"}
+{"text": "hello, can I charge a customer remotely?", "label": "knowledge", "group": "knowledge:en:27"}
+{"text": "quem é o presidente da Austrália", "label": "general", "group": "general:pt:13"}
+{"text": "bom dia, clonaram meu carão obrigado", "label": "escalate", "group": "escalate:pt:6"}
+{"text": "quick question: who discovered Brazil thanks", "label": "general", "group": "general:en:20"}
+{"text": "olá, quais as notícias de economia de hoje?", "label": "general", "group": "general:pt:12"}
+{"text": "qual o status da minha maquininha por favor", "label": "support", "group": "support:pt:14"}
+{"text": "quick question: my statemetn for Saturday looks wrong please", "label": "support", "group": "support:en:18"}
+{"text": "meu Pix de sábado não apareceu no extrato!", "label": "support", "group": "support:pt:31"}
+{"text": "hi, I received an ufair chargeback?", "label": "escalate", "group": "escalate:en:9"}
+{"text": "bom dia, quero registrar uma reclamação formal", "label": "escalate", "group": "escalate:pt:13"}
+{"text": "hey, waht's today's economic news thanks", "label": "general", "group": "general:en:12"}
+{"text": "por favor, quantos dias tem fevereiro este ano?", "label": "general", "group": "general:pt:21"}
+{"text": "por favor, crediário caeita aproximação", "label": "knowledge", "group": "knowledge:pt:18"}
+{"text": "hey, what is the settlement time for installments thanks", "label": "knowledge", "group": "knowledge:en:17"}
+{"text": "olá, apareceu erro na minha vendad e ontem?", "label": "support", "group": "support:pt:12"}
+{"text": "como façopara vender com Get Smart?", "label": "knowledge", "group": "knowledge:pt:15"}
+{"text": "preciso de ajuda urgente de alguém da Getnet", "label": "escalate", "group": "escalate:pt:25"}
+{"text": "me ajuda: queor ver minhas últimas vendas?", "label": "support", "group": "support:pt:13"}
+{"text": "urgente: recebi um chargeback indevido?", "label": "escalate", "group": "escalate:pt:10"}
+{"text": "what is the settlement time for Get Clássica?", "label": "knowledge", "group": "knowledge:en:17"}
+{"text": "hey, what's theb itcoin rate today thanks", "label": "general", "group": "general:en:4"}
+{"text": "por favor, debitaram um valor que eu não autorizei", "label": "escalate", "group": "escalate:pt:27"}
+{"text": "what is my next payout amount?", "label": "support", "group": "support:en:4"}
+{"text": "hi, I don't want to talk to a bot", "label": "escalate", "group": "escalate:en:20"}
+{"text": "por favor, o euro subiu ou caiu hoje", "label": "general", "group": "general:pt:7"}
+{"text": "urgente: qual a capital da França?", "label": "general", "group": "general:pt:9"}
+{"text": "oi, quero meu dinheiro de volta, fui enganado por favor", "label": "escalate", "group": "escalate:pt:26"}
+{"text": "por favor, posso rceber Get Clássica em conta de outro banco obrigado", "label": "knowledge", "group": "knowledge:pt:24"}
+{"text": "how do I connect thecard machine to wifi please", "label": "knowledge", "group": "knowledge:en:25"}
+{"text": "me ajuda: quando cai o dinheiro das minhas vendas de semana passada?", "label": "support", "group": "support:pt:0"}
+{"text": "por favor, em quantas vezes dá para parcelar com antecipação de recebíveis?", "label": "knowledge", "group": "knowledge:pt:16"}
+{"text": "hey, does crediáio have a monthly fee please", "label": "knowledge", "group": "knowledge:en:5"}
+{"text": "oi, quero falar com um atendente obrigado", "label": "escalate", "group": "escalate:pt:0"}
+{"text": "a dispute was opened against my store", "label": "escalate", "group": "escalate:en:10"}
+{"text": "quais formas de pagamentoa Getnet aceita", "label": "knowledge", "group": "knowledge:pt:30"}
+{"text": "o dinheiro de sábado já caiu na minha conta", "label": "support", "group": "support:pt:25"}
+{"text": "anteciação de recebíveis funciona sem internet obrigado", "label": "knowledge", "group": "knowledge:pt:9"}
+{"text": "olá, que horas são em Curitiba?", "label": "general", "group": "general:pt:11"}
+{"text": "my card reader shows a transaction error", "label": "support", "group": "support:en:20"}
+{"text": "bom dia, meu Pix de sábado não apareceu no extrato", "label": "support", "group": "support:pt:31"}
+{"text": "how do I connect the card machine to wifi thanks", "label": "knowledge", "group": "knowledge:en:25"}
+{"text": "como atiar Get Smart", "label": "knowledge", "group": "knowledge:pt:12"}
+{"text": "urgente: quem é o presidente da Arentina!", "label": "general", "group": "general:pt:13"}
+{"text": "me ajuda: meu terminal não etsá aceitando cartão", "label": "support", "group": "support:pt:21"}
+{"text": "quick question: which card brands does Get Clássica accept", "label": "knowledge", "group": "knowledge:en:11"}
+{"text": "por favor, posso usar Get Clássica sendo MEI obrigado", "label": "knowledge", "group": "knowledge:pt:14"}
+{"text": "quick question: how do I enable the card machine?", "label": "knowledge", "group": "knowledge:en:12"}
+{"text": "hello, is my terminal up to date", "label": "support", "group": "support:en:29"}
+{"text": "me ajuda: me transfere para um humano por favor", "label": "escalate", "group": "escalate:pt:1"}
+{"text": "abriram uma disputa contra a minha loja?", "label": "escalate", "group": "escalate:pt:11"}
+{"text": "how do I chage the paper roll!", "label": "knowledge", "group": "knowledge:en:33"}
+{"text": "my mchine has no signal", "label": "support", "group": "support:en:9"}
+{"text": "urgente: vou acoinar o Procon", "label": "escalate", "group": "escalate:pt:14"}
+{"text": "how do I set up the data chip on the terminal", "label": "knowledge", "group": "knowledge:en:26"}
+{"text": "preciso falar com uma pessoa de verdade", "label": "escalate", "group": "escalate:pt:2"}
+{"text": "quick question: how much did I sell today please", "label": "support", "group": "support:en:28"}
+{"text": "I got an error no my sale from Monday", "label": "support", "group": "support:en:12"}
+{"text": "olá, minha maquininha não conecta no wifi?", "label": "support", "group": "support:pt:22"}
+{"text": "hello, what's the population of Florianópolis!", "label": "general", "group": "general:en:10"}
+{"text": "urgente: qual o valor do meu próximo repasse por favor", "label": "support", "group": "support:pt:4"}
+{"text": "please, how do I enable the card machine!", "label": "knowledge", "group": "knowledge:en:12"}
+{"text": "me transfere para um humano obrigado", "label": "escalate", "group": "escalate:pt:1"}
+{"text": "vai fazer frio em Salvador amanhã por favor", "label": "general", "group": "general:pt:18"}
+{"text": "my terminal won't turn on", "label": "support", "group": "support:en:6"}
+{"text": "can I use Get Clássica on my phone thanks", "label": "knowledge", "group": "knowledge:en:10"}
+{"text": "how much will I receive tomorrow please", "label": "support", "group": "support:en:3"}
+{"text": "I didn't receive the money for the sale on today please", "label": "support", "group": "support:en:19"}
+{"text": "how can I get installment salesp aid sooner", "label": "knowledge", "group": "knowledge:en:31"}
+{"text": "bom dia, quero encerrar meu contrato", "label": "escalate", "group": "escalate:pt:18"}
+{"text": "bom dia, quero cancelar minha conta?", "label": "escalate", "group": "escalate:pt:12"}
+{"text": "quick question: does Getnet offer receivables advance?", "label": "knowledge", "group": "knowledge:en:20"}
+{"text": "oi, minha maquininha está offline", "label": "support", "group": "support:pt:5"}
+{"text": "oi, quando é o próximo feriado nacional!", "label": "general", "group": "general:pt:15"}
+{"text": "por favor, quanto custa Pix!", "label": "knowledge", "group": "knowledge:pt:2"}
+{"text": "how do I sign up for Get Smart thanks", "label": "knowledge", "group": "knowledge:en:4"}
+{"text": "urgente: qual a diferença de Pix para natecipação de recebíveis?", "label": "knowledge", "group": "knowledge:pt:13"}
+{"text": "quantos dias tem fevereiro este ano", "label": "general", "group": "general:pt:21"}
+{"text": "hello, who is eligible for meal vouchers please", "label": "knowledge", "group": "knowledge:en:21"}
+{"text": "my machine has no signal!", "label": "support", "group": "support:en:9"}
+{"text": "hello, can I get Get Smart paid into another bank thanks", "label": "knowledge", "group": "knowledge:en:24"}
+{"text": "oi, quais as taxas de Get Clássica!", "label": "knowledge", "group": "knowledge:pt:3"}
+{"text": "please, transfer me toa live agent?", "label": "escalate", "group": "escalate:en:1"}
+{"text": "quick question: which account do Get Smart sales go to?", "label": "knowledge", "group": "knowledge:en:23"}
+{"text": "a Getnet oferece antecipação de recebíveis?", "label": "knowledge", "group": "knowledge:pt:20"}
+{"text": "please, how much will I receive on Friday?", "label": "support", "group": "support:en:3"}
+{"text": "me ajuda: em quantas vezes dá para parcelar com link de pagamento?", "label": "knowledge", "group": "knowledge:pt:16"}
+{"text": "I want to talk to a human!", "label": "escalate", "group": "escalate:en:0"}
+{"text": "please, how much does terminal rental cst", "label": "knowledge", "group": "knowledge:en:2"}
+{"text": "how do I sell with Get Smart!", "label": "knowledge", "group": "knowledge:en:15"}
+{"text": "me ajuda: minha maquininha está sem sinal?", "label": "support", "group": "support:pt:9"}
+{"text": "bom dia, meu extrato de semana passada está errado por favor", "label": "support", "group": "support:pt:18"}
+{"text": "como contratar val-erefeição!", "label": "knowledge", "group": "knowledge:pt:4"}
+{"text": "oi, preciso de conta em banco para usar Get Clássica por favor", "label": "knowledge", "group": "knowledge:pt:22"}
+{"text": "quando é o próximo feriado nacional!", "label": "general", "group": "general:pt:15"}
+{"text": "hi, someone accessed my account without permission thanks", "label": "escalate", "group": "escalate:en:16"}
+{"text": "quick question: gt me a supervisor?", "label": "escalate", "group": "escalate:en:3"}
+{"text": "preciso falar com uma pessoa de verdade!", "label": "escalate", "group": "escalate:pt:2"}
+{"text": "quick question: I want my money back, I was deeived", "label": "escalate", "group": "escalate:en:26"}
+{"text": "please, show me my recent asles?", "label": "support", "group": "support:en:13"}
+{"text": "show me my recent sales!", "label": "support", "group": "support:en:13"}
+{"text": "bom dia, quero atendimento humano agora obrigado", "label": "escalate", "group": "escalate:pt:3"}
+{"text": "quick question: how much will I receive tomorrow?", "label": "support", "group": "support:en:3"}
+{"text": "will it rain in Salvador today", "label": "general", "group": "general:en:1"}
+{"text": "oi, minha maquininha está atualizada", "label": "support", "group": "support:pt:29"}
+{"text": "hi, what timezone is Recife in", "label": "general", "group": "general:en:16"}
+{"text": "hello, what is my next payout amount", "label": "support", "group": "support:en:4"}
+{"text": "olá, quanto custaparcelamento?", "label": "knowledge", "group": "knowledge:pt:2"}
+{"text": "qual a moeda da França", "label": "general", "group": "general:pt:19"}
+{"text": "por favor, dá para cobrar um cliente à distância", "label": "knowledge", "group": "knowledge:pt:27"}
+{"text": "hi, when is the next public holiday?", "label": "general", "group": "general:en:15"}
+{"text": "quem descobriu o Brasil por favor", "label": "general", "group": "general:pt:20"}
+{"text": "I don't want to talk to a bot thanks", "label": "escalate", "group": "escalate:en:20"}
+{"text": "which payment methods does Getnetaccept?", "label": "knowledge", "group": "knowledge:en:30"}
+{"text": "como conecto a maquininha no wifi por favor", "label": "knowledge", "group": "knowledge:pt:25"}
+{"text": "me ajuda: por que minha tansação foi negada", "label": "support", "group": "support:pt:11"}
+{"text": "I want to dispute a charge thanks", "label": "escalate", "group": "escalate:en:8"}
+{"text": "quanto está o bitcoin", "label": "general", "group": "general:pt:5"}
+{"text": "bom dia, que temperatura faz em Belo Horizonte amanhã?", "label": "general", "group": "general:pt:2"}

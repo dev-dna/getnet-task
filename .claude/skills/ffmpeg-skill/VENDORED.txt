@@ -1,0 +1,9 @@
+Third-party code, not written for this project.
+
+Source:   https://github.com/kajisho5/ffmpeg-skill
+Version:  3.6.4 (commit d7e321c48c06777e8200750fe9bbcc0e466d01fa, copied on 2026-11-12)
+License:  MIT (see LICENSE in this folder)
+Copied:   SKILL.md, scripts/, templates/, references/, docs/contract.md, package.json
+Left out: mcp/, bin/, tests/, evals/, demos/, site/, brand/, assets/ (not needed to run the tools)
+Used by:  demo/record.py (to build the demo video) and by Claude Code as a project skill.
+Refresh:  npx ffmpeg-skill --project

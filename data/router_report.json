@@ -1,0 +1,77 @@
+{
+  "n": 944,
+  "n_templates": 236,
+  "split": "StratifiedGroupKFold(5) por molde",
+  "accuracy_all": 0.858,
+  "decides_alone": {
+    "share": 0.618,
+    "accuracy": 0.966
+  },
+  "goes_to_llm": {
+    "share": 0.382
+  },
+  "thresholds": [
+    {
+      "threshold": 0.5,
+      "coverage": 0.935,
+      "accuracy": 0.888
+    },
+    {
+      "threshold": 0.6,
+      "coverage": 0.815,
+      "accuracy": 0.928
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 0.694,
+      "accuracy": 0.948
+    },
+    {
+      "threshold": 0.75,
+      "coverage": 0.618,
+      "accuracy": 0.966
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 0.511,
+      "accuracy": 0.977
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.253,
+      "accuracy": 0.979
+    }
+  ],
+  "labels": [
+    "knowledge",
+    "support",
+    "general",
+    "escalate"
+  ],
+  "confusion": [
+    [
+      249,
+      10,
+      5,
+      8
+    ],
+    [
+      9,
+      214,
+      20,
+      13
+    ],
+    [
+      5,
+      8,
+      179,
+      0
+    ],
+    [
+      19,
+      27,
+      10,
+      168
+    ]
+  ]
+}

@@ -1,0 +1,12 @@
+.env
+.git
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+data/tickets.json
+data/router.joblib
+demo
+.claude
+prompts
+specs

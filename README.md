@@ -1,6 +1,6 @@
 # Getnet Multi-Agent Support
 
-Multi-agent customer-support service for the "AI Hardcore Engineer - Multi-Agent Support System" challenge. State on 2026-11-13. The numbers are copied from files in this repository; section 8 lists what was run and what was not.
+Multi-agent customer-support service for the "AI Hardcore Engineer - Multi-Agent Support System" challenge. State on 2026-11-14. The numbers are copied from files in this repository; section 8 lists what was run and what was not.
 
 ## 1. What it does
 `POST /chat` receives `{message, user_id}` from a Getnet merchant, routes the message to one agent or to a sequence of agents (`knowledge`, `support`, `general`, `escalate`) and returns one JSON answer with the route, the tools called, the sources and a trace id.
@@ -36,14 +36,14 @@ Response: the output of `orchestrator.handle` (the function behind `POST /chat`)
 Docker. A real key is required in `.env`:
 ```bash
 cp .env.example .env        # set OPENROUTER_API_KEY, or use the anthropic block: LLM_PROVIDER=anthropic, ANTHROPIC_API_KEY, its two MODEL_* names
-docker compose up --build   # builds the image (the router classifier is trained in the build) and serves on port 8000
+docker compose up --build   # builds the image (downloads the 240 MB embedding model and trains the router: a few minutes, 1.4 GB) and serves on port 8000
 curl -s localhost:8000/health
 curl -s -X POST localhost:8000/chat -H 'Content-Type: application/json' -d '{"message": "Can I sell through WhatsApp using the Payment Link?", "user_id": "cliente1988"}'
 ```
 Local, without an API key (Python 3.12):
 ```bash
 make setup      # pip install -r requirements.txt; creates .env from .env.example if it does not exist
-make test       # 131 tests with LLM_PROVIDER=fake
+make test       # 144 tests with LLM_PROVIDER=fake
 make run-cli    # API on port 8000 with LLM_PROVIDER=claude_cli
 make eval-cli   # the 30 evaluation cases, in process, and the answers of groups S and H
 ```
@@ -51,7 +51,7 @@ make eval-cli   # the 30 evaluation cases, in process, and the answers of groups
 - `make run-cli` and `make eval-cli` call the Claude Code CLI (`claude -p`), which must be installed and logged in on the machine. They do not work inside Docker.
 - With a key: `make run` (local server), `make eval` (30 cases against the API at `localhost:8000`; exit code 1 below 90%), `make smoke` (real calls to the provider, to Jev and to the external APIs), `make ingest` (rebuild the knowledge base), `make train` (regenerate the data and retrain the classifier).
 - Swagger at `http://localhost:8000/docs` has the ten challenge scenarios (S1 to S10) and six other cases (injection, isolation, masking, handoff) as ready examples under `POST /chat`. The contract is in `openapi.json` (`make openapi` regenerates it; a test fails when the file is out of date).
-- Configuration, all in `.env`: `LLM_PROVIDER` (`openrouter`, `anthropic`, `claude_cli`, `fake`), `MODEL_FAST`, `MODEL_SMART`, `ROUTER_FALLBACK` (`jev` or `llm`), `ROUTER_HIGH` (0.7), `JEV_MIN` (0.5), `EMBEDDINGS` (`auto`, `cached` or `off`), `JEV_MODEL`, `LLM_TIMEOUT_S` (40), `TICKETS_PATH`. `GET /health` returns the provider, the router fallback, the chunk count and `corpus_is_placeholder` (false in this repository). `.env.example` sets `ROUTER_FALLBACK=jev`, which uses the OpenRouter key. The Jev step was not run against the real endpoint (section 8); a failed Jev call falls through to the LLM router. Set `ROUTER_FALLBACK=llm` to skip it; with the `anthropic` provider Jev has no key unless `OPENROUTER_API_KEY` or `JEV_API_KEY` is also set.
+- Configuration, all in `.env`: `LLM_PROVIDER` (`openrouter`, `anthropic`, `claude_cli`, `fake`), `MODEL_FAST`, `MODEL_SMART`, `ROUTER_FALLBACK` (`jev` or `llm`), `ROUTER_HIGH` (0.7), `JEV_MIN` (0.5), `EMBEDDINGS` (`auto`, `cached` or `off`), `JEV_MODEL`, `LLM_TIMEOUT_S` (40), `TICKETS_PATH`. `GET /health` returns the provider, the router fallback, `router_mode` (`letras+significado`, or `letras` when the embedding model is not available), the chunk count, `corpus_is_placeholder` (false in this repository) and `llm_problem`: when the API key is missing or still the placeholder of `.env.example`, `status` is `degraded` and the start-up log has one `CONFIGURATION PROBLEM` line; without this, a missing key looks like a healthy service where every answer is a handoff. A wrong key or model name is only found on the first call (`make smoke`). `.env.example` sets `ROUTER_FALLBACK=llm`, because the Jev step was not run against the real endpoint (section 8). `ROUTER_FALLBACK=jev` turns it on with the OpenRouter key; a failed Jev call falls through to the LLM router; with the `anthropic` provider Jev has no key unless `OPENROUTER_API_KEY` or `JEV_API_KEY` is also set.
 
 ## 3. Architecture
 Diagrams of the request flow and of the routing cascade, and where a queue would enter in production: [`docs/architecture.md`](docs/architecture.md).
@@ -129,10 +129,10 @@ POST /chat -> orchestrator.handle(req)                            src/app/orches
 
 No case failed in the stored run. H6 ("A máquina tá recusando tudo desde cedo") failed in earlier runs, when the search had no entry for "recusando" (section 10). The route was decided by the guardrail in 2 cases, a rule in 3, the classifier in 19 and the LLM router in 6. The eval checks route, tools called, leaked strings and the handoff flag. It does not check whether the answer text is correct: that is human reading. The ten S answers of the run are stored in the report under `answers`. A second set, `evals/variations.jsonl`, rewrites 14 test sentences with synonyms, in Portuguese and English (42 cases, `python evals/run.py --cli --file=evals/variations.jsonl`); its run is in `evals/report_variations_claude_cli.json`: 41 of 42. The one that fails (V5c) ends in a handoff after the knowledge step; in all 42 the first agent chosen is the expected one. Earlier runs gave 36 (before the glossary entries) and 40.
 
-| Verification status on 2026-11-13: item | Status |
+| Verification status on 2026-11-14: item | Status |
 |---|---|
-| `make test`: 131 tests with `LLM_PROVIDER=fake`, no API key | verified |
-| Docker: image build, `docker compose up` healthy, `/health`, `/docs`, `POST /chat`, `evals/run.py` inside the container | verified with the fake model only, on the authoring machine, with the same base image pulled from a registry mirror (Docker Hub rate limit); the Dockerfile in the repository is unchanged |
+| `make test`: 144 tests with `LLM_PROVIDER=fake`, no API key (139 pass and 5 are skipped when the embedding model is not on disk) | verified |
+| Docker: image build, `docker compose up` healthy, `/health`, `/docs`, `POST /chat`, `evals/run.py` inside the container | verified again on 2026-11-14, after the embedding model entered the image, with the fake model only. Image 1.42 GB; the container is healthy 6 s after start, with `router_mode: letras+significado` and the same classifier numbers as `data/router_report.json`; with the placeholder key of `.env.example`, `/health` answers `degraded`. The fake-model eval inside the container gives 28 of 30, the same two cases as outside Docker (the fake model does not pick routes or tools like a real one). Done on the authoring machine with the same base image pulled from a registry mirror (Docker Hub rate limit) and that machine's proxy certificate added; the Dockerfile in the repository is otherwise the one used. Not run in Docker with a real key |
 | 30-case evaluation with a real model through `claude_cli` (Claude Code headless on the author's login, no API key) | verified; results vary between runs (earlier runs gave 28 to 30 of 30); the files hold the runs of 2026-11-14 |
 | `weather` (Open-Meteo) and `fx_rate` (Frankfurter) | verified: both answered |
 | `web_search` (DuckDuckGo) | unstable: it returned results in one run of `scripts/smoke_tools.py` and none in another, on the authoring machine |
@@ -145,7 +145,7 @@ No case failed in the stored run. H6 ("A máquina tá recusando tudo desde cedo"
 **Observability.** Each request writes one JSON log line with `trace_id`, `user_id`, `route`, `decided_by`, `confidence`, `tool_calls`, `handoff`, `errors` and `latency_ms`; the message text is not part of that line. `trace_id` and `latency_ms` are also in the response. Dashboards and alerts are not implemented. From these fields a dashboard would show: share of requests per `decided_by` (against the 0.624 coverage of the report), handoff rate per error, guardrail block rate, latency percentiles per route. Alerts: handoff or `internal_error` rate above its baseline, rise of `ungrounded_answer` or `not_in_kb` (base out of date), fall in classifier coverage (drift), `corpus_is_placeholder: true` on `/health`.
 
 ## 9. Testing strategy
-- **Unit, fake model** (`make test`, 131 tests in 12 files): guardrails (14 attack sentences, 11 legitimate ones, masks, language), tool failure becomes a handoff, classifier (grouped cross-validation, eval sentences absent from training data), retriever against the real corpus (the six product scenarios must reach their source), tools (one merchant cannot read another, no `user_id` in any schema, external failure returns an error), Jev client and `claude_cli` protocol with simulated responses, orchestrator paths (injection, sequence, unknown user, question outside the base, unsupported answer, provider failure becomes a handoff).
+- **Unit, fake model** (`make test`, 144 tests in 12 files): guardrails (14 attack sentences, 11 legitimate ones, masks, language, content that tries to close its own data block), tool failure becomes a handoff, classifier (grouped cross-validation, eval sentences absent from training data), retriever against the real corpus (the six product scenarios must reach their source), tools (one merchant cannot read another, no `user_id` in any schema, external failure returns an error, dates in Brasília time, ticket file replaced atomically), a missing API key reported by `/health`, start-up training without cross-validation, Jev client and `claude_cli` protocol with simulated responses, orchestrator paths (injection, sequence, unknown user, question outside the base, unsupported answer, provider failure becomes a handoff).
 - **HTTP contract**: `test_http_contract` (200 with the response fields, 422 for an empty message or a missing `user_id`) and `tests/test_openapi.py` (Swagger page, the ten scenarios as examples, each example gets an answer, `openapi.json` up to date).
 - **Packaging** (`tests/test_packaging.py`): `.env` is not copied into the image, compose mounts no file that may not exist, every import is in `requirements.txt`, the Dockerfile does not hide a failed step.
 - **Evaluation and integration in CI**: the 30 cases with a real model (section 8); the fake model checks the plumbing only. CI is not set up. The plan: on each push `make test`; on main, `docker compose up --build -d` with a key from the CI secrets, wait for the healthcheck, assert `corpus_is_placeholder: false`, run `python evals/run.py` against the container and fail the job on its exit code (below 0.9). Because results vary between runs, run the eval more than once and track the pass rate per group over time.
@@ -157,19 +157,21 @@ From `git log`; all commits are dated 2026-11-13 (UTC). The order was: code, the
 - **Spec.** `d2547f5`, `1e9ac7e`: `specs/spec.md` (22 functional and 13 non-functional requirements, each tied to a sentence of the statement, and acceptance criteria for the 30 cases), `specs/plan.md` (22 decisions with the alternative discarded, 19 gaps between the statement and the code), `specs/tasks.md` (each task checked against the code).
 - **Review.** An agent with no context, which read only `specs/` and the eval dataset, judged the spec NOT READY. `855d670` applies its four blocking findings; `specs/review.md` records the verdict and each resolution.
 - **Code changes after the spec.** `f9ce408` RF21 and D18: a tool failure hands off, tool results enter as data. `8b98c42` RF14: language detection. `00d490c` RNF08: the eval report is reproducible. `9a674bd` S2: retry on a rate-limited API. `7d087c4`, `cac01eb` RF18: the classifier can decline.
-- **2026-11-14.** `558b42d`: 42 test sentences rewritten with synonyms, search glossary, one-command run. The commit after it: the router averages a classifier on letters and a classifier on meaning.
+- **2026-11-14.** `558b42d`: 42 test sentences rewritten with synonyms, search glossary, one-command run. `e1ecd56`: the router averages a classifier on letters and a classifier on meaning. Then three reviews by agents in a role (framework specialist, challenge evaluator, reliability and security) and the fixes they asked for that fit in a few lines: start-up never downloads or cross-validates, a missing key shows in `/health`, `.env.example` defaults to the verified router path, a `</data>` in content cannot close its data block, dates in Brasília time, atomic ticket write.
 
 The spec was written after the skeleton, not before it; the code of every task already existed when `specs/tasks.md` was written. Two commit subjects (`519f83b`, `29ed91b`) say "before the session"; the history has no session start or end commit and no timed session is claimed here. Not done: `make compare` and the runs with real API credentials (section 8). Nothing in the cut order of `CLAUDE.md` (`web_search`, `verify()`, classifier, sitemap) was removed from the code.
 
 ## 11. Known limitations
-- Merchant data is simulated: `data/merchants.json` has two merchants, with dates computed relative to today.
-- Tickets are a JSON file (`data/tickets.json`) guarded by an in-process lock. The compose file mounts no volume, so tickets are lost with the container.
+- Merchant data is simulated: `data/merchants.json` has two merchants, with dates computed relative to today in Brasília time (fixed UTC-3).
+- Tickets are a JSON file (`data/tickets.json`) guarded by an in-process lock and replaced atomically on each write; this holds for one worker process only. The compose file mounts no volume, so tickets are lost with the container. A provider outage opens one ticket per request.
 - BM25 does not match synonyms outside the glossary. `sources` in the response lists the URL of every retrieved chunk, not only the cited ones (S4 in the stored run lists 5 URLs and cites 1).
 - The verifier releases the answer if the verifier call itself fails; the failure is logged as a warning.
 - Every fraud or dispute message goes to a human, even when the question is informational.
 - Language detection counts words of two lists: Portuguese or English only, and a message with no word of either list is answered in English.
 - Results with a real model vary between runs (section 8). In the stored run B1 ended in a handoff after the knowledge step, and latency was 5.1 to 32.8 s per case that calls a model, through the `claude_cli` subprocess. Latency with the API providers was not measured.
-- The embedding model of the router (about 240 MB) is downloaded from Hugging Face during `docker build`, or on first use outside Docker; if the download fails the router works with the letters classifier only.
+- The embedding model of the router (about 240 MB) is downloaded from Hugging Face during `docker build`, or on first use outside Docker; if the download fails the build continues, the router works with the letters classifier only and `/health` shows `router_mode: letras`. The running container never downloads it (`EMBEDDINGS=cached` in the image).
+- The guardrail against prompt injection is a list of regular expressions in Portuguese and English: a heuristic, which another language or an encoding can pass. The second barrier is that external content enters the prompt as data and that no tool takes a `user_id`.
+- No overall deadline per request: each model call has a 40 s timeout and two retries in the SDK, and a request makes up to five calls in sequence. No rate limit and no cost cap.
 - There is no authentication (`user_id` is taken from the request body) and no conversation memory (each request is independent). The classifier was trained on generated sentences, not on real traffic.
 
 ## 12. Trade-offs

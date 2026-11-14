@@ -64,7 +64,7 @@ exception after the injection check -> hand_off, route ["escalate"], decided_by 
             if hand_off also fails -> FALLBACK[lang], route ["error"], handoff true, no ticket
 ```
 
-Differences between this flow and `CLAUDE.md`: `verify()` also accepts the facts of earlier agents as evidence (since `52d236c`); when `ROUTER_FALLBACK` is unset the code uses `llm`, while `.env.example` sets `jev`.
+Differences between this flow and `CLAUDE.md`: `verify()` also accepts the facts of earlier agents as evidence (since `52d236c`); when `ROUTER_FALLBACK` is unset the code uses `llm`; `.env.example` also sets `llm` since 2026-11-14 (it set `jev` before; G03).
 
 ## 3. Router evaluation
 
@@ -115,7 +115,7 @@ Checked and not a gap (RF06): `scripts/ingest.py` was re-run (exit 0, 502 passag
 
 - G01 (RF07). Resolved in the spec as a normative split after the review (`855d670`): `general` owns web search and non-Getnet facts, `knowledge` only retrieves. It remains a deviation from the statement's wording, which places the web search tool inside the Knowledge Agent. No eval case and no agent-level test calls `web_search`; `scripts/smoke_tools.py` got results from it in one run and none in another.
 - G02 (RNF11). Providers `anthropic` and `openrouter` were never run with real credentials. The real-model evaluation used `LLM_PROVIDER=claude_cli`, where a tool call is JSON inside the text, so the tool-call formats of both APIs and the model names in `.env.example` are untested. `scripts/smoke_llm.py` was not run.
-- G03 (RF04). The Jev step was never called with a real key (`scripts/smoke_jev.py` not run); `tests/test_jev.py` uses a simulated response in the documented format. `.env.example` sets `LLM_PROVIDER=openrouter` and `ROUTER_FALLBACK=jev`: the default container configuration is the unverified one.
+- G03 (RF04). The Jev step was never called with a real key (`scripts/smoke_jev.py` not run); `tests/test_jev.py` uses a simulated response in the documented format. Until 2026-11-14 `.env.example` set `ROUTER_FALLBACK=jev`, so the default container configuration was the unverified one; it now sets `llm` and keeps `jev` as a commented option. `LLM_PROVIDER=openrouter` remains the default and remains unverified (G02).
 - G04 (RNF08). `make compare` was not run and `evals/router_comparison.json` does not exist. Cost and latency of the cascade against a language-model-only router are not measured; D08 rests on the cross-validation of section 3.
 - G05 (RF09, RF16). Merchant data is simulated: two users in `data/merchants.json`. A ticket is a record in a JSON file inside the container: no operator is notified and the file is lost with the container.
 - G06 (RNF13, RNF02). No video is in the repository. `README.md` was added in `c08218c` with the sections RNF06 and RNF02 ask for; its text was not checked line by line against the code for this plan. The integration test in CI is described there, not set up.

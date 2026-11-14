@@ -6,7 +6,7 @@ O enunciado pede que o vídeo mostre três coisas: **seu raciocínio, as decisõ
 Regra: fale só o que é verdade no repositório. Cada número abaixo tem o arquivo de onde saiu; confira antes de gravar.
 
 ## Antes de gravar
-1. `make setup` e `make test` (120 testes passam).
+1. `make setup` e `make test` (144 testes passam).
 2. Suba a API com respostas de verdade: `make run-cli` (usa o Claude Code logado na máquina) ou Docker com chave real no `.env`.
 3. Abra `http://localhost:8000/docs` e rode um exemplo para aquecer.
 4. Leia as 10 respostas do grupo S (`make eval-cli` imprime; também estão em `evals/report_claude_cli.json`, campo `answers`). Só diga "eu li as respostas" se leu.
@@ -41,13 +41,13 @@ Regra: fale só o que é verdade no repositório. Cada número abaixo tem o arqu
 ## 5:00–7:00 — Roteamento em cascata (`data/router_report.json`)
 "Rotear é uma decisão, não um texto. Por isso não começo pelo modelo de linguagem: uso uma cascata do mais barato para o mais caro, e cada degrau só entra quando o anterior não tem certeza."
 1. "Regras: fraude, contestação e pedido de atendente vão direto para um humano."
-2. "Um classificador treinado dentro do projeto, com cinco classes: os quatro agentes e 'fora de escopo'. Ele só decide com probabilidade de 0,75 ou mais."
-3. "O Jev, um modelo de decisão. Está implementado e testado com respostas simuladas. Eu não o chamei com chave real, então não afirmo nada sobre o desempenho dele. Se falhar, o fluxo segue."
+2. "Um classificador treinado dentro do projeto, com cinco classes: os quatro agentes e 'fora de escopo'. São dois classificadores com a média das probabilidades: um olha as letras da frase, e tolera erro de digitação; o outro olha o significado, e entende sinônimo e outra redação, em português e inglês. Ele só decide com probabilidade de 0,7 ou mais."
+3. "O Jev, um modelo de decisão. Está implementado e testado com respostas simuladas. Eu não o chamei com chave real, então não afirmo nada sobre o desempenho dele e ele vem desligado por padrão. Se for ligado e falhar, o fluxo segue."
 4. "O modelo de linguagem, por último."
 
-"Os números: 1.288 frases de 322 moldes. O classificador acerta 87,0% no geral. Decide sozinho em 50,9% das frases, e nessas acerta 98,8%. Separei treino e teste por molde, porque variações da mesma frase nos dois lados inflam o resultado."
+"Os números: 1.320 frases de 330 moldes. O classificador acerta 92,3% no geral. Decide sozinho em 62,4% das frases, e nessas acerta 98,2%. Só com o classificador por letras eram 85,8% no geral e 51,2% decididas sozinho: o ganho veio do classificador por significado. Separei treino e teste por molde, porque variações da mesma frase nos dois lados inflam o resultado."
 
-"Um exemplo da especificação guiando o código: ela apontou que o classificador não sabia dizer 'fora de escopo', e 'Conte uma piada' abria chamado humano. O commit `fix(RF18)` criou a quinta classe. O custo: ele passou a decidir sozinho em menos mensagens."
+"Um exemplo da especificação guiando o código: ela apontou que o classificador não sabia dizer 'fora de escopo', e 'Conte uma piada' abria chamado humano. O commit `fix(RF18)` criou a quinta classe. O custo na época: ele passou a decidir sozinho em menos mensagens; o classificador por significado recuperou isso depois."
 
 "O campo `decided_by` de cada resposta mostra qual degrau decidiu."
 
@@ -76,9 +76,9 @@ Em cada resposta, aponte `route`, `decided_by`, `tool_calls` e `sources`.
 "Se uma API externa cai, há novas tentativas; se todas falham, o caso vira chamado, não uma resposta sem dado."
 
 ## 12:30–13:30 — Testes e avaliação (`evals/report_claude_cli.json`)
-"São 120 testes que rodam sem chave, com um modelo falso que só confere o encanamento. A avaliação tem 30 casos em cinco grupos: os dez do enunciado, as mesmas perguntas com outra redação, ataques, perguntas legítimas que parecem ataque e usuário desconhecido."
+"São 144 testes que rodam sem chave, com um modelo falso que só confere o encanamento. A avaliação tem 30 casos em cinco grupos: os dez do enunciado, as mesmas perguntas com outra redação, ataques, perguntas legítimas que parecem ataque e usuário desconhecido."
 
-"Com modelo real passaram 29 de 30, e os dez do enunciado passaram. O que falha é 'a máquina tá recusando tudo desde cedo': o agente de conhecimento não acha resposta na base e o caso vai para um humano."
+"Com modelo real, na execução guardada, passaram 30 de 30; execuções anteriores deram de 28 a 30, porque o resultado varia entre execuções. Num segundo conjunto, com 14 frases reescritas com sinônimos em português e inglês, 42 casos, passaram 41. A que falha é uma redação de 'minha maquininha não conecta': os agentes certos rodam, mas a resposta de conhecimento não é sustentada pela base e o caso vai para um humano." (`evals/report_variations_claude_cli.json`)
 
 "A avaliação confere rota, ferramenta, vazamento de dados e passagem para humano. Ela não confere se o texto está certo: isso eu li." (só se leu)
 
@@ -87,7 +87,7 @@ Em cada resposta, aponte `route`, `decided_by`, `tool_calls` e `sources`.
 
 "Limitações: os dados do lojista são simulados, os chamados ficam num arquivo e não há autenticação."
 
-"Com mais tempo: rodar com chave real e comparar os roteadores, busca com vetores junto com a busca por palavras, e a especificação antes do primeiro commit."
+"Com mais tempo: rodar com chave real e comparar os roteadores, a busca web como reserva dentro do agente de conhecimento, um prazo total por requisição, e a especificação antes do primeiro commit. A busca por significado na base eu medi e não adotei: não achou mais páginas que a busca por palavras."
 
 ## Perguntas prováveis na entrevista, e onde está a resposta
 - Por que não LangGraph ou outro framework? `specs/plan.md`, decisão D02.

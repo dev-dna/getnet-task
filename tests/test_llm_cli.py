@@ -14,6 +14,7 @@ class _Done:
 @pytest.fixture
 def cli(monkeypatch):
     monkeypatch.setattr(llm, "PROVIDER", "claude_cli")
+    monkeypatch.setattr(llm.shutil, "which", lambda name: "claude")  # o teste não depende do Claude Code instalado
     sent = []
 
     def install(*answers):
@@ -34,6 +35,14 @@ def test_text_call_uses_no_claude_code_tools_and_stays_out_of_the_project(cli):
     assert cmd[:2] == ["claude", "-p"] and cmd[cmd.index("--tools") + 1] == "" and cmd[cmd.index("--model") + 1] == "haiku"
     assert cmd[cmd.index("--system-prompt") + 1] == "Responda curto." and sent[0]["input"] == "Capital do Brasil?"
     assert sent[0]["cwd"] != "."
+    assert sent[0]["encoding"] == "utf-8"  # no Windows o padrão não é UTF-8 e estragava os acentos
+
+
+def test_missing_claude_code_gives_a_clear_error(monkeypatch):
+    monkeypatch.setattr(llm, "PROVIDER", "claude_cli")
+    monkeypatch.setattr(llm.shutil, "which", lambda name: None)
+    with pytest.raises(RuntimeError, match="Claude Code não encontrado"):
+        llm.complete("s", "u")
 
 
 def test_tool_loop_runs_the_tool_and_feeds_the_result_back(cli):

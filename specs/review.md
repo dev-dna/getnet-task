@@ -34,3 +34,5 @@ Each commit cites the requirement or gap it closes.
 | G12 | RF18 | `7d087c4`, `cac01eb` | The classifier has a fifth class, `out_of_scope`; a joke or a request to attack a card machine is declined instead of reaching an agent or opening a ticket. |
 
 After these commits: 120 tests pass and `make eval-cli` gives 29 of 30 (`evals/report_claude_cli.json`); H6 still ends in a handoff after the knowledge step (G09).
+
+On 2026-11-14 a second test set was added, `evals/variations.jsonl`: 14 test sentences rewritten with synonyms in Portuguese and English, 42 cases. Its first run gave 36/42; every failure was a handoff after the right agent ran, most because the search had no entry for the synonym. After the glossary additions: 40/42, and 30/30 on the original set (G09).

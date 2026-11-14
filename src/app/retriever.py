@@ -27,6 +27,10 @@ GLOSSARY = {
     "connect": "conexao conectar wifi sinal", "conect": "conexao conectar wifi sinal", "internet": "wifi conexao chip",
     "difference": "diferenca", "sell": "vender vendas", "receive": "receber",
     "antecipacao": "receivables advance", "parcela": "installments", "link de pagamento": "payment link", "taxa": "fees",
+    # sinônimos que as variações de evals/variations.jsonl mostraram faltar (V5a, V6a, V8c): sem eles a busca não achava a página
+    "anticipat": "antecipacao recebiveis", "get online": "conexao conectar wifi sinal", "offline": "conexao conectar wifi sinal",
+    "card reader": "maquininha", "refus": "recusada negada erro", "denied": "recusada negada erro", "reject": "recusada negada erro",
+    "recus": "recusada negada erro", "negad": "recusada negada erro",
 }
 STOPWORDS = frozenset("""
 a an and are as at be but by can could did do does don for from has have how i if in into is it its me my need not of on or

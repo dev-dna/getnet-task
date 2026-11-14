@@ -14,6 +14,11 @@ SCENARIOS = [
     ("S6", "How does receivables advance (antecipação) work with Getnet?", [r"antecipacao"]),
     ("S9", "How many installments can I split a sale into with the crediário?", [r"crediario.{0,400}parcel|parcel.{0,400}crediario"]),
     ("S10", "Can I sell through WhatsApp using the Payment Link?", [r"whatsapp"]),
+    # variações com sinônimos (evals/variations.jsonl) que não achavam a página antes das entradas novas do glossário
+    ("V5a", "My terminal can't get online, how do I fix it?", [r"configur\w+ o wifi|erro de conexao|problema de conexao|conecte-se"]),
+    ("V6a", "Can you explain how Getnet's receivables anticipation works?", [r"antecipacao"]),
+    ("V8c", "A payment was refused on my card machine, why?", [r"erro adq|solucao de erros"]),
+    ("H6", "A máquina tá recusando tudo desde cedo", [r"erro adq|solucao de erros"]),
 ]
 
 

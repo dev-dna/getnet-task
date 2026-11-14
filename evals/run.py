@@ -3,9 +3,13 @@
 Grupos: S = cenários do enunciado | H = mesmas intenções com outra redação | A = ataques e dados sensíveis
         B = perguntas legítimas que parecem ataque | U = usuário desconhecido
 Confere rota, ferramentas, vazamento e handoff. NÃO confere se o texto da resposta está correto: isso é leitura humana.
+
+Um comando, sem servidor, sem chave e sem variáveis de ambiente (usa o Claude Code logado na máquina):
+    python evals/run.py --cli --answers
 """
 import json
 import os
+import shutil
 import sys
 import time
 from collections import defaultdict
@@ -14,7 +18,13 @@ from pathlib import Path
 
 import httpx
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+ROOT = Path(__file__).resolve().parents[1]
+os.chdir(ROOT)  # os caminhos de dados são relativos à raiz: assim o script roda de qualquer pasta
+sys.path.insert(0, str(ROOT / "src"))
+
+if "--cli" in sys.argv:  # precisa vir antes de importar o app, que lê estas variáveis ao carregar
+    os.environ.update(LLM_PROVIDER="claude_cli", ROUTER_FALLBACK="llm", EVAL_DIRECT="1")
+    os.environ.setdefault("EVAL_WORKERS", "6")
 
 API = os.getenv("API_URL", "http://localhost:8000")
 DIRECT = os.getenv("EVAL_DIRECT", "0") == "1"
@@ -61,24 +71,37 @@ def run_case(c: dict) -> tuple[dict, dict, list[str], int]:
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):  # resposta com acento ou símbolo não pode derrubar a impressão no Windows
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if DIRECT:
         from app import llm, orchestrator, retriever
+        if llm.PROVIDER == "claude_cli" and not shutil.which("claude"):
+            print("Claude Code não encontrado nesta máquina. Instale, rode `claude` uma vez para entrar na conta e tente de novo.")
+            return 2
         info = {"llm_provider": llm.PROVIDER, "router_fallback": orchestrator.ROUTER_FALLBACK,
                 "corpus_is_placeholder": retriever.is_placeholder()}
     else:
-        info = httpx.get(f"{API}/health", timeout=20).json()
+        try:
+            info = httpx.get(f"{API}/health", timeout=20).json()
+        except httpx.HTTPError as e:
+            print(f"O app não está no ar em {API} ({type(e).__name__}).")
+            print("Opção 1, sem subir nada:   python evals/run.py --cli --answers")
+            print("Opção 2, suba o app antes: python scripts/serve.py --cli   (em outra janela) e rode este comando de novo")
+            return 2
     if info.get("llm_provider") == "fake":
         print("AVISO: modelo falso. Este resultado só confere o encanamento, não a qualidade.")
     if info.get("corpus_is_placeholder"):
         print("AVISO: base de conhecimento de EXEMPLO. Rode scripts/ingest.py; não entregue assim.")
 
-    cases = [json.loads(l) for l in Path("evals/dataset.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+    # --file=evals/variations.jsonl roda outro conjunto: as 14 frases de teste reescritas com sinônimos, em pt e en
+    source = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--file=")), "evals/dataset.jsonl")
+    cases = [json.loads(l) for l in Path(source).read_text(encoding="utf-8").splitlines() if l.strip()]
     rows, answers, stored, by_group = [], [], {}, defaultdict(lambda: [0, 0])
     with ThreadPoolExecutor(WORKERS) as pool:  # a ordem da saída é a do arquivo, com qualquer número de casos em paralelo
         results = list(pool.map(run_case, cases))
     for c, r, fails, ms in results:
         answers.append((c["id"], c["message"], r.get("answer", "")))
-        if c["id"][0] == "S":  # as respostas do enunciado ficam no relatório, para a leitura humana
+        if c["id"][0] in "SV":  # as respostas do enunciado e das variações ficam no relatório, para a leitura humana
             stored[c["id"]] = {"message": c["message"], "answer": r.get("answer", ""), "sources": r.get("sources", []),
                                "tool_calls": r.get("tool_calls", [])}
         g = c["id"][0]

@@ -5,6 +5,7 @@ Serve para desenvolver e rodar a avaliação sem chave. Não funciona dentro do 
 """
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 from typing import Any
@@ -108,8 +109,12 @@ use o resultado e, quando tiver o que precisa, dê a resposta final."""
 def _cli(system: str, user: str, model: str) -> str:
     """Uma chamada ao Claude Code, sem as ferramentas dele e fora da pasta do projeto (para não carregar o CLAUDE.md)."""
     alias = "haiku" if model == MODEL_FAST else "sonnet"  # apelidos do Claude Code; os nomes do .env são de outro provedor
-    r = subprocess.run(["claude", "-p", "--system-prompt", system, "--tools", "", "--strict-mcp-config", "--model", alias,
-                        "--output-format", "json"], input=user, capture_output=True, text=True,
+    exe = shutil.which("claude")  # caminho completo: no Windows o nome sozinho não acha o claude.exe fora da pasta atual
+    if not exe:
+        raise RuntimeError("Claude Code não encontrado. Instale, rode `claude` uma vez para entrar na conta e tente de novo.")
+    # encoding fixo: o padrão do Windows não é UTF-8 e estragava acentos e símbolos dos trechos em português
+    r = subprocess.run([exe, "-p", "--system-prompt", system, "--tools", "", "--strict-mcp-config", "--model", alias,
+                        "--output-format", "json"], input=user, capture_output=True, text=True, encoding="utf-8",
                        timeout=TIMEOUT_S * 3, cwd=tempfile.gettempdir())
     d = json.loads(r.stdout)
     if d.get("is_error"):

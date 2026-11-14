@@ -43,10 +43,11 @@ curl -s -X POST localhost:8000/chat -H 'Content-Type: application/json' -d '{"me
 Local, without an API key (Python 3.12):
 ```bash
 make setup      # pip install -r requirements.txt; creates .env from .env.example if it does not exist
-make test       # 120 tests with LLM_PROVIDER=fake
+make test       # 125 tests with LLM_PROVIDER=fake
 make run-cli    # API on port 8000 with LLM_PROVIDER=claude_cli
 make eval-cli   # the 30 evaluation cases, in process, and the answers of groups S and H
 ```
+- Without `make` (Windows): `python scripts/serve.py --cli` starts the API and `python evals/run.py --cli --answers` runs the 30 cases with no server; neither needs environment variables. Not run on Windows by the author.
 - `make run-cli` and `make eval-cli` call the Claude Code CLI (`claude -p`), which must be installed and logged in on the machine. They do not work inside Docker.
 - With a key: `make run` (local server), `make eval` (30 cases against the API at `localhost:8000`; exit code 1 below 90%), `make smoke` (real calls to the provider, to Jev and to the external APIs), `make ingest` (rebuild the knowledge base), `make train` (regenerate the data and retrain the classifier).
 - Swagger at `http://localhost:8000/docs` has the ten challenge scenarios (S1 to S10) and six other cases (injection, isolation, masking, handoff) as ready examples under `POST /chat`. The contract is in `openapi.json` (`make openapi` regenerates it; a test fails when the file is out of date).
@@ -120,19 +121,19 @@ POST /chat -> orchestrator.handle(req)                            src/app/orches
 | Group | Cases | Passed |
 |---|---|---|
 | S: the ten challenge scenarios | 10 | 10 |
-| H: same intents, other wording | 8 | 7 |
+| H: same intents, other wording | 8 | 8 |
 | A: attacks and sensitive data | 7 | 7 |
 | B: legitimate questions that look like attacks | 4 | 4 |
 | U: unknown user | 1 | 1 |
-| Total (target 0.9) | 30 | 29 (0.967) |
+| Total (target 0.9) | 30 | 30 (1.0) |
 
-The failed case is H6 ("A máquina tá recusando tudo desde cedo"): route `support`, `knowledge`, `escalate` where `support` or `support`, `knowledge` was expected. In that run the route was decided by the guardrail in 2 cases, a rule in 3, the classifier in 13 and the LLM router in 12. The eval checks route, tools called, leaked strings and the handoff flag. It does not check whether the answer text is correct: that is human reading. The ten S answers of the run are stored in the report under `answers`, and `make eval-cli` prints the S and H answers.
+No case failed in the stored run. H6 ("A máquina tá recusando tudo desde cedo") failed in earlier runs, when the search had no entry for "recusando" (section 10). The route was decided by the guardrail in 2 cases, a rule in 3, the classifier in 13 and the LLM router in 12. The eval checks route, tools called, leaked strings and the handoff flag. It does not check whether the answer text is correct: that is human reading. The ten S answers of the run are stored in the report under `answers`. A second set, `evals/variations.jsonl`, rewrites 14 test sentences with synonyms, in Portuguese and English (42 cases, `python evals/run.py --cli --file=evals/variations.jsonl`); its run is in `evals/report_variations_claude_cli.json`: 40 of 42. The two that fail end in a handoff after the knowledge step (V4c, V8c); in all 42 the first agent chosen is the expected one.
 
 | Verification status on 2026-11-13: item | Status |
 |---|---|
-| `make test`: 120 tests with `LLM_PROVIDER=fake`, no API key | verified |
+| `make test`: 125 tests with `LLM_PROVIDER=fake`, no API key | verified |
 | Docker: image build, `docker compose up` healthy, `/health`, `/docs`, `POST /chat`, `evals/run.py` inside the container | verified with the fake model only, on the authoring machine, with the same base image pulled from a registry mirror (Docker Hub rate limit); the Dockerfile in the repository is unchanged |
-| 30-case evaluation with a real model through `claude_cli` (Claude Code headless on the author's login, no API key) | verified; results vary between runs: three runs before the spec gaps were closed gave 30, 28 and 29 of 30; the file holds the run after them (`make eval-cli`, commit `cac01eb`) |
+| 30-case evaluation with a real model through `claude_cli` (Claude Code headless on the author's login, no API key) | verified; results vary between runs (earlier runs gave 28 to 30 of 30); the files hold the runs of 2026-11-14 |
 | `weather` (Open-Meteo) and `fx_rate` (Frankfurter) | verified: both answered |
 | `web_search` (DuckDuckGo) | unstable: it returned results in one run of `scripts/smoke_tools.py` and none in another, on the authoring machine |
 | `anthropic` provider with real credentials | not run |
@@ -144,7 +145,7 @@ The failed case is H6 ("A máquina tá recusando tudo desde cedo"): route `suppo
 **Observability.** Each request writes one JSON log line with `trace_id`, `user_id`, `route`, `decided_by`, `confidence`, `tool_calls`, `handoff`, `errors` and `latency_ms`; the message text is not part of that line. `trace_id` and `latency_ms` are also in the response. Dashboards and alerts are not implemented. From these fields a dashboard would show: share of requests per `decided_by` (against the 0.509 coverage of the report), handoff rate per error, guardrail block rate, latency percentiles per route. Alerts: handoff or `internal_error` rate above its baseline, rise of `ungrounded_answer` or `not_in_kb` (base out of date), fall in classifier coverage (drift), `corpus_is_placeholder: true` on `/health`.
 
 ## 9. Testing strategy
-- **Unit, fake model** (`make test`, 120 tests in 11 files): guardrails (14 attack sentences, 11 legitimate ones, masks, language), tool failure becomes a handoff, classifier (grouped cross-validation, eval sentences absent from training data), retriever against the real corpus (the six product scenarios must reach their source), tools (one merchant cannot read another, no `user_id` in any schema, external failure returns an error), Jev client and `claude_cli` protocol with simulated responses, orchestrator paths (injection, sequence, unknown user, question outside the base, unsupported answer, provider failure becomes a handoff).
+- **Unit, fake model** (`make test`, 125 tests in 11 files): guardrails (14 attack sentences, 11 legitimate ones, masks, language), tool failure becomes a handoff, classifier (grouped cross-validation, eval sentences absent from training data), retriever against the real corpus (the six product scenarios must reach their source), tools (one merchant cannot read another, no `user_id` in any schema, external failure returns an error), Jev client and `claude_cli` protocol with simulated responses, orchestrator paths (injection, sequence, unknown user, question outside the base, unsupported answer, provider failure becomes a handoff).
 - **HTTP contract**: `test_http_contract` (200 with the response fields, 422 for an empty message or a missing `user_id`) and `tests/test_openapi.py` (Swagger page, the ten scenarios as examples, each example gets an answer, `openapi.json` up to date).
 - **Packaging** (`tests/test_packaging.py`): `.env` is not copied into the image, compose mounts no file that may not exist, every import is in `requirements.txt`, the Dockerfile does not hide a failed step.
 - **Evaluation and integration in CI**: the 30 cases with a real model (section 8); the fake model checks the plumbing only. CI is not set up. The plan: on each push `make test`; on main, `docker compose up --build -d` with a key from the CI secrets, wait for the healthcheck, assert `corpus_is_placeholder: false`, run `python evals/run.py` against the container and fail the job on its exit code (below 0.9). Because results vary between runs, run the eval more than once and track the pass rate per group over time.
@@ -166,7 +167,7 @@ The spec was written after the skeleton, not before it; the code of every task a
 - The verifier releases the answer if the verifier call itself fails; the failure is logged as a warning.
 - Every fraud or dispute message goes to a human, even when the question is informational.
 - Language detection counts words of two lists: Portuguese or English only, and a message with no word of either list is answered in English.
-- Results with a real model vary between runs (section 8). In the stored run B1 and H6 ended in a handoff after the knowledge step, and latency was 4.5 to 33.5 s per case that calls a model, through the `claude_cli` subprocess. Latency with the API providers was not measured.
+- Results with a real model vary between runs (section 8). In the stored run B1 ended in a handoff after the knowledge step, and latency was 4.9 to 34.7 s per case that calls a model, through the `claude_cli` subprocess. Latency with the API providers was not measured.
 - There is no authentication (`user_id` is taken from the request body) and no conversation memory (each request is independent). The classifier was trained on generated sentences, not on real traffic.
 
 ## 12. Trade-offs

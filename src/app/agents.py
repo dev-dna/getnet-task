@@ -1,5 +1,6 @@
 """Quatro agentes. Cada um é uma função que recebe a mensagem ORIGINAL (já mascarada) e devolve AgentResult."""
 import logging
+from urllib.parse import urlparse
 
 from . import llm, retriever, tools
 from .guardrails import language, wrap_data
@@ -54,20 +55,45 @@ def route_llm(message: str, candidates: list[str]) -> Plan:
         return Plan(steps=[Step(agent=candidates[0], question=message)], confidence=0.5, source="clf", reason="router_llm_failed")
 
 
-def knowledge(message: str, facts: list[str]) -> AgentResult:
-    chunks = retriever.retrieve(message, k=5)
-    if not chunks:
-        return AgentResult(agent="knowledge", tool_calls=["retrieve"], error="no_chunks")
-    # A evidência leva URL e título, iguais ao que o agente lê: sem eles o verificador reprovava a própria citação da fonte.
-    evidence = [f"[{c['url']}] {c['title']}\n{c['text']}" for c in chunks]
+# Recuperação externa do agente de conhecimento: só resultado de site oficial sustenta fato sobre produto da Getnet.
+OFFICIAL_SITES = ("getnet.com.br", "getnet.net")
+
+
+def _official(url: str) -> bool:
+    host = (urlparse(url or "").hostname or "").lower()
+    return any(host == d or host.endswith("." + d) for d in OFFICIAL_SITES)
+
+
+def _web_evidence(message: str) -> tuple[list[str], list[str]]:
+    """Busca na web e devolve (evidência, URLs) só dos sites oficiais. Vazio se a busca falhar ou não achar nenhum."""
+    hits = [h for h in tools.web_search(f"Getnet {message}", k=8).get("results", []) if h.get("snippet") and _official(h.get("url"))][:4]
+    return [f"[{h['url']}] {h.get('title') or ''}\n{h['snippet']}" for h in hits], [h["url"] for h in hits]
+
+
+def _answer_from(message: str, evidence: list[str], facts: list[str]) -> str | None:
+    """Resposta escrita só a partir da evidência, ou None quando a evidência não responde."""
     user = wrap_data("chunks", "\n\n".join(evidence)) + "\n"
     if facts:
         user += wrap_data("facts_from_previous_agents", "\n".join(facts)) + "\n"
     answer = llm.complete(KNOWLEDGE_SYS + reply_in(message), user + f"Pergunta: {message}")
-    if "NOT_FOUND" in answer[:40]:
-        return AgentResult(agent="knowledge", tool_calls=["retrieve"], error="not_in_kb")
-    return AgentResult(agent="knowledge", facts=[answer], sources=sorted({c["url"] for c in chunks}),
-                       evidence=evidence, tool_calls=["retrieve"])
+    return None if "NOT_FOUND" in answer[:40] else answer
+
+
+def knowledge(message: str, facts: list[str]) -> AgentResult:
+    """Recuperação interna (base raspada) e, só se ela não responder, externa (busca web nos sites oficiais).
+    Nos dois casos a resposta sai apenas da evidência, com URL, e o orquestrador confere com verify()."""
+    chunks = retriever.retrieve(message, k=5)
+    # A evidência leva URL e título, iguais ao que o agente lê: sem eles o verificador reprovava a própria citação da fonte.
+    evidence = [f"[{c['url']}] {c['title']}\n{c['text']}" for c in chunks]
+    answer = _answer_from(message, evidence, facts) if chunks else None
+    if answer:
+        return AgentResult(agent="knowledge", facts=[answer], sources=sorted({c["url"] for c in chunks}),
+                           evidence=evidence, tool_calls=["retrieve"])
+    evidence, urls = _web_evidence(message)
+    answer = _answer_from(message, evidence, facts) if evidence else None
+    if answer:
+        return AgentResult(agent="knowledge", facts=[answer], sources=urls, evidence=evidence, tool_calls=["retrieve", "web_search"])
+    return AgentResult(agent="knowledge", tool_calls=["retrieve", "web_search"], error="not_in_kb" if chunks else "no_chunks")
 
 
 def _watch(handlers: dict) -> tuple[dict, list[bool]]:

@@ -20,6 +20,8 @@ _metrics_lock = threading.Lock()
 
 # Quem decide quando o classificador local fica abaixo do limiar: "jev" (decisão barata e rápida) ou "llm".
 ROUTER_FALLBACK = os.getenv("ROUTER_FALLBACK", "llm")
+# Passado este tempo, a requisição não começa outro agente: entrega o que já tem e encaminha para um humano.
+DEADLINE_S = float(os.getenv("REQUEST_DEADLINE_S", "60"))
 
 # "minha maquininha ... o que eu faço?" pede dado da conta E instrução de produto: Suporte e depois Conhecimento.
 MINE = re.compile(r"\b(my|minha|meu)\b.{0,30}\b(maquininha|maquina|terminal|machine|reader|leitor)\b")
@@ -97,6 +99,8 @@ def handle(req: ChatRequest) -> ChatResponse:
         for step in plan.steps:
             if step.agent == "escalate":
                 return hand_off(route, plan.source, plan.confidence, results, facts, plan.reason or "router")
+            if route and time.perf_counter() - t0 > DEADLINE_S:
+                return hand_off(route, plan.source, plan.confidence, results, facts, "deadline_exceeded")
             route.append(step.agent)
             t_step = time.perf_counter()
             if step.agent == "knowledge":

@@ -50,13 +50,13 @@ def _client_for():
         return _client
     if PROVIDER == "anthropic":
         import anthropic
-        _client = anthropic.Anthropic(timeout=TIMEOUT_S, max_retries=2)
+        _client = anthropic.Anthropic(timeout=TIMEOUT_S, max_retries=1)
     elif PROVIDER == "openrouter":
         from openai import OpenAI
         _client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=os.environ["OPENROUTER_API_KEY"],
-            timeout=TIMEOUT_S, max_retries=2,
+            timeout=TIMEOUT_S, max_retries=1,
             default_headers={"HTTP-Referer": os.getenv("APP_URL", "https://github.com/getnet-multi-agent"),
                              "X-Title": "getnet-multi-agent"},
         )

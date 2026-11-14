@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from fastapi.testclient import TestClient
 
 from app import agents, orchestrator
@@ -155,3 +156,50 @@ def test_log_line_has_one_timed_step_per_agent(caplog):
         handle(ChatRequest(message="My card machine won't connect to the internet, what should I do?", user_id="cliente1988"))
     line = json.loads(caplog.records[-1].getMessage())
     assert [s["agent"] for s in line["steps"]] == line["route"][:len(line["steps"])] and all(s["ms"] >= 0 for s in line["steps"])
+
+
+# ---------- agente de conhecimento: recuperação externa (busca web) quando a base não responde ----------
+OFFICIAL = {"title": "Antecipação de recebíveis", "url": "https://site.getnet.com.br/antecipacao/", "snippet": "Receba suas vendas no crédito em até um dia útil."}
+BLOG = {"title": "Blog qualquer", "url": "https://blog.exemplo.com/getnet", "snippet": "A Getnet cobra taxa X."}
+LOOKALIKE = {"title": "Parece oficial", "url": "https://fakegetnet.net/promo", "snippet": "Antecipe agora."}
+
+
+def _base_has_no_answer(monkeypatch, hits):
+    """A base responde NOT_FOUND; a segunda chamada (com o que veio da web) responde. Devolve os prompts e a evidência vista."""
+    seen = {"prompts": [], "evidence": None}
+
+    def complete(system, user, *a, **k):
+        seen["prompts"].append(user)
+        return "NOT_FOUND" if len(seen["prompts"]) == 1 else "Em até um dia útil (https://site.getnet.com.br/antecipacao/)."
+
+    def verify(answer, evidence):
+        seen["evidence"] = evidence
+        return True
+
+    monkeypatch.setattr(agents.llm, "complete", complete)
+    monkeypatch.setattr(agents, "verify", verify)
+    monkeypatch.setattr(agents.tools, "web_search", lambda query, k=3: hits)
+    return seen
+
+
+def test_knowledge_falls_back_to_web_search_on_official_sites(monkeypatch):
+    seen = _base_has_no_answer(monkeypatch, {"results": [BLOG, OFFICIAL, LOOKALIKE], "source": "duckduckgo.com"})
+    r = chat("How does receivables advance (antecipação) work with Getnet?")
+    assert r.route == ["knowledge"] and not r.handoff and r.tool_calls == ["retrieve", "web_search"]
+    assert r.sources == [OFFICIAL["url"]]                       # só o site oficial vira fonte
+    assert "blog.exemplo.com" not in seen["prompts"][1] and "fakegetnet" not in seen["prompts"][1]
+    assert len(seen["evidence"]) == 1 and OFFICIAL["snippet"] in seen["evidence"][0]  # o verificador confere contra o que veio da web
+
+
+@pytest.mark.parametrize("hits", [{"results": [BLOG, LOOKALIKE], "source": "duckduckgo.com"}, {"results": []}, {"error": "web_search indisponível"}])
+def test_web_search_without_an_official_result_keeps_the_handoff(monkeypatch, hits):
+    seen = _base_has_no_answer(monkeypatch, hits)
+    r = chat("How does receivables advance (antecipação) work with Getnet?")
+    assert r.route == ["knowledge", "escalate"] and r.handoff and len(seen["prompts"]) == 1  # o modelo nem lê resultado não oficial
+
+
+def test_deadline_stops_before_the_next_agent(monkeypatch):
+    """Tempo esgotado depois do primeiro agente: o segundo não começa, o que já foi apurado vai junto com o chamado."""
+    monkeypatch.setattr(orchestrator, "DEADLINE_S", 0.0)
+    r = chat("My card machine won't connect to the internet, what should I do?")
+    assert r.route == ["support", "escalate"] and r.handoff and r.ticket_id and "retrieve" not in r.tool_calls

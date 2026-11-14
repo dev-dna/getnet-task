@@ -26,6 +26,12 @@ def setup_data():
     tools.TICKETS.unlink(missing_ok=True)
 
 
+@pytest.fixture(autouse=True)
+def no_real_web_search(monkeypatch):
+    """Nenhum teste chama a busca web de verdade: o agente de conhecimento recorre a ela quando a base não responde."""
+    monkeypatch.setattr(tools, "web_search", lambda query, k=3: {"results": [], "source": "duckduckgo.com"})
+
+
 @pytest.fixture
 def no_network(monkeypatch):
     """Ferramentas gerais sem internet: devolve resposta fixa no formato que o código espera."""

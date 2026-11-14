@@ -29,6 +29,16 @@ def test_every_import_is_in_requirements():
         assert pkg in req, pkg
 
 
+def test_docker_installs_the_versions_that_were_tested():
+    """Sem versões travadas, um build feito semanas depois instala bibliotecas que ninguém testou."""
+    import re
+    assert "-c requirements.lock" in Path("Dockerfile").read_text()
+    locked = {re.split(r"==", line)[0].lower().replace("_", "-") for line in Path("requirements.lock").read_text().splitlines() if "==" in line}
+    for line in Path("requirements.txt").read_text().splitlines():
+        name = re.split(r"[\[<>=]", line.strip())[0].lower().replace("_", "-")
+        assert not name or name in locked, name
+
+
 def test_ingest_chunkers():
     import ingest
     html = "<html><title>Getnet</title><body><nav>menu</nav><h2>Pix</h2><p>" + "Receba com Pix na maquininha. " * 8 + "</p><h2>Link</h2><p>" + "Cobre por link. " * 10 + "</p></body></html>"

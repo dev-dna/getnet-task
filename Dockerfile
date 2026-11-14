@@ -1,8 +1,9 @@
 FROM python:3.12-slim
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app/src
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# requirements.lock trava as versões exatas que foram testadas; requirements.txt diz só o mínimo de cada biblioteca.
+COPY requirements.txt requirements.lock ./
+RUN pip install --no-cache-dir -r requirements.txt -c requirements.lock
 # Modelo de vetores do roteador (uns 240 MB), baixado antes do código: o Docker reaproveita esta camada a cada edição.
 # Sem acesso ao Hugging Face o build continua e o roteador fica só com o classificador por letras; GET /health mostra router_mode.
 COPY src/app/__init__.py src/app/embeddings.py src/app/

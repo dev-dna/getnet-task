@@ -6,7 +6,7 @@ O enunciado pede que o vídeo mostre três coisas: **seu raciocínio, as decisõ
 Regra: fale só o que é verdade no repositório. Cada número abaixo tem o arquivo de onde saiu; confira antes de gravar.
 
 ## Antes de gravar
-1. `make setup` e `make test` (149 testes passam).
+1. `make setup` e `make test` (156 testes passam).
 2. Suba a API com respostas de verdade: `make run-cli` (usa o Claude Code logado na máquina) ou Docker com chave real no `.env`.
 3. Abra `http://localhost:8000/docs` e rode um exemplo para aquecer.
 4. Leia as 10 respostas do grupo S (`make eval-cli` imprime; também estão em `evals/report_claude_cli.json`, campo `answers`). Só diga "eu li as respostas" se leu.
@@ -36,7 +36,7 @@ Regra: fale só o que é verdade no repositório. Cada número abaixo tem o arqu
 
 "Os agentes se comunicam por chamada de função, trocando dois objetos tipados: o plano do roteador e o resultado de cada agente. Não usei framework de agentes porque o fluxo tem no máximo três passos: assim ele cabe numa função que se lê de cima a baixo e se testa com um modelo falso."
 
-"Uma diferença para o enunciado: ele coloca a busca web dentro do agente de conhecimento. Eu separei. O agente de conhecimento só responde com trechos da base; clima, câmbio e busca web ficam num agente geral. Assim uma resposta sobre produto nunca mistura fonte da web."
+"O enunciado dá ao agente de conhecimento duas buscas: a base e a web. Aqui ele procura primeiro na base raspada. Se a base não responde, ele busca na web, mas só aceita resultado dos sites oficiais da Getnet, e a resposta passa pelo mesmo verificador. Sem resultado oficial, o caso vai para um humano. Clima, câmbio e fatos gerais ficam num agente geral, para uma resposta sobre produto nunca se apoiar em página não oficial."
 
 ## 5:00–7:00 — Roteamento em cascata (`data/router_report.json`)
 "Rotear é uma decisão, não um texto. Por isso não começo pelo modelo de linguagem: uso uma cascata do mais barato para o mais caro, e cada degrau só entra quando o anterior não tem certeza."
@@ -76,18 +76,18 @@ Em cada resposta, aponte `route`, `decided_by`, `tool_calls` e `sources`.
 "Se uma API externa cai, há novas tentativas; se todas falham, o caso vira chamado, não uma resposta sem dado."
 
 ## 12:30–13:30 — Testes e avaliação (`evals/report_claude_cli.json`)
-"São 149 testes que rodam sem chave, com um modelo falso que só confere o encanamento. A avaliação tem 30 casos em cinco grupos: os dez do enunciado, as mesmas perguntas com outra redação, ataques, perguntas legítimas que parecem ataque e usuário desconhecido."
+"São 156 testes que rodam sem chave, com um modelo falso que só confere o encanamento. A avaliação tem 30 casos em cinco grupos: os dez do enunciado, as mesmas perguntas com outra redação, ataques, perguntas legítimas que parecem ataque e usuário desconhecido."
 
 "Com modelo real, na execução guardada, passaram 30 de 30; execuções anteriores deram de 28 a 30, porque o resultado varia entre execuções. Num segundo conjunto, com 14 frases reescritas com sinônimos em português e inglês, 42 casos, passaram 41. A que falha é uma redação de 'minha maquininha não conecta': os agentes certos rodam, mas a resposta de conhecimento não é sustentada pela base e o caso vai para um humano." (`evals/report_variations_claude_cli.json`)
 
 "A avaliação confere rota, ferramenta, vazamento de dados e passagem para humano. Ela não confere se o texto está certo: isso eu li." (só se leu)
 
 ## 13:30–14:30 — O que ficou de fora
-"O que eu não verifiquei: a avaliação com modelo real rodou pelo Claude Code em linha de comando. Os provedores da Anthropic e do OpenRouter estão implementados, mas não foram executados com chave real, e o Jev também não. A busca web funcionou numa execução e falhou em outra."
+"O que eu não verifiquei: a avaliação com modelo real rodou pelo Claude Code em linha de comando. Os provedores da Anthropic e do OpenRouter estão implementados, mas não foram executados com chave real, e o Jev também não. A busca web funcionou numa execução e falhou em outras: por isso o caminho da busca web no agente de conhecimento está coberto por testes com resultado simulado, e quando a busca falha o caso vai para um humano."
 
 "Limitações: os dados do lojista são simulados, os chamados ficam num arquivo e não há autenticação."
 
-"Com mais tempo: rodar com chave real e comparar os roteadores, a busca web como reserva dentro do agente de conhecimento, um prazo total por requisição, e a especificação antes do primeiro commit. A busca por significado na base eu medi e não adotei: não achou mais páginas que a busca por palavras."
+"Com mais tempo: rodar com chave real e comparar os roteadores, um provedor de busca web estável, interromper uma chamada de modelo em andamento quando o prazo estoura, e a especificação antes do primeiro commit. A busca por significado na base eu medi e não adotei: não achou mais páginas que a busca por palavras."
 
 ## Perguntas prováveis na entrevista, e onde está a resposta
 - Por que não LangGraph ou outro framework? `specs/plan.md`, decisão D02.

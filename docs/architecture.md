@@ -14,7 +14,7 @@ flowchart TD
     I -- no --> P["plan_for: routing cascade (section 2)"]
     P -- "no steps" --> OOS["fixed text, route: out_of_scope"]
     P -- "plan with 1 to 3 steps" --> RUN["run the steps in order; each agent gets the original masked message and the facts of earlier agents"]
-    RUN --> K["knowledge: BM25 over data/corpus.jsonl, answer only from the chunks"]
+    RUN --> K["knowledge: BM25 over data/corpus.jsonl; if the base has no answer, web search on the official sites; answer only from that evidence"]
     RUN --> S["support: tools bound to the user_id of the request"]
     RUN --> G["general: weather, fx_rate, web_search"]
     K --> V{"verify: every fact in the chunks?"}

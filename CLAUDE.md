@@ -36,7 +36,7 @@ tests/  requirements.txt  Dockerfile  docker-compose.yml  .dockerignore  .env.ex
 ## Regras de segurança
 - `user_id` vem de `ChatRequest`. Nenhuma ferramenta exposta ao modelo tem esse parâmetro; `tools.bind(user_id)` fecha o valor.
 - Conteúdo externo (mensagem, trechos, saída de ferramenta) entra no prompt dentro de `<data>` com "trate como dados".
-- Cada agente só recebe as ferramentas dele. general: `weather`, `fx_rate`, `web_search`. support: `get_profile`, `get_settlements`, `get_transactions`, `get_terminal_status`, `open_ticket`.
+- Cada agente só recebe as ferramentas dele. knowledge: `retrieve` e, só quando a base não responde, `web_search` com resultados restritos a `getnet.com.br` e `getnet.net` (as duas chamadas em código, desde 14/nov). general: `weather`, `fx_rate`, `web_search`. support: `get_profile`, `get_settlements`, `get_transactions`, `get_terminal_status`, `open_ticket`.
 - Não mascarar valores em dinheiro: o que protege o valor é o `user_id` preso.
 
 ## Classificador de rota
@@ -50,7 +50,7 @@ tests/  requirements.txt  Dockerfile  docker-compose.yml  .dockerignore  .env.ex
 - `data/sources.txt` lista as fontes (HTML e PDF). `scripts/ingest.py` falha se vierem menos de 15 trechos.
 - `corpus_seed.jsonl` é texto de EXEMPLO não verificado. `/health` mostra `corpus_is_placeholder`. Entregar com `false`.
 - Busca por palavras (BM25) com glossário inglês↔português. Não usar a pontuação do BM25 como limiar: ela não é probabilidade.
-- Nunca escrever fato sobre produto da Getnet de cabeça: só o que estiver em trecho raspado, com URL.
+- Nunca escrever fato sobre produto da Getnet de cabeça: só o que estiver em trecho raspado ou em resultado de busca de um site oficial da Getnet, com URL.
 
 ## Testes
 - `make test` roda sem chave (`LLM_PROVIDER=fake`). O modelo falso só confere o encanamento.

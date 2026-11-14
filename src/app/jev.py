@@ -6,7 +6,7 @@ Chamado pela Decisions API do OpenRouter com a mesma chave do resto do projeto.
 Formato conferido em 14/nov/2026 com a referência oficial (openrouter.ai/docs, "Submit a decisions request"):
 POST /api/alpha/decisions, chave como Bearer, corpo {model, state, questions}; a resposta vem em "answers", e cada
 resposta traz "choice" + "probabilities" (pergunta choice), "noul" (pergunta sim/não) ou type "refusal".
-A API é alfa: o formato pode mudar. Chamada com chave real: scripts/smoke_jev.py (ainda não rodada).
+A API é alfa: o formato pode mudar. Chamada com chave real: scripts/smoke_jev.py, rodada em 14/nov/2026 (HTTP 200, 187 ms).
 Outro endereço ou modelo: JEV_URL, JEV_MODEL, JEV_API_KEY (a API direta da TypeSafe não foi conferida).
 """
 import logging

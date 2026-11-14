@@ -27,6 +27,27 @@
         }
       }
     },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "ops"
+        ],
+        "summary": "Request counters since the process started",
+        "operationId": "metrics_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metrics"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/chat": {
       "post": {
         "tags": [
@@ -384,6 +405,62 @@
           "corpus_is_placeholder"
         ],
         "title": "Health"
+      },
+      "Metrics": {
+        "properties": {
+          "requests": {
+            "type": "integer",
+            "title": "Requests"
+          },
+          "decided_by": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Decided By",
+            "description": "Requests per routing step that decided: `guardrail`, `rule`, `clf`, `jev`, `llm`, `error`."
+          },
+          "route": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Route",
+            "description": "Times each agent or outcome appears in a route: `knowledge`, `support`, `general`, `escalate`, `guardrail`, `out_of_scope`, `error`."
+          },
+          "errors": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Errors",
+            "description": "Agent errors that caused a handoff, by name: `not_in_kb`, `ungrounded_answer`, `merchant_not_found`, `tool_failed`…"
+          },
+          "handoffs": {
+            "type": "integer",
+            "title": "Handoffs"
+          },
+          "handoff_rate": {
+            "type": "number",
+            "title": "Handoff Rate"
+          },
+          "avg_latency_ms": {
+            "type": "integer",
+            "title": "Avg Latency Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "requests",
+          "decided_by",
+          "route",
+          "errors",
+          "handoffs",
+          "handoff_rate",
+          "avg_latency_ms"
+        ],
+        "title": "Metrics",
+        "description": "Counters since the process started. In memory: they reset when the container restarts."
       },
       "ValidationError": {
         "properties": {

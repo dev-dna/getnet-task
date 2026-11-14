@@ -51,6 +51,17 @@ class ChatResponse(BaseModel):
         "handoff": False, "ticket_id": None, "trace_id": "3f9a1c2b7d10", "latency_ms": 1840}]}}
 
 
+class Metrics(BaseModel):
+    """Counters since the process started. In memory: they reset when the container restarts."""
+    requests: int
+    decided_by: dict[str, int] = Field(description="Requests per routing step that decided: `guardrail`, `rule`, `clf`, `jev`, `llm`, `error`.")
+    route: dict[str, int] = Field(description="Times each agent or outcome appears in a route: `knowledge`, `support`, `general`, `escalate`, `guardrail`, `out_of_scope`, `error`.")
+    errors: dict[str, int] = Field(description="Agent errors that caused a handoff, by name: `not_in_kb`, `ungrounded_answer`, `merchant_not_found`, `tool_failed`…")
+    handoffs: int
+    handoff_rate: float
+    avg_latency_ms: int
+
+
 class Health(BaseModel):
     status: str = Field(description="`ok`, or `degraded` when `llm_problem` is set.")
     llm_provider: str = Field(description="`anthropic`, `openrouter`, `claude_cli` (local, no API key) or `fake` (tests).")

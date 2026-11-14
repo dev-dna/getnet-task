@@ -6,13 +6,17 @@ import json
 import logging
 import os
 import re
+import threading
 import time
 import uuid
+from collections import Counter
 
 from . import agents, guardrails, jev, router_clf
 from .schemas import AgentResult, ChatRequest, ChatResponse, Plan, Step
 
 log = logging.getLogger("orchestrator")
+METRICS: Counter = Counter()  # contadores do processo, lidos por GET /metrics
+_metrics_lock = threading.Lock()
 
 # Quem decide quando o classificador local fica abaixo do limiar: "jev" (decisão barata e rápida) ou "llm".
 ROUTER_FALLBACK = os.getenv("ROUTER_FALLBACK", "llm")
@@ -41,8 +45,19 @@ def plan_for(msg: str) -> Plan:
     return agents.route_llm(msg, [c for c, _ in top2])
 
 
+def metrics() -> dict:
+    """Contadores desde que o processo subiu (em memória: zeram quando o container reinicia)."""
+    with _metrics_lock:
+        m = dict(METRICS)
+    n, group = m.get("requests", 0), lambda prefix: {k[len(prefix):]: v for k, v in sorted(m.items()) if k.startswith(prefix)}
+    return {"requests": n, "decided_by": group("decided_by."), "route": group("route."), "errors": group("error."),
+            "handoffs": m.get("handoffs", 0), "handoff_rate": round(m.get("handoffs", 0) / n, 3) if n else 0.0,
+            "avg_latency_ms": round(m.get("latency_ms_total", 0) / n) if n else 0}
+
+
 def handle(req: ChatRequest) -> ChatResponse:
     t0 = time.perf_counter()
+    steps: list[dict] = []  # um item por agente que rodou: nome, tempo e erro; vai para a linha de log
     trace = uuid.uuid4().hex[:12]
     lang = guardrails.language(req.message)
     msg = guardrails.mask(req.message)
@@ -53,9 +68,14 @@ def handle(req: ChatRequest) -> ChatResponse:
             sources=sorted({s for r in results if r.agent != "escalate" for s in r.sources if s}),
             tool_calls=[t for r in results for t in r.tool_calls], handoff=handoff, ticket_id=ticket,
             trace_id=trace, latency_ms=int((time.perf_counter() - t0) * 1000))
+        errors = [r.error for r in results if r.error]
+        with _metrics_lock:
+            METRICS.update(["requests", f"decided_by.{decided_by}", *(f"route.{a}" for a in route), *(f"error.{e}" for e in errors)]
+                           + (["handoffs"] if handoff else []))
+            METRICS["latency_ms_total"] += resp.latency_ms
         log.info(json.dumps({"trace_id": trace, "user_id": req.user_id, "route": route, "decided_by": decided_by,
                              "confidence": resp.confidence, "tool_calls": resp.tool_calls, "handoff": handoff,
-                             "errors": [r.error for r in results if r.error], "latency_ms": resp.latency_ms}, ensure_ascii=False))
+                             "errors": errors, "steps": steps, "latency_ms": resp.latency_ms}, ensure_ascii=False))
         return resp
 
     def hand_off(route, decided_by, conf, results, facts, reason) -> ChatResponse:
@@ -78,6 +98,7 @@ def handle(req: ChatRequest) -> ChatResponse:
             if step.agent == "escalate":
                 return hand_off(route, plan.source, plan.confidence, results, facts, plan.reason or "router")
             route.append(step.agent)
+            t_step = time.perf_counter()
             if step.agent == "knowledge":
                 r = agents.knowledge(msg, facts)
                 # fatos dos agentes anteriores (dados da conta) também sustentam a resposta, além dos trechos da base
@@ -88,6 +109,7 @@ def handle(req: ChatRequest) -> ChatResponse:
             else:
                 r = agents.general(msg, facts)
             results.append(r)
+            steps.append({"agent": step.agent, "ms": int((time.perf_counter() - t_step) * 1000), "error": r.error})
             if r.error:
                 return hand_off(route, plan.source, plan.confidence, results, facts, f"agent_error:{r.error}")
             facts += r.facts

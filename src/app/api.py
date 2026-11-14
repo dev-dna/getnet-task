@@ -7,7 +7,7 @@ from fastapi import Body, FastAPI
 from fastapi.responses import RedirectResponse
 
 from . import llm, orchestrator, retriever, router_clf
-from .schemas import ChatRequest, ChatResponse, Health
+from .schemas import ChatRequest, ChatResponse, Health, Metrics
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logging.getLogger("httpx").setLevel(logging.WARNING)  # o httpx registra a URL inteira de cada chamada, com parâmetros
@@ -79,6 +79,11 @@ def health() -> Health:
     return Health(status="degraded" if problem else "ok", llm_provider=llm.PROVIDER, llm_problem=problem,
                   router_fallback=orchestrator.ROUTER_FALLBACK, router_mode=router_clf.mode(),
                   corpus_chunks=len(retriever.load()[1]), corpus_is_placeholder=retriever.is_placeholder())
+
+
+@app.get("/metrics", response_model=Metrics, tags=["ops"], summary="Request counters since the process started")
+def metrics() -> Metrics:
+    return Metrics(**orchestrator.metrics())
 
 
 @app.post("/chat", response_model=ChatResponse, tags=["chat"], summary="Send a merchant message to the agents",

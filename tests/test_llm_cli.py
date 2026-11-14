@@ -83,3 +83,39 @@ def test_missing_key_is_reported_without_calling_the_model(monkeypatch, provider
         monkeypatch.setenv(name, value)
     found = llm.config_problem()
     assert (found is None) if problem is None else (problem in found)
+
+
+# ---------- provedores de API: o raciocínio do modelo conta no limite de saída ----------
+class _Choice:
+    def __init__(self, text, finish):
+        self.finish_reason = finish
+        self.message = type("M", (), {"content": text, "tool_calls": None})()
+
+
+class _OpenAIStub:
+    """Imita o cliente do formato OpenAI (OpenRouter): guarda o que foi pedido e devolve o fim configurado."""
+    def __init__(self, finish):
+        self.sent, self.finish = {}, finish
+        self.chat = type("C", (), {"completions": self})()
+
+    def create(self, **kw):
+        self.sent = kw
+        return type("R", (), {"choices": [_Choice("Toque em Configurar e depois em Conex", self.finish)]})()
+
+
+@pytest.mark.parametrize("call", ["complete", "run_tools"])
+def test_answer_cut_at_the_output_limit_is_an_error_not_an_answer(monkeypatch, call):
+    """Rodada com chave real de 14/nov: o raciocínio consumiu o limite e a S5 foi entregue sem as instruções."""
+    stub = _OpenAIStub("length")
+    monkeypatch.setattr(llm, "PROVIDER", "openrouter")
+    monkeypatch.setattr(llm, "_client_for", lambda: stub)
+    with pytest.raises(llm.Truncated):
+        llm.complete("s", "u") if call == "complete" else llm.run_tools("s", "u", [], {})
+
+
+def test_output_limit_leaves_room_for_the_model_to_reason(monkeypatch):
+    stub = _OpenAIStub("stop")
+    monkeypatch.setattr(llm, "PROVIDER", "openrouter")
+    monkeypatch.setattr(llm, "_client_for", lambda: stub)
+    assert llm.complete("s", "u", max_tokens=700).startswith("Toque")
+    assert stub.sent["max_tokens"] == 700 + llm.THINKING_ROOM and llm.THINKING_ROOM >= 1000

@@ -22,11 +22,27 @@ TIMEOUT_S = float(os.getenv("LLM_TIMEOUT_S", "40"))
 PROVIDER = os.getenv("LLM_PROVIDER", "anthropic")
 MODEL_FAST = os.getenv("MODEL_FAST", "claude-haiku-5-5")
 MODEL_SMART = os.getenv("MODEL_SMART", "claude-sonnet-5-5")
+# Os modelos atuais raciocinam antes de responder, e esse raciocínio conta no limite de saída (max_tokens). Com os limites
+# antigos (700 e 400) o raciocínio às vezes consumia quase tudo e a resposta saía cortada no meio: na rodada com chave
+# real de 14/nov a S5 perdeu as instruções e o JSON do verificador veio quebrado. Pelo Claude Code não há esse limite.
+# A folga abaixo é somada a cada limite; e uma resposta cortada vira erro (chamado humano), nunca é entregue pela metade.
+# Medido com chave real: o raciocínio usou de 267 a 603 tokens por chamada. A folga não pode ser grande à toa: o
+# OpenRouter reserva crédito pelo limite pedido, e uma conta sem crédito comprado recusou (HTTP 402) limites de 3000 ou mais.
+THINKING_ROOM = int(os.getenv("LLM_THINKING_ROOM", "1500"))
 EXHAUSTED = "Não consegui concluir a consulta."  # o loop de ferramentas acabou sem resposta; o agente trata como falha
 
 KEY_ENV = {"anthropic": "ANTHROPIC_API_KEY", "openrouter": "OPENROUTER_API_KEY"}
 
 _client = None
+
+
+class Truncated(RuntimeError):
+    """O provedor parou no limite de saída: o texto recebido está incompleto."""
+
+
+def _whole(reason: str | None) -> None:
+    if reason in ("length", "max_tokens"):  # nomes do formato OpenAI e da API da Anthropic
+        raise Truncated("resposta cortada pelo provedor no limite de saída (max_tokens); aumente LLM_THINKING_ROOM")
 
 
 def config_problem() -> str | None:
@@ -69,12 +85,14 @@ def complete(system: str, user: str, model: str = MODEL_SMART, max_tokens: int =
     if PROVIDER == "claude_cli":
         return _cli(system, user, model)
     if PROVIDER == "anthropic":
-        r = _client_for().messages.create(model=model, max_tokens=max_tokens, system=system,
+        r = _client_for().messages.create(model=model, max_tokens=max_tokens + THINKING_ROOM, system=system,
                                           messages=[{"role": "user", "content": user}])
+        _whole(r.stop_reason)
         return "".join(b.text for b in r.content if b.type == "text")
     r = _client_for().chat.completions.create(
-        model=model, max_tokens=max_tokens,
+        model=model, max_tokens=max_tokens + THINKING_ROOM,
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user}])
+    _whole(r.choices[0].finish_reason)
     return r.choices[0].message.content or ""
 
 
@@ -163,7 +181,8 @@ def _run_tools_anthropic(system, user, tools, handlers, model, max_rounds):
     messages = [{"role": "user", "content": user}]
     called: list[str] = []
     for _ in range(max_rounds):
-        r = client.messages.create(model=model, max_tokens=800, system=system, tools=tools, messages=messages)
+        r = client.messages.create(model=model, max_tokens=800 + THINKING_ROOM, system=system, tools=tools, messages=messages)
+        _whole(r.stop_reason)
         messages.append({"role": "assistant", "content": r.content})
         if r.stop_reason != "tool_use":
             return "".join(b.text for b in r.content if b.type == "text"), called
@@ -181,8 +200,9 @@ def _run_tools_openai(system, user, tools, handlers, model, max_rounds):
     messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     called: list[str] = []
     for _ in range(max_rounds):
-        r = client.chat.completions.create(model=model, max_tokens=800, messages=messages,
+        r = client.chat.completions.create(model=model, max_tokens=800 + THINKING_ROOM, messages=messages,
                                            tools=_to_openai_tools(tools), tool_choice="auto")
+        _whole(r.choices[0].finish_reason)
         m = r.choices[0].message
         messages.append(m)
         if not m.tool_calls:

@@ -1,0 +1,34 @@
+{
+  "cliente1988": {
+    "name": "Padaria Pão Quente",
+    "plan": "Get Smart",
+    "terminal_model": "Get Smart",
+    "pix_enabled": true,
+    "anticipation_enabled": true,
+    "settlements": [
+      {"in_days": 1, "amount_brl": 1834.50, "origin": "vendas de débito e Pix de ontem"},
+      {"in_days": 2, "amount_brl": 620.00, "origin": "crédito antecipado"},
+      {"in_days": 30, "amount_brl": 2410.90, "origin": "crédito à vista"}
+    ],
+    "transactions": [
+      {"id": "tx-9001", "days_ago": 0, "amount_brl": 89.90, "brand": "Visa", "last4": "4412", "status": "declined", "reason_code": "51", "reason": "Saldo ou limite insuficiente no cartão do cliente"},
+      {"id": "tx-9000", "days_ago": 0, "amount_brl": 45.00, "brand": "Pix", "last4": null, "status": "approved", "reason_code": null, "reason": null},
+      {"id": "tx-8999", "days_ago": 1, "amount_brl": 310.00, "brand": "Mastercard", "last4": "0199", "status": "approved", "reason_code": null, "reason": null}
+    ],
+    "terminal": {"serial": "GS-77A1", "online": false, "last_seen_hours_ago": 3, "connection": "wifi", "wifi_signal": "weak", "battery_pct": 42, "firmware": "4.2.1", "firmware_latest": "4.3.0"}
+  },
+  "cliente2000": {
+    "name": "Mercado Dois Mil",
+    "plan": "Get Clássica",
+    "terminal_model": "Get Clássica",
+    "pix_enabled": false,
+    "anticipation_enabled": false,
+    "settlements": [
+      {"in_days": 1, "amount_brl": 9876.54, "origin": "vendas de débito de ontem"}
+    ],
+    "transactions": [
+      {"id": "tx-2000", "days_ago": 0, "amount_brl": 9876.54, "brand": "Elo", "last4": "2000", "status": "approved", "reason_code": null, "reason": null}
+    ],
+    "terminal": {"serial": "GC-2000", "online": true, "last_seen_hours_ago": 0, "connection": "chip", "wifi_signal": null, "battery_pct": 97, "firmware": "2.0.0", "firmware_latest": "2.0.0"}
+  }
+}

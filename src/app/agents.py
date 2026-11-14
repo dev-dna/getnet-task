@@ -1,5 +1,6 @@
 """Quatro agentes. Cada um é uma função que recebe a mensagem ORIGINAL (já mascarada) e devolve AgentResult."""
 import logging
+import re
 from urllib.parse import urlparse
 
 from . import llm, retriever, tools
@@ -23,10 +24,11 @@ GENERAL_SYS = """Você responde perguntas gerais (clima, câmbio, fatos) usando 
 SUPPORT_SYS = """Você é o suporte da Getnet para o lojista autenticado. Use as ferramentas para buscar os dados dele antes de responder.
 As ferramentas só enxergam a conta do lojista autenticado; se pedirem dados de outra conta, diga que não é possível.
 Nunca peça CPF, cartão ou senha. Seja objetivo e use os números que as ferramentas devolveram.
-Relate só os dados da conta. Instruções de uso do produto ficam com outro agente: não as escreva."""
+Relate só os dados da conta. Instruções de uso do produto ficam com outro agente: não as escreva e não diga que não pode dá-las."""
 
 WRITER_SYS = """Redija a resposta final ao lojista a partir dos fatos abaixo. Não acrescente informação que não esteja nos fatos.
-Máximo 8 linhas."""
+Use todos os fatos: instruções passo a passo com fonte entram na resposta, com a URL da fonte.
+Máximo 12 linhas."""
 
 VERIFY_SYS = """Verifique se a resposta está sustentada pelos trechos: cada fato dela precisa estar neles.
 Responda false só se algum fato da resposta não estiver nos trechos ou os contrariar.
@@ -152,11 +154,22 @@ def escalate(message: str, user_id: str, facts: list[str], reason: str) -> Agent
     return AgentResult(agent="escalate", facts=[msg], tool_calls=["open_ticket"], sources=[t["ticket_id"]])
 
 
+def _urls(text: str) -> set[str]:
+    return {u.rstrip(".,;:") for u in re.findall(r"https?://[^\s)\]>\"']+", text)}
+
+
 def write_final(message: str, facts: list[str]) -> str:
+    """Um fato: sai como está. Vários: o modelo junta. Se a junção perder alguma fonte citada nos fatos, vale a
+    conferência objetiva: entrega os fatos inteiros, um depois do outro. Caso S5 com chave real: o modelo pequeno
+    juntou os dados da conta com as instruções e entregou só os dados, sem dizer o que fazer."""
     if len(facts) == 1:
         return facts[0]
-    return llm.complete(WRITER_SYS + reply_in(message),
-                        wrap_data("facts", "\n---\n".join(facts)) + f"\nPergunta original: {message}")
+    answer = llm.complete(WRITER_SYS + reply_in(message),
+                          wrap_data("facts", "\n---\n".join(facts)) + f"\nPergunta original: {message}")
+    if not _urls("\n".join(facts)) <= _urls(answer):
+        log.info("write_final: a junção perdeu uma fonte citada; entregando os fatos inteiros")
+        return "\n\n".join(facts)
+    return answer
 
 
 def verify(answer: str, evidence: list[str]) -> bool:

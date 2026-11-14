@@ -235,3 +235,15 @@ def test_provider_error_is_visible_in_health_and_metrics(monkeypatch):
     with TestClient(app) as client:
         assert "402" in client.get("/health").json()["last_error"]
         assert client.get("/metrics").json()["errors"] == {"RuntimeError": 1}
+
+
+def test_final_answer_never_loses_a_cited_source(monkeypatch):
+    """S5 com chave real: ao juntar os dados da conta com as instruções, o modelo pequeno entregou só os dados."""
+    facts = ["Sua maquininha GS-77A1 está offline, com sinal de Wi-Fi fraco.",
+             "Toque em Configurar e depois em Conexões (https://site.getnet.com.br/manual.pdf)."]
+    monkeypatch.setattr(agents.llm, "complete", lambda *a, **k: "Sua maquininha está offline. Posso abrir um chamado.")
+    assert agents.write_final("o que eu faço?", facts) == "\n\n".join(facts)      # perdeu a fonte: entrega os fatos inteiros
+    kept = "Sua maquininha está offline. Toque em Configurar e depois em Conexões: https://site.getnet.com.br/manual.pdf."
+    monkeypatch.setattr(agents.llm, "complete", lambda *a, **k: kept)
+    assert agents.write_final("o que eu faço?", facts) == kept                      # manteve a fonte: vale a junção
+    assert agents.write_final("o que eu faço?", facts[:1]) == facts[0]              # um fato só: sem chamada de modelo

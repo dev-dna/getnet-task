@@ -7,7 +7,7 @@ import json
 import os
 import threading
 import time
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import httpx
@@ -17,6 +17,9 @@ TICKETS = Path(os.getenv("TICKETS_PATH", "data/tickets.json"))
 TIMEOUT = 8
 RETRY_STATUS = (429, 500, 502, 503, 504)
 _ticket_lock = threading.Lock()
+# Horário de Brasília (sem horário de verão desde 2019). O container roda em UTC: sem isto, "ontem" e "amanhã"
+# saem com um dia de diferença para quem pergunta entre 21h e meia-noite.
+BRT = timezone(timedelta(hours=-3))
 
 
 # ---------- gerais ----------
@@ -109,7 +112,8 @@ def merchants() -> dict:
 def bind(user_id: str) -> tuple[list[dict], dict]:
     """Fecha o user_id dentro das funções. O modelo nunca recebe nem escolhe esse parâmetro."""
     m = merchants().get(user_id)
-    today, now = date.today(), datetime.now()
+    now = datetime.now(BRT)
+    today = now.date()
     missing = {"error": "merchant not found"}
 
     def get_profile() -> dict:
@@ -154,8 +158,11 @@ def open_ticket_record(user_id: str, summary: str, priority: str, source: str, e
     with _ticket_lock:
         TICKETS.parent.mkdir(parents=True, exist_ok=True)
         data = json.loads(TICKETS.read_text(encoding="utf-8")) if TICKETS.is_file() else []
-        tid = f"GN-{date.today():%Y%m%d}-{len(data) + 1:04d}"
+        now = datetime.now(BRT)
+        tid = f"GN-{now:%Y%m%d}-{len(data) + 1:04d}"
         data.append({"ticket_id": tid, "user_id": user_id, "summary": summary, "priority": priority, "source": source,
-                     "created_at": datetime.now().isoformat(timespec="seconds"), **(extra or {})})
-        TICKETS.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+                     "created_at": now.isoformat(timespec="seconds"), **(extra or {})})
+        tmp = TICKETS.with_name(TICKETS.name + ".tmp")  # grava ao lado e troca: uma queda no meio não corrompe o arquivo
+        tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        os.replace(tmp, TICKETS)
     return {"ticket_id": tid, "status": "open", "sla_hours": 4 if priority == "high" else 24}

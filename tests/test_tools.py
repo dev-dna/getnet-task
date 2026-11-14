@@ -1,5 +1,5 @@
 import json
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 
 import httpx
 
@@ -13,10 +13,21 @@ def test_model_never_sees_user_id():
     assert handlers["get_settlements"]()["settlements"]
 
 
-def test_dates_are_relative_to_today():
+def test_dates_are_relative_to_today_in_brasilia():
     _, h = tools.bind("cliente1988")
-    assert h["get_settlements"]()["settlements"][0]["date"] == str(date.today() + timedelta(days=1))
-    assert h["get_transactions"]()["transactions"][0]["date"] == str(date.today())
+    today = datetime.now(tools.BRT).date()  # o container roda em UTC; "hoje" é o dia do lojista
+    assert tools.BRT.utcoffset(None) == timedelta(hours=-3)
+    assert h["get_settlements"]()["settlements"][0]["date"] == str(today + timedelta(days=1))
+    assert h["get_transactions"]()["transactions"][0]["date"] == str(today)
+
+
+def test_ticket_file_is_replaced_not_rewritten_in_place(tmp_path, monkeypatch):
+    monkeypatch.setattr(tools, "TICKETS", tmp_path / "tickets.json")
+    first = tools.open_ticket_record("cliente1988", "a", "normal", source="test")
+    second = tools.open_ticket_record("cliente1988", "b", "high", source="test")
+    saved = json.loads((tmp_path / "tickets.json").read_text(encoding="utf-8"))
+    assert [t["ticket_id"] for t in saved] == [first["ticket_id"], second["ticket_id"]]
+    assert saved[0]["created_at"].endswith("-03:00") and not list(tmp_path.glob("*.tmp"))
 
 
 def test_one_merchant_cannot_read_another():

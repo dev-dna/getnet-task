@@ -2,6 +2,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 from app import router_clf as rc
 from app.guardrails import normalize
 
@@ -40,3 +42,14 @@ def test_never_confidently_wrong_on_held_out_scenarios():
 def test_predict_shape():
     label, p, top2 = rc.predict("how does the payment link work")
     assert label in rc.CLASSES and 0 <= p <= 1 and len(top2) == 2
+
+
+def test_startup_training_does_not_run_cross_validation(tmp_path, monkeypatch):
+    """Arquivo ausente na subida: treina e grava, sem a avaliação por molde (minutos) e sem tocar no relatório."""
+    monkeypatch.setattr(rc, "_clf", None)
+    monkeypatch.setattr(rc, "evaluate", lambda *a, **k: pytest.fail("a subida não pode rodar a validação cruzada"))
+    before = rc.REPORT_PATH.read_bytes()
+    clf = rc.load(tmp_path / "router.joblib")
+    assert (tmp_path / "router.joblib").exists() and rc.REPORT_PATH.read_bytes() == before
+    assert rc.predict("how does the payment link work", clf)[0] in rc.CLASSES
+    assert rc.mode() in ("letras", "letras+significado")

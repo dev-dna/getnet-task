@@ -1,11 +1,13 @@
 """Vetores de significado (embeddings) de frases em português e inglês. Roda no processador, sem chave e sem serviço externo.
 
-Quem usa: o roteador (classificador por significado, em router_clf.py) e a busca na base (retriever.py), para que
-sinônimos e outra redação da mesma pergunta sejam entendidos sem lista manual de palavras.
+Quem usa: só o roteador (classificador por significado, em router_clf.py), para que sinônimos e outra redação da
+mesma pergunta sejam entendidos. A busca na base (retriever.py) continua por palavras: a busca por significado foi
+medida e não achou mais páginas (specs/plan.md, D05).
 
 Modelo: paraphrase-multilingual-MiniLM-L12-v2, pela biblioteca fastembed (ONNX). O arquivo (uns 240 MB) fica em
-data/models, fora do git; é baixado na primeira vez e no `docker build`.
-Se a biblioteca ou o modelo não estiverem disponíveis, available() devolve False e quem chama segue só por palavras.
+data/models, fora do git; é baixado na primeira vez e no `docker build`. Dentro da imagem EMBEDDINGS=cached:
+o container só lê o arquivo do disco, nunca baixa na subida.
+Se a biblioteca ou o modelo não estiverem disponíveis, available() devolve False e o roteador segue só por letras.
 """
 import logging
 import os
@@ -33,6 +35,8 @@ def _load():
         try:
             from fastembed import TextEmbedding
             try:
+                if not (CACHE.is_dir() and any(CACHE.iterdir())):
+                    raise FileNotFoundError(CACHE)  # nada baixado: nem tenta ler do disco (a biblioteca registraria ERROR)
                 _model = TextEmbedding(MODEL_NAME, cache_dir=str(CACHE), local_files_only=True)
             except Exception:
                 if MODE == "cached":
@@ -40,7 +44,7 @@ def _load():
                 _model = TextEmbedding(MODEL_NAME, cache_dir=str(CACHE))  # primeira vez: baixa o modelo
         except Exception as e:  # noqa: BLE001  # sem biblioteca, sem rede ou sem o arquivo: o sistema segue sem vetores
             _failed = True
-            log.warning("vetores de significado indisponíveis (%s): roteador e busca seguem só por palavras", type(e).__name__)
+            log.warning("vetores de significado indisponíveis (%s): o roteador segue só por letras", type(e).__name__)
         return _model
 
 

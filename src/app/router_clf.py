@@ -129,16 +129,22 @@ def evaluate(X, y, groups, n_splits: int = 5, seed: int = 42) -> dict:
                         for k, v in methods.items()}}
 
 
-def train(train_path: Path = TRAIN_PATH, out: Path = MODEL_PATH, seed: int = 42, write_report: bool = True) -> dict:
-    """Treina e grava o modelo. O relatório versionado só é regravado pelo treino pedido (scripts/train_router.py),
-    não pelo treino automático da subida: assim rodar o app ou os testes sem o modelo de vetores não troca os números."""
-    global HIGH
+def _fit_and_save(train_path: Path, out: Path, seed: int = 42) -> bool:
+    """Treina com todos os dados e grava o modelo. Devolve True se o classificador por significado entrou."""
     X, y, groups = _rows(train_path)
-    report = evaluate(X, y, groups, seed=seed)
     both = embeddings.available()
     meaning = fit_meaning(embeddings.embed(X), np.array(y), groups, seed) if both else None
     out.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump(Router(fit(X, y, groups, seed), meaning, _signature(train_path)), out)  # modelo final usa todos os dados
+    joblib.dump(Router(fit(X, y, groups, seed), meaning, _signature(train_path)), out)
+    return both
+
+
+def train(train_path: Path = TRAIN_PATH, out: Path = MODEL_PATH, seed: int = 42, write_report: bool = True) -> dict:
+    """Treino pedido (scripts/train_router.py): avalia por molde, grava o modelo e o relatório versionado."""
+    global HIGH
+    X, y, groups = _rows(train_path)
+    report = evaluate(X, y, groups, seed=seed)
+    both = _fit_and_save(train_path, out, seed)
     if write_report:
         REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     HIGH = _threshold(both)
@@ -147,7 +153,8 @@ def train(train_path: Path = TRAIN_PATH, out: Path = MODEL_PATH, seed: int = 42,
 
 def load(path: Path = MODEL_PATH):
     """Treina na hora se o arquivo faltar, for de outra versão ou de outros dados de treino.
-    O .joblib não vai para o git: evita versão incompatível do scikit-learn."""
+    O .joblib não vai para o git: evita versão incompatível do scikit-learn.
+    Aqui só treina (segundos): a validação cruzada e o relatório ficam no treino pedido, fora da subida do app."""
     global _clf, HIGH
     if _clf is None:
         model = None
@@ -159,11 +166,16 @@ def load(path: Path = MODEL_PATH):
         stale = (not isinstance(model, Router) or getattr(model, "format", 0) != FORMAT
                  or model.signature != _signature(TRAIN_PATH) or (model.meaning is None and embeddings.available()))
         if stale:
-            train(out=path, write_report=False)
+            _fit_and_save(TRAIN_PATH, path)
             model = joblib.load(path)
         _clf = model
         HIGH = _threshold(_clf.uses_meaning())
     return _clf
+
+
+def mode() -> str:
+    """Quais classificadores estão em uso, com os mesmos nomes de data/router_report.json."""
+    return "letras+significado" if load().uses_meaning() else "letras"
 
 
 def predict(text: str, clf=None) -> tuple[str, float, list[tuple[str, float]]]:

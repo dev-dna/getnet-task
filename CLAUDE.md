@@ -6,7 +6,7 @@ Sessão cronometrada de 60 minutos. As decisões abaixo já estão tomadas. Não
 - Python 3.12, FastAPI, pydantic v2, httpx, scikit-learn, rank-bm25, beautifulsoup4, pypdf, pytest.
 - Modelo por variável de ambiente: `LLM_PROVIDER=anthropic|openrouter|claude_cli|fake`, `MODEL_FAST` (roteador-reserva, verificador, agente geral), `MODEL_SMART` (conhecimento, suporte, redação final).
 - `claude_cli` usa o Claude Code logado na máquina, sem chave de API (`make run-cli`, `make eval-cli`). Só fora do Docker; a chamada de ferramenta é imitada em JSON.
-- Sem LangChain, LangGraph, ADK, Chroma, embeddings. Se parecer necessário, anotar em "Next steps" do README e seguir.
+- Sem LangChain, LangGraph, ADK, Chroma. Embeddings só no roteador (`embeddings.py`, modelo local pelo `fastembed`, desde 14/nov); a busca na base continua por palavras, porque a busca por significado foi medida e não achou mais páginas.
 
 ## Estrutura (fixa)
 ```
@@ -25,7 +25,7 @@ tests/  requirements.txt  Dockerfile  docker-compose.yml  .dockerignore  .env.ex
 1. `msg = guardrails.mask(req.message)`. Se `detect_injection(msg)` → recusa, sem chamar modelo.
 2. Regras: fraude/contestação/pedido de humano → `escalate`. "minha maquininha … o que eu faço" → `support` depois `knowledge`.
 3. Cascata do mais barato para o mais caro:
-   - `router_clf.predict(msg)`: classificador local. `p >= ROUTER_HIGH (0.75)` → decide.
+   - `router_clf.predict(msg)`: classificador local. `p >= ROUTER_HIGH (0.7)` → decide.
    - senão, se `ROUTER_FALLBACK=jev`: `jev.route(msg)` (Jev da TypeSafe pela Decisions API do OpenRouter). Decide se `p >= JEV_MIN (0.5)`; "out_of_scope" é uma opção escrita por nós porque o Jev não tem resposta "nenhuma".
    - senão, ou se o Jev falhar: `agents.route_llm(msg)` (modelo de linguagem).
 4. Cada agente recebe a mensagem ORIGINAL mascarada + `facts` dos agentes anteriores. Nunca uma pergunta reescrita.
@@ -40,7 +40,7 @@ tests/  requirements.txt  Dockerfile  docker-compose.yml  .dockerignore  .env.ex
 - Não mascarar valores em dinheiro: o que protege o valor é o `user_id` preso.
 
 ## Classificador de rota
-- TF-IDF de n-gramas de caracteres (3 a 5) + regressão logística + calibração.
+- Dois classificadores com a média das probabilidades: por letras (TF-IDF de n-gramas de caracteres 3 a 5) e por significado (vetor da frase), cada um com regressão logística calibrada. Sem o modelo de vetores fica só o primeiro.
 - Dados gerados por moldes (`scripts/gen_router_data.py`), cada frase com `group` = molde. Frases parecidas com as de `evals/dataset.jsonl` são descartadas.
 - Avaliar SEMPRE separando por molde (`StratifiedGroupKFold`). Separação aleatória dá número inflado: variações da mesma frase caem em treino e teste.
 - Número que importa: acerto quando decide sozinho e fração das mensagens em que decide sozinho. Copiar de `data/router_report.json` para o README.

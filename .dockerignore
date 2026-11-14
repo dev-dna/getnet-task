@@ -6,6 +6,7 @@ __pycache__
 .pytest_cache
 data/tickets.json
 data/router.joblib
+data/models
 demo
 .claude
 prompts

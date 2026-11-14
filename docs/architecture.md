@@ -40,7 +40,7 @@ flowchart LR
     MSG["masked message"] --> R1{"rules"}
     R1 -- "fraud, dispute, request for a person" --> ESC["escalate"]
     R1 -- "my machine ... what should I do" --> SK["support, then knowledge"]
-    R1 -- "no match" --> CLF{"local classifier, p >= 0.75?"}
+    R1 -- "no match" --> CLF{"local classifier (letters + meaning), p >= 0.7?"}
     CLF -- yes --> C1["its class: one agent, or out_of_scope"]
     CLF -- no --> JEV{"Jev, p >= 0.5? (only with ROUTER_FALLBACK=jev)"}
     JEV -- yes --> J1["its choice"]

@@ -5,7 +5,7 @@ import pytest
 from app import agents, jev, orchestrator
 from app.schemas import Plan, Step
 
-UNSURE = "Do I need a bank account to receive my sales via Pix?"  # o classificador local fica abaixo do limiar nesta frase
+UNSURE = "Do I need a bank account to receive my sales via Pix?"  # frase em que o classificador (simulado abaixo) fica em dúvida
 
 
 class _Resp:
@@ -73,7 +73,16 @@ def test_unsure_or_broken_returns_none(jev_says, body, status):
     assert jev.route("x") is None
 
 
-def test_cascade_uses_jev_only_when_local_classifier_is_unsure(monkeypatch):
+@pytest.fixture
+def classifier(monkeypatch):
+    """Classificador local com resposta fixa: dúvida só na frase UNSURE. Estes testes são da cascata, não do classificador."""
+    def fake_predict(text, clf=None):
+        p = 0.4 if text == UNSURE else 0.95
+        return "knowledge", p, [("knowledge", p), ("support", round(1 - p, 2))]
+    monkeypatch.setattr(orchestrator.router_clf, "predict", fake_predict)
+
+
+def test_cascade_uses_jev_only_when_local_classifier_is_unsure(monkeypatch, classifier):
     monkeypatch.setattr(orchestrator, "ROUTER_FALLBACK", "jev")
     calls = []
 
@@ -87,7 +96,7 @@ def test_cascade_uses_jev_only_when_local_classifier_is_unsure(monkeypatch):
     assert orchestrator.plan_for(UNSURE).source == "jev" and calls == [UNSURE]
 
 
-def test_cascade_falls_back_to_language_model_when_jev_fails(monkeypatch):
+def test_cascade_falls_back_to_language_model_when_jev_fails(monkeypatch, classifier):
     monkeypatch.setattr(orchestrator, "ROUTER_FALLBACK", "jev")
     monkeypatch.setattr(jev, "route", lambda msg: None)
     monkeypatch.setattr(agents, "route_llm", lambda msg, cands: Plan(steps=[Step(agent="knowledge", question=msg)], confidence=0.6, source="llm"))

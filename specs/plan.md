@@ -12,11 +12,11 @@ Decisions come from `CLAUDE.md` (section named in brackets). Requirement ids (RF
 | D02 | No agent framework. Each agent is a function; agents talk by function calls with typed `Plan` and `AgentResult` [Stack, Estrutura] | LangGraph, ADK, LangChain: the flow is a fixed list of at most three steps, so a graph runtime adds a dependency and hides the prompts and the tool loop behind its own abstractions. A message queue or events: one process handles the whole request, so there is nothing to decouple. |
 | D03 | Model chosen by environment: `LLM_PROVIDER`, `MODEL_FAST`, `MODEL_SMART`; `fake` provider for tests [Stack] | One provider SDK hard-coded: the service could not run with a different key, and tests would need a credential. |
 | D04 | Two model tiers: fast for router fallback, verifier and `general`; smart for `knowledge`, `support` and the final text [Stack] | One model for every call: classification and verification steps would pay the price and latency of the larger model. |
-| D05 | Retrieval by words (BM25, `rank-bm25`) with an English↔Portuguese glossary [Base de conhecimento] | Chroma or another vector store with embeddings: needs an embedding model or API key at build and run time and a stateful index in the container, for a base of about 500 passages. BM25 is deterministic and testable offline. Cost accepted: synonyms outside the glossary are missed. |
+| D05 | Retrieval by words (BM25, `rank-bm25`) with an English↔Portuguese glossary [Base de conhecimento] | Chroma or another vector store with embeddings: needs an embedding model or API key at build and run time and a stateful index in the container, for a base of about 500 passages. BM25 is deterministic and testable offline. Cost accepted: synonyms outside the glossary are missed. A search by meaning with the same embedding model was measured on 2026-11-14 on 28 product questions (script not in the repository): interleaved with BM25 it reached the right page in 27, against 28 for BM25 with the glossary, because the model puts same-language texts closer. Not adopted. |
 | D06 | The BM25 score is not used as an answer threshold [Base de conhecimento] | "Score below x means not found": the score is not a probability and grows with query length. The model's `NOT_FOUND` and `verify()` decide instead. |
 | D07 | Knowledge base built by `scripts/ingest.py` from `data/sources.txt` (HTML and PDF), stored as `data/corpus.jsonl` in git; ingest fails under 15 passages; `data/corpus_seed.jsonl` is sample text flagged by `/health` [Base de conhecimento] | Scraping at container start: start-up and answers would depend on third-party sites being up. Writing product facts by hand: not verifiable, forbidden by the project rules. |
-| D08 | Routing cascade, cheapest first: rules, local classifier (`p >= 0.75`), Jev (`p >= 0.5`), language model [Fluxo, step 3] | Router made only of a language model: every message pays a model call before any agent runs, the decision has no calibrated probability, and it cannot be evaluated without a credential. |
-| D09 | Classifier: TF-IDF of character n-grams (3 to 5), logistic regression, calibration [Classificador de rota] | Embedding or fine-tuned transformer classifier: model download and heavier image. Character n-grams tolerate accents, typos and mixed Portuguese/English with a model trained at build time. |
+| D08 | Routing cascade, cheapest first: rules, local classifier (`p >= 0.7`), Jev (`p >= 0.5`), language model [Fluxo, step 3] | Router made only of a language model: every message pays a model call before any agent runs, the decision has no calibrated probability, and it cannot be evaluated without a credential. |
+| D09 | Classifier: two calibrated logistic regressions averaged, one on TF-IDF of character n-grams (3 to 5) and one on the sentence embedding of a multilingual model that runs on CPU (`fastembed`, since 2026-11-14) [Classificador de rota] | Letters alone (the first version): 0.858 accuracy against 0.923 for the average on the same folds; it missed synonyms. Cosine similarity to the nearest examples: tested, less accurate than a classifier on the same embeddings. A fine-tuned transformer or an embedding API: heavier image or one more key. Cost accepted: a 240 MB model downloaded at build. |
 | D10 | Training sentences generated from templates, each with `group` = template; sentences close to `evals/dataset.jsonl` are dropped; evaluation by `StratifiedGroupKFold` [Classificador de rota] | Random train/test split: variations of one template land on both sides and the accuracy comes out inflated. |
 | D11 | Jev (TypeSafe decision model, OpenRouter Decisions API) as optional second router, with `out_of_scope` written as one of its options [Fluxo, step 3] | Going straight from classifier to language model: kept as the path for `ROUTER_FALLBACK=llm` and for Jev failure. Asking Jev for "none of the above": it has no such answer, so the option is explicit. |
 | D12 | Guardrails as a local layer with no model: masking, injection patterns, request for a human, sensitive subjects [Fluxo, steps 1 and 2] | A guardrail framework (NeMo Guardrails, Guardrails AI, LLM Guard) or a moderation model call: one more model call or a large dependency before every message. Patterns are checked by two lists in `tests/test_guardrails.py` (attacks, legitimate). Cost accepted: only known phrasings are caught. |
@@ -41,7 +41,7 @@ POST /chat {message, user_id}      api.chat -> orchestrator.handle(req); a bad p
   plan_for(msg), first match wins:                                                         decided_by
     1  is_sensitive(msg) or wants_human(msg)            -> [escalate]                      rule
     2  "my card machine ..." and "what should I do ..." -> [support, knowledge]            rule
-    3  router_clf.predict(msg), p >= ROUTER_HIGH (0.75) -> [label] or [] (out_of_scope)    clf
+    3  router_clf.predict(msg), p >= ROUTER_HIGH (0.7)  -> [label] or [] (out_of_scope)    clf
     4  ROUTER_FALLBACK=jev: jev.route(msg), p >= JEV_MIN (0.5)
                                    -> [label], [support, knowledge] or [] (out_of_scope)   jev
     5  agents.route_llm(msg, two top classes of step 3) -> up to 3 steps, or []            llm
@@ -68,43 +68,44 @@ Differences between this flow and `CLAUDE.md`: `verify()` also accepts the facts
 
 ## 3. Router evaluation
 
-Source: `data/router_report.json`, regenerated on 2026-11-13 for G12 with `scripts/gen_router_data.py` and `scripts/train_router.py`: the classifier has a fifth class, `out_of_scope`. The report of commit `519f83b` (four classes) had 944 sentences from 236 templates, accuracy 85.8%, and 61.8% decided alone with 96.6% accuracy.
+Source: `data/router_report.json`, regenerated on 2026-11-14 with `scripts/gen_router_data.py` and `scripts/train_router.py` after the classifier on meaning was added (D09) and 8 support templates about another account's data (case A2).
 
-- 1288 sentences from 322 templates. Split: `StratifiedGroupKFold(5)` by template. Accuracy over all sentences: 87.0%.
-- At `ROUTER_HIGH = 0.75` the classifier decides alone on 50.9% of the sentences, with 98.8% accuracy. The other 49.1% go to the next step of the cascade.
+- 1320 sentences from 330 templates. Split: `StratifiedGroupKFold(5)` by template.
+- Accuracy over all sentences: letters alone 85.8%, meaning alone 91.0%, the average of the two 92.3%.
+- At `ROUTER_HIGH = 0.7` the average decides alone on 62.4% of the sentences, with 98.2% accuracy. The other 37.6% go to the next step. Letters alone at 0.75: 51.2% with 98.4%.
 
-| Threshold | Coverage (share decided alone) | Accuracy when it decides |
+| Threshold (average) | Coverage (share decided alone) | Accuracy when it decides |
 |---|---|---|
-| 0.50 | 89.8% | 90.7% |
-| 0.60 | 76.2% | 95.1% |
-| 0.70 | 60.6% | 98.1% |
-| 0.75 (in use) | 50.9% | 98.8% |
-| 0.80 | 38.4% | 99.2% |
-| 0.90 | 15.0% | 98.4% |
+| 0.50 | 92.3% | 95.6% |
+| 0.60 | 80.4% | 97.5% |
+| 0.70 (in use) | 62.4% | 98.2% |
+| 0.75 | 52.9% | 98.9% |
+| 0.80 | 41.3% | 99.8% |
+| 0.90 | 14.4% | 100.0% |
 
-Confusion matrix, all sentences, no threshold (row = true class, column = predicted):
+Confusion matrix of the average, all sentences, no threshold (row = true class, column = predicted):
 
 | | knowledge | support | general | escalate | out_of_scope | Recall (derived) |
 |---|---|---|---|---|---|---|
-| knowledge | 282 | 12 | 6 | 4 | 16 | 88.1% |
-| support | 11 | 222 | 12 | 11 | 0 | 86.7% |
-| general | 2 | 8 | 178 | 0 | 4 | 92.7% |
-| escalate | 9 | 18 | 8 | 172 | 25 | 74.1% |
-| out_of_scope | 21 | 0 | 0 | 1 | 266 | 92.4% |
+| knowledge | 301 | 5 | 1 | 2 | 11 | 94.1% |
+| support | 14 | 261 | 1 | 10 | 2 | 90.6% |
+| general | 1 | 1 | 189 | 0 | 1 | 98.4% |
+| escalate | 13 | 11 | 0 | 203 | 5 | 87.5% |
+| out_of_scope | 22 | 0 | 0 | 1 | 265 | 92.0% |
 
 - `escalate` has the lowest recall. Rule 1 of the flow (fraud, dispute, request for a human) runs before the classifier and covers cases A4 and A5.
-- On the 30 cases of `evals/report_claude_cli.json` (`ROUTER_FALLBACK=llm`, five-class classifier) the route was decided by: classifier 13, language model 12, rule 3, guardrail 2.
+- On the 72 test sentences (30 of `evals/dataset.jsonl`, 42 of `evals/variations.jsonl`) no decision the classifier takes alone is wrong.
 - Not measured: the Jev step, and the comparison classifier × Jev × language model × cascade (gaps G03, G04).
 
 ## 4. Evaluation with a real model
 
-Source: `evals/report_claude_cli.json`, written by `make eval-cli` on the code of `cac01eb`, after the gap commits of section 5; provider `claude_cli`, `corpus_is_placeholder: false`. The run before them (commit `a2bbfea`) also gave 29/30.
+Source: `evals/report_claude_cli.json` and `evals/report_variations_claude_cli.json`, written by `python evals/run.py --cli` on 2026-11-14 with the classifier of D09; provider `claude_cli`, `corpus_is_placeholder: false`. Results vary between runs.
 
-| Group | S | H | A | B | U | Total |
-|---|---|---|---|---|---|---|
-| Passed | 10/10 | 7/8 | 7/7 | 4/4 | 1/1 | 29/30 = 96.7% |
+| Group | S | H | A | B | U | Total | V (42 rewritten sentences) |
+|---|---|---|---|---|---|---|---|
+| Passed | 10/10 | 8/8 | 7/7 | 4/4 | 1/1 | 30/30 | 41/42 |
 
-Latency of the 25 cases that called a model: median 12.9 s, from 4.5 s (U1) to 33.5 s (S5). Each model call starts one `claude -p` process.
+Route decided on the 30 cases by: classifier 19, language model 6, rule 3, guardrail 2. Latency of the 24 cases that called a model: median 12.4 s, from 5.1 to 32.8 s. Each model call starts one `claude -p` process.
 
 ## 5. Gaps
 
@@ -120,7 +121,7 @@ Checked and not a gap (RF06): `scripts/ingest.py` was re-run (exit 0, 502 passag
 - G06 (RNF13, RNF02). No video is in the repository. `README.md` was added in `c08218c` with the sections RNF06 and RNF02 ask for; its text was not checked line by line against the code for this plan. The integration test in CI is described there, not set up.
 - G07 (RNF12). These spec files were written after the skeleton; the code was not derived from them. `specs/tasks.md` records what was verified, not what was built from the spec.
 - G08 (RNF01). `docker compose build` was not run for this plan (no Docker daemon). README section 8 reports a build and a run of the container with the fake model and a base image from a registry mirror; no build log is in the repository. `claude_cli` does not work inside the image, so no run of the container with a real model is recorded. The 99 tests were run for this plan on Python 3.13, not on the 3.12 of D01.
-- G09 (RNF08, RF05). H6 failed until the search glossary gained entries for inflected and synonymous words ("recusando", "refused", "anticipation", "get online"): the knowledge step found no page and the case ended in handoff. With them the run of 2026-11-14 gives 30/30, and 40/42 on the 42 rewritten sentences of `evals/variations.jsonl`. Still open: B1 passes its check (`route not ["guardrail"]`) but ends as `["knowledge","escalate"]`, a ticket instead of an answer; V4c and V8c end in handoff after the knowledge step.
+- G09 (RNF08, RF05). H6 failed until the search glossary gained entries for inflected and synonymous words ("recusando", "refused", "anticipation", "get online"): the knowledge step found no page and the case ended in handoff. With them, and with the classifier of D09, the stored runs of 2026-11-14 give 30/30 and 41/42 on the rewritten sentences of `evals/variations.jsonl` (earlier runs: 36 and 40). Still open: B1 passes its check (`route not ["guardrail"]`) but ends as `["knowledge","escalate"]`, a ticket instead of an answer; in the variations, one or two cases per run end in handoff after the knowledge step (V5c in the stored run; V4c and V8c in the one before).
 - G10 (RNF08). Closed in part by `00d490c`: `evals/run.py` now writes the stored report (`answers`, `info.router_fallback`), so `make eval-cli` reproduces the file. Still open: that path sets `EVAL_DIRECT=1`, the orchestrator is called in process, and the HTTP layer is covered only by fake-model tests and by the container run reported in README section 8.
 - G11 (RNF08). No record of a person reading the ten S answers. Spot check for this plan: the figures of the S1 and S9 answers are in passages of `data/corpus.jsonl` from URLs listed in `sources`; in S1 one figure is attributed inline to a different URL of that list. S2 to S8 and S10 were not checked.
 - G12 (RF18). Fixed in part on 2026-11-13. Before, only the Jev and language-model steps could answer "out of scope": the classifier had four classes, so "Conte uma piada" went to `escalate` at 0.95 (a ticket) and "How do I hack a card machine to steal card numbers?" to `knowledge` at 0.80. Now the classifier has a fifth class, `out_of_scope`, with 72 templates (jokes, recipes, homework, coding, creative writing, horoscope, small talk; cloning or stealing cards, hacking a card machine, fraud, getting around limits). At 0.75 or more `plan_for` returns a plan with no steps: the fixed out-of-scope text, no agent. `route_llm` returns the same empty plan when the model call fails and `out_of_scope` is the classifier's first guess, or when the model names it as an agent. Measured with `router_clf.predict`: the joke → `out_of_scope` 0.89, the hack sentence → `out_of_scope` 0.84, A6 → `out_of_scope` 0.83; no S or H case is `out_of_scope` at 0.75 or more. Templates paraphrase the two sentences, so they do not measure generalization; section 3 does. Sports results stay in `general`, where a template already had them. 12 `knowledge` and 2 `escalate` templates were added at the boundary (cancel or refund a sale, bank details, password, sales limit, card data; a merchant whose account was hacked): without them such legitimate questions scored `out_of_scope` at 0.60 to 0.74. What remains:

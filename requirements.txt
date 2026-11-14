@@ -9,6 +9,7 @@ scikit-learn>=1.5
 joblib>=1.4
 numpy
 rank-bm25>=0.2.2
+fastembed>=0.5
 beautifulsoup4>=4.12
 pypdf>=4.0
 ddgs>=9.0

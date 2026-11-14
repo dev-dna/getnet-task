@@ -6,6 +6,7 @@ __pycache__/
 data/tickets.json
 data/tickets_test.json
 data/router.joblib
+data/models/
 evals/report.json
 demo/out/
 *_work/

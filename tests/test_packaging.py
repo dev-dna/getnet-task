@@ -25,7 +25,7 @@ def test_dockerfile_does_not_hide_failed_steps():
 
 def test_every_import_is_in_requirements():
     req = Path("requirements.txt").read_text().lower()
-    for pkg in ("fastapi", "uvicorn", "pydantic", "httpx", "anthropic", "openai", "python-dotenv", "scikit-learn", "joblib", "rank-bm25", "beautifulsoup4", "pypdf", "ddgs"):
+    for pkg in ("fastapi", "uvicorn", "pydantic", "httpx", "anthropic", "openai", "python-dotenv", "scikit-learn", "joblib", "rank-bm25", "fastembed", "beautifulsoup4", "pypdf", "ddgs"):
         assert pkg in req, pkg
 
 

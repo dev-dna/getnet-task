@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 os.environ["LLM_PROVIDER"] = "fake"  # definido antes de importar app.llm; o .env não sobrescreve
+os.environ.setdefault("EMBEDDINGS", "cached")  # os testes nunca baixam o modelo de vetores: usam se já estiver em data/models
 ROOT = Path(__file__).resolve().parents[1]
 os.environ["TICKETS_PATH"] = str(ROOT / "data" / "tickets_test.json")
 sys.path.insert(0, str(ROOT / "src"))

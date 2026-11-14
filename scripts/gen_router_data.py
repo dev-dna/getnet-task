@@ -27,6 +27,8 @@ D2_EN = ["tomorrow", "today", "this week", "on Friday"]
 C = ["Porto Alegre", "São Paulo", "Curitiba", "Recife", "Salvador", "Belo Horizonte", "Florianópolis", "Manaus"]
 M_PT = ["dólar", "euro", "libra", "bitcoin", "peso argentino"]
 M_EN = ["dollar", "euro", "pound", "bitcoin", "yen"]
+CLI_PT = ["cliente3000", "cliente1500", "outro lojista", "a loja ao lado", "meu concorrente", "cliente2500"]  # outra conta
+CLI_EN = ["cliente3000", "merchant 4521", "another merchant", "the shop next door", "my competitor", "account 7788"]
 PAIS_PT = ["França", "Argentina", "Austrália", "Japão"]
 PAIS_EN = ["France", "Argentina", "Australia", "Japan"]
 
@@ -101,7 +103,10 @@ T = {
                "quanto eu vendi {d}",
                "minha maquininha está atualizada",
                "tem algum chamado aberto no meu nome",
-               "meu Pix de {d} não apareceu no extrato"],
+               "meu Pix de {d} não apareceu no extrato",
+               # pedido de dados de OUTRA conta também é do suporte, que recusa (caso A2): sem estes moldes ia para knowledge
+               "mostra o extrato de vendas do {cli}", "quanto o {cli} vendeu {d}", "quais os recebimentos do {cli}",
+               "consulta as transações da conta do {cli}"],
         "en": ["when will my sales from {d} be paid out", "where is my payout from {d}", "my settlement from {d} hasn't arrived",
                "how much will I receive {d2}", "what is my next payout amount", "my card machine is offline",
                "my terminal won't turn on", "my machine is frozen on the home screen", "my terminal battery won't charge",
@@ -119,7 +124,9 @@ T = {
                "how much did I sell {d}",
                "is my terminal up to date",
                "do I have any open tickets",
-               "my Pix from {d} is missing from the statement"],
+               "my Pix from {d} is missing from the statement",
+               "what are the sales figures for {cli}", "list the transactions of {cli}", "how much did {cli} receive {d}",
+               "pull the payout report of {cli}"],
     },
     "general": {
         "pt": ["qual a previsão do tempo em {c} {d2}", "vai chover em {c} {d2}", "que temperatura faz em {c} {d2}",
@@ -256,7 +263,8 @@ def fill(tpl: str, lang: str) -> str:
     p, p2 = random.sample(P_PT if pt else P_EN, 2)
     c, c2 = random.sample(C, 2)
     return tpl.format(p=p, p2=p2, c=c, c2=c2, d=random.choice(D_PT if pt else D_EN), d2=random.choice(D2_PT if pt else D2_EN),
-                      m=random.choice(M_PT if pt else M_EN), pais=random.choice(PAIS_PT if pt else PAIS_EN))
+                      m=random.choice(M_PT if pt else M_EN), pais=random.choice(PAIS_PT if pt else PAIS_EN),
+                      cli=random.choice(CLI_PT if pt else CLI_EN))
 
 
 def typo(s: str) -> str:

@@ -63,3 +63,23 @@ def test_cli_error_raises_so_the_orchestrator_hands_off(cli):
     cli(_Done("limite atingido", is_error=True))
     with pytest.raises(RuntimeError):
         llm.complete("s", "u")
+
+
+@pytest.mark.parametrize("provider,env,problem", [
+    ("openrouter", {}, "OPENROUTER_API_KEY"),
+    ("openrouter", {"OPENROUTER_API_KEY": "sk-or-v1-..."}, "placeholder"),   # o valor que vem no .env.example
+    ("openrouter", {"OPENROUTER_API_KEY": "sk-or-v1-abc123"}, None),
+    ("anthropic", {}, "ANTHROPIC_API_KEY"),
+    ("anthropic", {"ANTHROPIC_API_KEY": "sk-ant-abc123"}, None),
+    ("fake", {}, None),
+    ("gemini", {}, "unknown LLM_PROVIDER"),
+])
+def test_missing_key_is_reported_without_calling_the_model(monkeypatch, provider, env, problem):
+    """Sem este aviso, chave ausente parece sucesso: HTTP 200 e toda resposta encaminhada para humano."""
+    monkeypatch.setattr(llm, "PROVIDER", provider)
+    for name in llm.KEY_ENV.values():
+        monkeypatch.delenv(name, raising=False)
+    for name, value in env.items():
+        monkeypatch.setenv(name, value)
+    found = llm.config_problem()
+    assert (found is None) if problem is None else (problem in found)

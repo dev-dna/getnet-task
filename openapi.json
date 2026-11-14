@@ -334,17 +334,35 @@
         "properties": {
           "status": {
             "type": "string",
-            "title": "Status"
+            "title": "Status",
+            "description": "`ok`, or `degraded` when `llm_problem` is set."
           },
           "llm_provider": {
             "type": "string",
             "title": "Llm Provider",
             "description": "`anthropic`, `openrouter`, `claude_cli` (local, no API key) or `fake` (tests)."
           },
+          "llm_problem": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Problem",
+            "description": "Configuration problem found without calling the model (missing key, unknown provider). Null when none was found; a wrong key or model name only shows on the first call."
+          },
           "router_fallback": {
             "type": "string",
             "title": "Router Fallback",
             "description": "Who decides when the local classifier is unsure: `jev` or `llm`."
+          },
+          "router_mode": {
+            "type": "string",
+            "title": "Router Mode",
+            "description": "Classifiers in use: `letras+significado` (letters and meaning), or `letras` when the embedding model is not available."
           },
           "corpus_chunks": {
             "type": "integer",
@@ -361,6 +379,7 @@
           "status",
           "llm_provider",
           "router_fallback",
+          "router_mode",
           "corpus_chunks",
           "corpus_is_placeholder"
         ],

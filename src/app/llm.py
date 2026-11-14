@@ -24,7 +24,24 @@ MODEL_FAST = os.getenv("MODEL_FAST", "claude-haiku-5-5")
 MODEL_SMART = os.getenv("MODEL_SMART", "claude-sonnet-5-5")
 EXHAUSTED = "Não consegui concluir a consulta."  # o loop de ferramentas acabou sem resposta; o agente trata como falha
 
+KEY_ENV = {"anthropic": "ANTHROPIC_API_KEY", "openrouter": "OPENROUTER_API_KEY"}
+
 _client = None
+
+
+def config_problem() -> str | None:
+    """O que impede o provedor de responder, visto sem chamar o modelo; None se nada foi encontrado.
+    Sem este aviso, chave ausente parece sucesso: toda resposta vira encaminhamento para humano com HTTP 200."""
+    if PROVIDER in KEY_ENV:
+        key = os.getenv(KEY_ENV[PROVIDER], "").strip()
+        if not key or key.endswith("..."):
+            return f"{KEY_ENV[PROVIDER]} is missing or still the placeholder of .env.example: every answer will be a handoff"
+    elif PROVIDER == "claude_cli":
+        if not shutil.which("claude"):
+            return "Claude Code CLI not found on PATH (LLM_PROVIDER=claude_cli does not work inside Docker)"
+    elif PROVIDER != "fake":
+        return f"unknown LLM_PROVIDER '{PROVIDER}': use anthropic, openrouter, claude_cli or fake"
+    return None
 
 
 def _client_for():

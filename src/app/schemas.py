@@ -52,8 +52,10 @@ class ChatResponse(BaseModel):
 
 
 class Health(BaseModel):
-    status: str
+    status: str = Field(description="`ok`, or `degraded` when `llm_problem` is set.")
     llm_provider: str = Field(description="`anthropic`, `openrouter`, `claude_cli` (local, no API key) or `fake` (tests).")
+    llm_problem: str | None = Field(default=None, description="Configuration problem found without calling the model (missing key, unknown provider). Null when none was found; a wrong key or model name only shows on the first call.")
     router_fallback: str = Field(description="Who decides when the local classifier is unsure: `jev` or `llm`.")
+    router_mode: str = Field(description="Classifiers in use: `letras+significado` (letters and meaning), or `letras` when the embedding model is not available.")
     corpus_chunks: int
     corpus_is_placeholder: bool = Field(description="True means the knowledge base is still the sample file. Run scripts/ingest.py.")

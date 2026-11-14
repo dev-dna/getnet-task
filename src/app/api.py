@@ -10,6 +10,8 @@ from . import llm, orchestrator, retriever, router_clf
 from .schemas import ChatRequest, ChatResponse, Health
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
+logging.getLogger("httpx").setLevel(logging.WARNING)  # o httpx registra a URL inteira de cada chamada, com parâmetros
+log = logging.getLogger("api")
 
 DESCRIPTION = """
 Multi-agent customer support for Getnet merchants.
@@ -54,7 +56,10 @@ EXAMPLES = {
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     retriever.load()   # carrega a base (ou a de exemplo, com aviso no log)
-    router_clf.load()  # treina o classificador se o arquivo não existir
+    router_clf.load()  # treina o classificador se o arquivo não existir (sem validação cruzada: segundos)
+    if problem := llm.config_problem():
+        log.error("CONFIGURATION PROBLEM: %s", problem)
+    log.info("router: %s, fallback %s | llm: %s", router_clf.mode(), orchestrator.ROUTER_FALLBACK, llm.PROVIDER)
     yield
 
 
@@ -70,7 +75,9 @@ def root():
 
 @app.get("/health", response_model=Health, tags=["ops"], summary="Service status and configuration")
 def health() -> Health:
-    return Health(status="ok", llm_provider=llm.PROVIDER, router_fallback=orchestrator.ROUTER_FALLBACK,
+    problem = llm.config_problem()
+    return Health(status="degraded" if problem else "ok", llm_provider=llm.PROVIDER, llm_problem=problem,
+                  router_fallback=orchestrator.ROUTER_FALLBACK, router_mode=router_clf.mode(),
                   corpus_chunks=len(retriever.load()[1]), corpus_is_placeholder=retriever.is_placeholder())
 
 

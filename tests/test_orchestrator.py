@@ -118,9 +118,18 @@ def test_route_llm_reads_an_out_of_scope_step_as_no_step(monkeypatch):
 def test_http_contract():
     with TestClient(app) as client:
         h = client.get("/health").json()
-        assert h["status"] == "ok" and h["corpus_chunks"] > 0
+        assert h["status"] == "ok" and h["corpus_chunks"] > 0 and h["llm_problem"] is None
+        assert h["router_mode"] in ("letras", "letras+significado")
         r = client.post("/chat", json={"message": "How does receivables advance (antecipação) work with Getnet?", "user_id": "cliente1988"})
         assert r.status_code == 200
         assert {"answer", "route", "decided_by", "confidence", "sources", "tool_calls", "handoff", "trace_id", "latency_ms"} <= r.json().keys()
         assert client.post("/chat", json={"message": "", "user_id": "x"}).status_code == 422
         assert client.post("/chat", json={"message": "oi"}).status_code == 422
+
+
+def test_health_says_when_the_key_is_missing(monkeypatch):
+    monkeypatch.setattr(agents.llm, "PROVIDER", "openrouter")
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    with TestClient(app) as client:
+        h = client.get("/health").json()
+    assert h["status"] == "degraded" and "OPENROUTER_API_KEY" in h["llm_problem"]

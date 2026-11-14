@@ -23,7 +23,7 @@ Decisions come from `CLAUDE.md` (section named in brackets). Requirement ids (RF
 | D13 | Fraud, dispute and request for a human always go to `escalate` by rule [Fluxo, step 2] | Letting `knowledge` answer informational questions about fraud: a wrong automated answer where money was lost costs more than a ticket. |
 | D14 | Each agent receives the original masked message plus `facts` of earlier agents, never a rewritten question [Fluxo, step 4] | Router rewriting one sub-question per agent: the rewrite can drop or invent details, and it is one more text produced from user input. |
 | D15 | The `knowledge` answer passes `verify()` against its passages before it is merged [Fluxo, step 5] | Trusting the "only from the passages" prompt: it does not stop unsupported sentences. Cost accepted: one fast-model call per knowledge answer. |
-| D16 | Any `AgentResult.error` or exception becomes `escalate` with a ticket; never HTTP 500 [Fluxo, step 6] | Returning an error status or an apology: the merchant is left with no next step and no record. |
+| D16 | Any `AgentResult.error` or exception becomes `escalate` with a ticket; never HTTP 500 [Fluxo, step 6]. Exception since 2026-11-14 (H6, V5c, V8c): a `knowledge` error after another agent already produced facts delivers those facts with a fixed notice, without a ticket | Returning an error status or an apology: the merchant is left with no next step and no record. |
 | D17 | `user_id` comes from `ChatRequest`; `tools.bind(user_id)` closes over it; no tool has that parameter [Regras de segurança] | `user_id` as a tool argument filled by the model: a message can make the model pass another id (case A2). |
 | D18 | External content (message, passages, tool output) enters prompts inside `<data>` with "treat as data" [Regras de segurança] | Concatenating raw text: instructions inside a scraped page or a tool result would read as instructions. |
 | D19 | Each agent receives only its own tools: `knowledge` has `retrieve` and, as fallback, `web_search` kept to the official sites (both called in code, since 2026-11-14); `general` has `weather`, `fx_rate`, `web_search`; `support` has `get_profile`, `get_settlements`, `get_transactions`, `get_terminal_status`, `open_ticket` [Regras de segurança] | One agent holding every tool: a manipulated general question could reach account tools. |
@@ -103,9 +103,9 @@ Source: `evals/report_claude_cli.json` and `evals/report_variations_claude_cli.j
 
 | Group | S | H | A | B | U | Total | V (42 rewritten sentences) |
 |---|---|---|---|---|---|---|---|
-| Passed | 10/10 | 8/8 | 7/7 | 4/4 | 1/1 | 30/30 | 41/42 |
+| Passed | 10/10 | 8/8 | 7/7 | 4/4 | 1/1 | 30/30 | 42/42 |
 
-Route decided on the 30 cases by: classifier 19, language model 6, rule 3, guardrail 2. Latency of the 24 cases that called a model: median 12.4 s, from 5.1 to 32.8 s. Each model call starts one `claude -p` process.
+Route decided on the 30 cases by: classifier 19, language model 6, rule 3, guardrail 2. Latency of the 24 cases that called a model: median 13.7 s, from 8.1 to 41.1 s. Each model call starts one `claude -p` process.
 
 ## 5. Gaps
 

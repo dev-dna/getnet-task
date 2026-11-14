@@ -34,7 +34,7 @@
       "knowledge",
       "clf",
       "0.87",
-      15977,
+      15079,
       ""
     ],
     [
@@ -43,7 +43,7 @@
       "general",
       "clf",
       "0.88",
-      10406,
+      17814,
       ""
     ],
     [
@@ -52,7 +52,7 @@
       "support",
       "clf",
       "0.78",
-      12616,
+      11218,
       ""
     ],
     [
@@ -61,7 +61,7 @@
       "knowledge",
       "clf",
       "0.71",
-      13499,
+      14624,
       ""
     ],
     [
@@ -70,7 +70,7 @@
       "support+knowledge",
       "rule",
       "1.00",
-      32798,
+      41109,
       ""
     ],
     [
@@ -79,7 +79,7 @@
       "knowledge",
       "clf",
       "0.97",
-      14242,
+      15154,
       ""
     ],
     [
@@ -88,7 +88,7 @@
       "general",
       "clf",
       "0.94",
-      8845,
+      9387,
       ""
     ],
     [
@@ -97,7 +97,7 @@
       "support",
       "clf",
       "0.93",
-      11066,
+      10216,
       ""
     ],
     [
@@ -106,7 +106,7 @@
       "knowledge",
       "clf",
       "0.96",
-      9416,
+      10234,
       ""
     ],
     [
@@ -115,7 +115,7 @@
       "knowledge",
       "clf",
       "0.88",
-      12148,
+      12788,
       ""
     ],
     [
@@ -141,8 +141,8 @@
       "ok",
       "support",
       "llm",
-      "0.93",
-      21317,
+      "0.90",
+      24076,
       ""
     ],
     [
@@ -151,7 +151,7 @@
       "support",
       "clf",
       "0.81",
-      10040,
+      10260,
       ""
     ],
     [
@@ -160,7 +160,7 @@
       "escalate",
       "rule",
       "1.00",
-      0,
+      1,
       ""
     ],
     [
@@ -178,7 +178,7 @@
       "out_of_scope",
       "clf",
       "0.89",
-      18,
+      23,
       ""
     ],
     [
@@ -196,7 +196,7 @@
       "knowledge+escalate",
       "clf",
       "0.71",
-      5102,
+      8083,
       ""
     ],
     [
@@ -205,7 +205,7 @@
       "support",
       "clf",
       "0.84",
-      10943,
+      10710,
       ""
     ],
     [
@@ -213,8 +213,8 @@
       "ok",
       "knowledge",
       "llm",
-      "0.92",
-      21819,
+      "0.90",
+      18205,
       ""
     ],
     [
@@ -223,7 +223,7 @@
       "knowledge",
       "clf",
       "0.74",
-      11999,
+      11181,
       ""
     ],
     [
@@ -232,7 +232,7 @@
       "knowledge",
       "llm",
       "0.90",
-      18822,
+      19693,
       ""
     ],
     [
@@ -241,7 +241,7 @@
       "support",
       "llm",
       "0.93",
-      16116,
+      19071,
       ""
     ],
     [
@@ -250,7 +250,7 @@
       "general",
       "clf",
       "0.89",
-      10545,
+      18270,
       ""
     ],
     [
@@ -259,7 +259,7 @@
       "general",
       "clf",
       "0.92",
-      8326,
+      10712,
       ""
     ],
     [
@@ -268,7 +268,7 @@
       "knowledge",
       "llm",
       "0.80",
-      16021,
+      15677,
       ""
     ],
     [
@@ -277,7 +277,7 @@
       "support",
       "llm",
       "0.85",
-      25963,
+      25839,
       ""
     ],
     [
@@ -286,7 +286,7 @@
       "knowledge",
       "clf",
       "0.78",
-      13538,
+      11705,
       ""
     ],
     [
@@ -295,14 +295,14 @@
       "support",
       "clf",
       "0.74",
-      9061,
+      10974,
       ""
     ]
   ],
   "answers": {
     "S1": {
       "message": "What's the difference between the Get Clássica and the Get Smart?",
-      "answer": "- **Get Clássica:** Focused on speed. It prints receipts, accepts tap and Pix via QR Code, and has Chip 3G + Wi-Fi. Rental is free at R$ 10,000/month in sales, otherwise R$ 79.90/month. (https://www.santander.com.br/blog/seus-negocios/solucoes-getnet/)\n- **Get Smart:** Focused on complete management. It integrates the order with the payment, has Chip 3G with a free data plan + Wi-Fi, and accepts tap and Pix. It costs R$ 129.90/month, deducted from sales. (https://www.santander.com.br/blog/seus-negocios/solucoes-getnet/)\n- **Free machine:** Get Smart is free at R$ 60,000/month per machine, versus R$ 10,000 for the Clássica. (https://site.getnet.com.br/wp-content/uploads/2025/09/termos_e_condicoes_aluguel.pdf)",
+      "answer": "**Get Clássica:** Rental is free at R$10,000/month in sales, otherwise R$79.90/month. It has a 3G chip, Wi-Fi and a receipt printer, and accepts contactless and Pix via QR Code. It is aimed at faster payments and receipts. (https://www.santander.com.br/blog/seus-negocios/solucoes-getnet/, https://site.getnet.com.br/wp-content/uploads/2025/09/termos_e_condicoes_aluguel.pdf)\n\n**Get Smart:** Rental is free at R$60,000/month in sales, otherwise R$129.90/month. It has a 3G chip with a free data plan and Wi-Fi, and accepts contactless and Pix via QR Code. It focuses on complete management, integrating the order with payment, and you can receive per installment or in 1 business day. (https://www.santander.com.br/blog/seus-negocios/solucoes-getnet/, https://site.getnet.com.br/get-tap-03-11-25/)",
       "sources": [
         "https://site.getnet.com.br/get-tap-03-11-25/",
         "https://site.getnet.com.br/wp-content/uploads/2025/09/termos_e_condicoes_aluguel.pdf",
@@ -316,9 +316,9 @@
     },
     "S2": {
       "message": "What's the weather forecast in Porto Alegre tomorrow?",
-      "answer": "Tomorrow in Porto Alegre (Nov 14, 2026, per the forecast date): high of 29.9°C, low of 18.7°C, 15% chance of rain. Source: open-meteo.com.",
+      "answer": "Tomorrow in Porto Alegre (2026-11-15): high 28°C, low 20°C, 82% chance of rain. Source: wttr.in",
       "sources": [
-        "open-meteo.com"
+        "wttr.in"
       ],
       "tool_calls": [
         "weather"
@@ -326,7 +326,7 @@
     },
     "S3": {
       "message": "When will the money from yesterday's sales be deposited?",
-      "answer": "Yesterday's debit and Pix sales (R$ 1,834.50) will be deposited on 2026-11-15. You also have R$ 620.00 in anticipated credit arriving on 2026-11-16, and R$ 2,410.90 in credit sales paid in full (à vista) due on 2026-12-14.",
+      "answer": "Yesterday's debit and Pix sales (R$ 1,834.50) will be deposited tomorrow, 2026-11-15. Also coming up: R$ 620.00 on 2026-11-16 (advanced credit) and R$ 2,410.90 on 2026-12-14 (credit paid in full upfront).",
       "sources": [],
       "tool_calls": [
         "get_settlements"
@@ -334,7 +334,7 @@
     },
     "S4": {
       "message": "Do I need a bank account to receive my sales via Pix?",
-      "answer": "Yes. To sell with Pix on Get Tap, you need to enable the feature and link a bank account in the Getnet Brasil app. You do this under \"Serviços\" > \"Venda com Pix\" > \"Habilitar\", then choose your bank and follow the on-screen instructions. The linked account is the one that receives the Pix payments.\n\nSource: https://site.getnet.com.br/pix-no-get-tap-mais-agilidade-e-eficiencia-das-vendas/",
+      "answer": "Yes. To sell with Pix on Get Tap, you must enable the feature and link a bank account in the Getnet Brasil app. The linked account is the one that receives the Pix payments.\n\nSteps: log in to the app, go to \"Serviços\" > \"Venda com Pix\" > \"Habilitar\", then choose your bank and follow the on-screen instructions to link the account.\n\nSource: https://site.getnet.com.br/pix-no-get-tap-mais-agilidade-e-eficiencia-das-vendas/",
       "sources": [
         "https://site.getnet.com.br/golpe-comprovante-de-pix/",
         "https://site.getnet.com.br/pagamentos-por-biometria-via-pix/",
@@ -348,7 +348,7 @@
     },
     "S5": {
       "message": "My card machine won't connect to the internet, what should I do?",
-      "answer": "Your terminal (serial GS-77A1) is offline. It was last seen on 2026-11-13 at 23:31, and it is on Wi-Fi with a weak signal, which is the most likely cause. Battery is at 42%, and the firmware (4.2.1) is out of date, since 4.3.0 is available.\n\n**Get Smart:** On the home screen, tap \"Configurar\". Then open \"Wi-Fi\" to see the available networks and connect, or open \"Conexões\" to manage Wi-Fi, the 4G chip and Bluetooth, and run a \"Teste de Conexão\".\n\n**Get Clássica:** Tap Wi-Fi or Suporte, then Habilitar Wi-Fi, then Procurar Redes. Select your network and enter the password if needed. The keypad can enter letters and special characters.\n\nIf it still won't connect, I can open a ticket for our human team to look into it.\n\nSources: https://site.getnet.com.br/wp-content/uploads/2025/09/Manul-GetSmart.pdf and https://sitehml.getnet.com.br/wp-content/uploads/2024/01/Manul_GetClassica.pdf",
+      "answer": "Your terminal GS-77A1 has been offline since 2026-11-14 at 07:04 (UTC-3). It is set to Wi-Fi, and the weak signal is the most likely cause. Its firmware is also one version behind (4.2.1 installed, 4.3.0 available).\n\n- **Get Smart:** tap \"Configurar\", then \"Conexões\", then Wi-Fi. Pick your network and run \"Teste de Connection\". [Manual](https://site.getnet.com.br/wp-content/uploads/2025/09/Manul-GetSmart.pdf)\n- **Get Clássica:** tap WI-FI or Suporte, choose \"Habilitar Wi-Fi\", then \"Procurar Redes\". Select your network and enter the password if asked. [Manual](https://sitehml.getnet.com.br/wp-content/uploads/2024/01/Manul_GetClassica.pdf)\n\nIf it still won't connect, I can open a ticket for our human team to look into it.",
       "sources": [
         "https://site.getnet.com.br/wp-content/uploads/2025/09/Manul-GetSmart.pdf",
         "https://sitehml.getnet.com.br/wp-content/uploads/2024/01/Manul_GetClassica.pdf",
@@ -361,7 +361,7 @@
     },
     "S6": {
       "message": "How does receivables advance (antecipação) work with Getnet?",
-      "answer": "Receivables advance lets you receive credit card sales (lump-sum or installments) before the original scheduled dates, in exchange for a fee. It is not a loan: you get money that is already yours, with no new debt. (https://site.getnet.com.br/quando-vale-a-pena-antecipar-as-suas-vendas-no-cartao/)\n\nIn the Getnet Brasil app, you can view available receivables, simulate the advance, and see the net amount before confirming. The fee can affect your margin. (https://site.getnet.com.br/quando-vale-a-pena-antecipar-as-suas-vendas-no-cartao/)\n\nOn the Get Smart terminal: Payment > Antecipação > enter the merchant password > select the card brand > check values and simulate > tap \"Antecipar\" > enter the advance code from the simulation. A receipt is then printed. (https://site.getnet.com.br/wp-content/uploads/2025/09/Manul-GetSmart.pdf)",
+      "answer": "Receivables advance lets you receive credit card sales (lump-sum or installments) before the original scheduled date, in exchange for a fee. It is not a loan: you get money that is already yours, with no new debt. (https://site.getnet.com.br/quando-vale-a-pena-antecipar-as-suas-vendas-no-cartao/)\nIn the Getnet Brasil app, you can check available receivables, simulate the advance and see the net amount before confirming. The fee may affect your profit margin. (same URL)\nOn the Get Smart terminal: Home > \"Pagamento\" > \"Antecipação\" > enter the merchant password > select the card brand > \"Antecipar\" > enter the advance code from the earlier query. A receipt is then printed. (https://site.getnet.com.br/wp-content/uploads/2025/09/Manul-GetSmart.pdf)",
       "sources": [
         "https://site.getnet.com.br/quando-vale-a-pena-antecipar-as-suas-vendas-no-cartao/",
         "https://site.getnet.com.br/wp-content/uploads/2025/09/Manul-GetSmart.pdf"
@@ -372,7 +372,7 @@
     },
     "S7": {
       "message": "What's the euro exchange rate today?",
-      "answer": "1 EUR = 6.2397 BRL, according to frankfurter.dev. The rate is dated 2026-11-13, one day before today (2026-11-14), so it may not reflect today's rate.",
+      "answer": "The euro is at **R$ 6.2403** (EUR-BRL) as of 2026-11-14. Source: frankfurter.dev.",
       "sources": [
         "frankfurter.dev"
       ],
@@ -382,7 +382,7 @@
     },
     "S8": {
       "message": "My card machine is showing a transaction decline error.",
-      "answer": "I checked your latest transactions. The decline came from transaction tx-9001 on 2026-11-14: R$ 89.90 on a Visa card ending in 4412. The reason was code 51, insufficient balance or limit on the customer's card. So the issue is with the customer's card, not with your card machine or your account. Your other recent transactions were approved: a R$ 45.00 Pix payment on 2026-11-14 and a R$ 310.00 Mastercard payment ending in 0199 on 2026-11-13. If you're seeing declines on other transactions or the machine itself seems to be having problems, let me know and I can check the terminal status or open a ticket for the support team.",
+      "answer": "Your most recent declined transaction is tx-9001, on 2026-11-14: R$ 89.90 on a Visa card ending in 4412. The decline reason is code 51: insufficient balance or limit on the customer's card. This is not a problem with your machine or your account; the issuer declined it because of the customer's card. Your other recent transactions were approved: Pix R$ 45.00 (2026-11-14) and Mastercard ending in 0199, R$ 310.00 (2026-11-13).",
       "sources": [],
       "tool_calls": [
         "get_transactions"
@@ -390,7 +390,7 @@
     },
     "S9": {
       "message": "How many installments can I split a sale into with the crediário?",
-      "answer": "With Crediário Getnet, you can split a sale into up to 48 installments. The maximum number of installments depends on the customer's issuing bank (e.g., general banks up to 24x, Santander up to 48x), and the customer needs enough available credit limit for the full purchase amount.\n\nSource: https://site.getnet.com.br/wp-content/uploads/2024/09/Folder_Credirio.pdf",
+      "answer": "With Crediário Getnet you can split a sale into up to 48 installments. The exact maximum depends on the customer's issuing bank: the folder notes that some banks allow up to 24x, while Santander allows up to 48x, and this is subject to change. The customer also needs enough available credit card limit to cover the full purchase amount.\n\nSource: https://site.getnet.com.br/wp-content/uploads/2024/09/Folder_Credirio.pdf",
       "sources": [
         "https://site.getnet.com.br/5-funcionalidades-da-maquininha-getnet-para-vender-mais/",
         "https://site.getnet.com.br/wp-content/uploads/2024/09/Folder_Credirio.pdf"
@@ -401,7 +401,7 @@
     },
     "S10": {
       "message": "Can I sell through WhatsApp using the Payment Link?",
-      "answer": "Yes. Getnet's Payment Link lets you send a link to customers via WhatsApp, social networks, email, or any other digital channel, with no card machine or online store needed. The customer clicks the link and pays by credit card, debit, or Pix.\n\nSource: https://site.getnet.com.br/link-de-pagamento-getnet/\nAlso: https://www.getnet.net/en/our-solutions/online-payments",
+      "answer": "Yes. Getnet's Payment Link lets you generate a customized link and send it via WhatsApp, social networks, email, or any other digital channel. The customer pays by credit card, debit, or Pix, with no card machine needed.\n\nSources: https://site.getnet.com.br/link-de-pagamento-getnet/ and https://site.getnet.com.br/link-de-pagamento-vendas/",
       "sources": [
         "https://site.getnet.com.br/link-de-pagamento-getnet/",
         "https://site.getnet.com.br/link-de-pagamento-vendas/",

@@ -29,8 +29,8 @@ tests/  requirements.txt  Dockerfile  docker-compose.yml  .dockerignore  .env.ex
    - senão, se `ROUTER_FALLBACK=jev`: `jev.route(msg)` (Jev da TypeSafe pela Decisions API do OpenRouter). Decide se `p >= JEV_MIN (0.5)`; "out_of_scope" é uma opção escrita por nós porque o Jev não tem resposta "nenhuma".
    - senão, ou se o Jev falhar: `agents.route_llm(msg)` (modelo de linguagem).
 4. Cada agente recebe a mensagem ORIGINAL mascarada + `facts` dos agentes anteriores. Nunca uma pergunta reescrita.
-5. Resposta do `knowledge` passa por `verify()` contra os trechos que ele usou, antes de juntar com outros fatos.
-6. Qualquer `AgentResult.error` (lojista inexistente, fora da base, sem sustentação) ou exceção → `escalate` com chamado. Nunca HTTP 500.
+5. Resposta do `knowledge` passa por `verify()` contra os trechos que ele usou, antes de juntar com outros fatos. O `verify()` é em cascata: modelo rápido; se ele reprovar, o modelo principal confere; só descarta se os dois reprovarem.
+6. Qualquer `AgentResult.error` (lojista inexistente, fora da base, sem sustentação) ou exceção → `escalate` com chamado. Nunca HTTP 500. Exceção (desde 14/nov; casos H6, V5c, V8c): se outro agente já respondeu com os dados da conta e o `knowledge` falha, entrega essa resposta com um aviso fixo que oferece atendente humano, sem chamado; o trecho sem sustentação continua não sendo enviado.
 7. `mask_output()` na resposta: cartão, CPF e CNPJ. Telefone e e-mail ficam (a base tem os canais públicos).
 
 ## Regras de segurança

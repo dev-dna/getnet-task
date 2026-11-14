@@ -1,0 +1,117 @@
+{
+  "n": 1320,
+  "n_templates": 330,
+  "split": "StratifiedGroupKFold(5) por molde",
+  "router": "letras+significado",
+  "labels": [
+    "knowledge",
+    "support",
+    "general",
+    "escalate",
+    "out_of_scope"
+  ],
+  "threshold": 0.7,
+  "accuracy_all": 0.923,
+  "decides_alone": {
+    "share": 0.624,
+    "accuracy": 0.982
+  },
+  "goes_to_llm": {
+    "share": 0.376
+  },
+  "thresholds": [
+    {
+      "threshold": 0.5,
+      "coverage": 0.923,
+      "accuracy": 0.956
+    },
+    {
+      "threshold": 0.6,
+      "coverage": 0.804,
+      "accuracy": 0.975
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 0.624,
+      "accuracy": 0.982
+    },
+    {
+      "threshold": 0.75,
+      "coverage": 0.529,
+      "accuracy": 0.989
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 0.413,
+      "accuracy": 0.998
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.144,
+      "accuracy": 1.0
+    }
+  ],
+  "confusion": [
+    [
+      301,
+      5,
+      1,
+      2,
+      11
+    ],
+    [
+      14,
+      261,
+      1,
+      10,
+      2
+    ],
+    [
+      1,
+      1,
+      189,
+      0,
+      1
+    ],
+    [
+      13,
+      11,
+      0,
+      203,
+      5
+    ],
+    [
+      22,
+      0,
+      0,
+      1,
+      265
+    ]
+  ],
+  "methods": {
+    "letras": {
+      "accuracy_all": 0.858,
+      "threshold": 0.75,
+      "decides_alone": {
+        "share": 0.512,
+        "accuracy": 0.984
+      }
+    },
+    "significado": {
+      "accuracy_all": 0.91,
+      "threshold": 0.75,
+      "decides_alone": {
+        "share": 0.648,
+        "accuracy": 0.966
+      }
+    },
+    "letras+significado": {
+      "accuracy_all": 0.923,
+      "threshold": 0.7,
+      "decides_alone": {
+        "share": 0.624,
+        "accuracy": 0.982
+      }
+    }
+  }
+}

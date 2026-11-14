@@ -203,3 +203,17 @@ def test_deadline_stops_before_the_next_agent(monkeypatch):
     monkeypatch.setattr(orchestrator, "DEADLINE_S", 0.0)
     r = chat("My card machine won't connect to the internet, what should I do?")
     assert r.route == ["support", "escalate"] and r.handoff and r.ticket_id and "retrieve" not in r.tool_calls
+
+
+@pytest.mark.parametrize("message,lang", [("My card machine won't connect to the internet, what should I do?", "en"),
+                                          ("Minha maquininha não conecta na internet, o que eu faço?", "pt")])
+def test_account_answer_is_kept_when_the_base_has_no_instruction(monkeypatch, message, lang):
+    """H6, V5c, V8c: o suporte responde com os dados da conta e o conhecimento não acha instrução. A resposta do
+    suporte é entregue com um aviso, em vez de virar chamado humano; nada sem sustentação é enviado."""
+    from app import guardrails
+    from app.schemas import AgentResult
+    monkeypatch.setattr(agents, "knowledge", lambda msg, facts: AgentResult(agent="knowledge", tool_calls=["retrieve", "web_search"], error="not_in_kb"))
+    r = chat(message)
+    assert r.route == ["support", "knowledge"] and not r.handoff and r.ticket_id is None
+    assert r.answer.endswith(guardrails.NO_INSTRUCTIONS[lang]) and "get_terminal_status" in r.tool_calls
+    assert guardrails.wants_human(guardrails.normalize('quero falar com um atendente' if lang == "pt" else 'I want to talk to a human agent'))

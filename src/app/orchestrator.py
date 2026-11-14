@@ -95,6 +95,7 @@ def handle(req: ChatRequest) -> ChatResponse:
 
         results: list[AgentResult] = []
         facts: list[str] = []
+        note = ""
         route: list[str] = []
         for step in plan.steps:
             if step.agent == "escalate":
@@ -115,9 +116,14 @@ def handle(req: ChatRequest) -> ChatResponse:
             results.append(r)
             steps.append({"agent": step.agent, "ms": int((time.perf_counter() - t_step) * 1000), "error": r.error})
             if r.error:
+                if step.agent == "knowledge" and facts:
+                    # Outro agente já apurou os dados da conta: essa resposta é entregue, com o aviso de que a instrução
+                    # não está na base. Antes ela era trocada por um chamado humano (H6, V5c, V8c). Nada sem sustentação é enviado.
+                    note = "\n\n" + guardrails.NO_INSTRUCTIONS[lang]
+                    continue
                 return hand_off(route, plan.source, plan.confidence, results, facts, f"agent_error:{r.error}")
             facts += r.facts
-        return done(agents.write_final(msg, facts), route, plan.source, plan.confidence, results)
+        return done(agents.write_final(msg, facts) + note, route, plan.source, plan.confidence, results)
     except Exception:  # noqa: BLE001  # provedor fora do ar, tempo esgotado, erro nosso: nunca devolver 500 ao cliente
         log.exception("trace_id=%s falha no fluxo", trace)
         try:

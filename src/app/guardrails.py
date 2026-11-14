@@ -66,6 +66,11 @@ OUT_OF_SCOPE = {
     "pt": "Isso está fora do que consigo atender aqui. Posso ajudar com produtos Getnet, sua conta e maquininha, clima ou câmbio.",
     "en": "That's outside what I can help with here. I can help with Getnet products, your account and card machine, weather or exchange rates.",
 }
+# Quando outro agente já respondeu com os dados da conta e a base não tem a instrução pedida: entrega o que há e avisa.
+NO_INSTRUCTIONS = {
+    "pt": "Não encontrei na documentação da Getnet uma instrução confirmada para este caso. Se preferir, escreva \"quero falar com um atendente\" e eu encaminho para a equipe humana.",
+    "en": "I could not find a confirmed instruction for this case in Getnet's documentation. If you prefer, write \"I want to talk to a human agent\" and I will forward it to the human team.",
+}
 FALLBACK = {
     "pt": "Tive um problema técnico para responder agora. Por favor, tente de novo em instantes ou fale com a central de atendimento.",
     "en": "I hit a technical problem answering this. Please try again shortly or contact customer service.",

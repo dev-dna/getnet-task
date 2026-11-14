@@ -30,6 +30,7 @@ Máximo 8 linhas."""
 
 VERIFY_SYS = """Verifique se a resposta está sustentada pelos trechos: cada fato dela precisa estar neles.
 Responda false só se algum fato da resposta não estiver nos trechos ou os contrariar.
+A resposta direta à pergunta (sim ou não) deduzida do que os trechos dizem não é fato novo.
 Tradução, resumo, ressalvas, formatação e fonte atribuída a outro trecho da lista não são falha.
 JSON: {"grounded": true|false, "why": "..."}"""
 
@@ -159,10 +160,19 @@ def write_final(message: str, facts: list[str]) -> str:
 
 
 def verify(answer: str, evidence: list[str]) -> bool:
-    """Segunda checagem da resposta do Conhecimento. Se o verificador falhar, deixa passar e registra no log."""
+    """Segunda checagem da resposta do Conhecimento, em cascata como o roteador: o modelo rápido confere; se ele
+    reprovar, o modelo principal confere de novo, e a resposta só é descartada se os dois reprovarem.
+    Motivo (V4c, V5c): o modelo rápido oscila, aprovou e reprovou a mesma resposta em duas chamadas seguidas, e cada
+    reprovação dele transformava uma resposta correta em chamado humano.
+    Se o verificador falhar, deixa passar e registra no log."""
+    user = wrap_data("chunks", "\n\n".join(evidence)[:12000]) + "\n" + wrap_data("answer", answer)
     try:
-        d = llm.complete_json(VERIFY_SYS, wrap_data("chunks", "\n\n".join(evidence)[:12000]) + "\n" + wrap_data("answer", answer))
-        return bool(d.get("grounded", True))
+        for model in (llm.MODEL_FAST, llm.MODEL_SMART):
+            d = llm.complete_json(VERIFY_SYS, user, model=model)
+            if d.get("grounded", True):
+                return True
+            log.info("verify: reprovado por %s: %s", model, str(d.get("why", ""))[:200])
+        return False
     except Exception as e:  # noqa: BLE001
         log.warning("verify falhou, resposta liberada sem verificação: %s", e)
         return True

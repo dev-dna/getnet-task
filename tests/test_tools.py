@@ -106,3 +106,19 @@ def test_api_that_stays_down_returns_error_after_the_retries(monkeypatch):
     monkeypatch.setattr(httpx, "get", lambda url, **kw: httpx.Response(503, request=httpx.Request("GET", url)))
     monkeypatch.setattr(tools.time, "sleep", lambda s: None)
     assert "error" in tools.weather("Porto Alegre")
+
+
+def test_weather_uses_the_reserve_source_when_the_first_is_rate_limited(monkeypatch):
+    """S2 na avaliação de 14/nov: a Open-Meteo devolveu 429 em todas as tentativas e o cenário foi para um humano."""
+    def limited(url, **kw):
+        req = httpx.Request("GET", url)
+        if "open-meteo" in url:
+            return httpx.Response(429, request=req)
+        assert "wttr.in/Porto%20Alegre" in url, url
+        day = {"maxtempC": "28", "mintempC": "20", "hourly": [{"chanceofrain": "10"}, {"chanceofrain": "82"}]}
+        return httpx.Response(200, request=req, json={"weather": [{**day, "date": "2026-11-14"}, {**day, "date": "2026-11-15"}]})
+
+    monkeypatch.setattr(tools.httpx, "get", limited)
+    monkeypatch.setattr(tools.time, "sleep", lambda s: None)
+    w = tools.weather("Porto Alegre", "tomorrow")
+    assert w == {"city": "Porto Alegre", "date": "2026-11-15", "t_max_c": 28.0, "t_min_c": 20.0, "rain_probability_pct": 82, "source": "wttr.in"}

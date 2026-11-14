@@ -9,6 +9,7 @@ import threading
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 import httpx
 
@@ -36,7 +37,8 @@ def _get(url: str, **kw) -> httpx.Response:
                 raise
             time.sleep(wait)
 def weather(city: str, day: str = "tomorrow") -> dict:
-    """Open-Meteo: acha a cidade pelo nome e devolve a previsão. Sem chave."""
+    """Previsão do tempo, sem chave: Open-Meteo primeiro; wttr.in como reserva (a Open-Meteo limita chamadas por endereço)."""
+    i = 1 if day == "tomorrow" else 0
     try:
         g = _get("https://geocoding-api.open-meteo.com/v1/search", params={"name": city, "count": 1, "language": "pt"})
         hits = g.json().get("results") or []
@@ -46,12 +48,17 @@ def weather(city: str, day: str = "tomorrow") -> dict:
             "latitude": hits[0]["latitude"], "longitude": hits[0]["longitude"], "timezone": "auto", "forecast_days": 2,
             "daily": "temperature_2m_max,temperature_2m_min,precipitation_probability_max"})
         d = r.json()["daily"]
-        i = 1 if day == "tomorrow" else 0
         return {"city": hits[0].get("name", city), "date": d["time"][i], "t_max_c": d["temperature_2m_max"][i],
                 "t_min_c": d["temperature_2m_min"][i], "rain_probability_pct": d["precipitation_probability_max"][i],
                 "source": "open-meteo.com"}
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        w = httpx.get(f"https://wttr.in/{quote(city)}", params={"format": "j1"}, timeout=TIMEOUT).raise_for_status().json()["weather"][i]
+        return {"city": city, "date": w["date"], "t_max_c": float(w["maxtempC"]), "t_min_c": float(w["mintempC"]),
+                "rain_probability_pct": max(int(h["chanceofrain"]) for h in w["hourly"]), "source": "wttr.in"}
     except Exception as e:  # noqa: BLE001
-        return {"error": f"weather indisponível: {e}"}
+        return {"error": f"weather indisponível: {type(e).__name__}"}
 
 
 def fx_rate(pair: str = "EUR-BRL") -> dict:

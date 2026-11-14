@@ -7,7 +7,7 @@ The code of every task below already existed in the skeleton commit `519f83b`; n
 - Commands run from the repository root; `tests/conftest.py` forces `LLM_PROVIDER=fake`.
 - Checks ran on the code of `a2bbfea` (later commits change no code), on Python 3.13. Full suite, `make test`: 99 passed. Scripts that write files ran in a copy of the repository.
 - Sub-agents A (infra), B (knowledge), C (support, guardrails, classifier) are those of `prompts/03_paralelo.md`.
-- Counts below are those of that check and are kept as a record. On 2026-11-14 `make test` gives 146 passed in 12 test files (`test_embeddings.py`, `test_llm_cli.py` and `test_tool_failure.py` were added after T00), and the classifier of T10 reports 98.2% when it decides alone and 62.4% decided alone (`data/router_report.json`). Later changes are listed in `README.md` section 10.
+- Counts below are those of that check and are kept as a record. On 2026-11-14 `make test` gives 149 passed in 12 test files (`test_embeddings.py`, `test_llm_cli.py` and `test_tool_failure.py` were added after T00), and the classifier of T10 reports 98.2% when it decides alone and 62.4% decided alone (`data/router_report.json`). Later changes are listed in `README.md` section 10.
 - Status: **done** = the criterion was run and passed. **partial** = the offline part passed and the named part was not run or is missing. Gap ids (G01…) are in `specs/plan.md`.
 
 ## T00: skeleton prepared before the spec

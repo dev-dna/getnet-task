@@ -67,7 +67,22 @@ def test_out_of_scope_is_an_explicit_option(jev_says):
     assert plan.steps == [] and plan.reason == "out_of_scope"
 
 
-@pytest.mark.parametrize("body,status", [(_answer("support", 0.3), 200), ({"error": "x"}, 500), ({"answers": {}}, 200)])
+REFUSAL = {"answers": {"route": {"type": "refusal"}, "both": {"type": "refusal"}}, "usage": {"input_tokens": 300, "output_tokens": 0}}
+OTHER_SHAPE = {"decisions": {"route": {"answer": "support", "confidence": 0.9}}}  # formato de exemplos da internet, não o oficial
+
+
+def test_questions_follow_the_official_schema():
+    """Conferido em 14/nov/2026 com a referência da Decisions API do OpenRouter (alphadecisions/submit-a-decisions-request):
+    POST /api/alpha/decisions; pergunta choice exige type e criteria (objeto opção -> descrição); noul exige só type."""
+    assert jev.URL == "https://openrouter.ai/api/alpha/decisions"
+    for q in jev.QUESTIONS.values():
+        assert q["type"] in ("noul", "choice", "score", "box")
+        if q["type"] == "choice":
+            assert q["criteria"] and all(isinstance(k, str) and isinstance(v, str) for k, v in q["criteria"].items())
+
+
+@pytest.mark.parametrize("body,status", [(_answer("support", 0.3), 200), ({"error": "x"}, 500), ({"answers": {}}, 200),
+                                         (REFUSAL, 200), (OTHER_SHAPE, 200)])
 def test_unsure_or_broken_returns_none(jev_says, body, status):
     jev_says(body, status)
     assert jev.route("x") is None

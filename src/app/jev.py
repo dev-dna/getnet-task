@@ -2,7 +2,12 @@
 
 Aqui ele é o segundo roteador: entra só quando o classificador local fica em dúvida.
 Chamado pela Decisions API do OpenRouter com a mesma chave do resto do projeto.
-Para usar a API da TypeSafe direto: JEV_URL=https://api.typesafe.ai/v1/systemone, JEV_MODEL=jev-latest, JEV_API_KEY=...
+
+Formato conferido em 14/nov/2026 com a referência oficial (openrouter.ai/docs, "Submit a decisions request"):
+POST /api/alpha/decisions, chave como Bearer, corpo {model, state, questions}; a resposta vem em "answers", e cada
+resposta traz "choice" + "probabilities" (pergunta choice), "noul" (pergunta sim/não) ou type "refusal".
+A API é alfa: o formato pode mudar. Chamada com chave real: scripts/smoke_jev.py (ainda não rodada).
+Outro endereço ou modelo: JEV_URL, JEV_MODEL, JEV_API_KEY (a API direta da TypeSafe não foi conferida).
 """
 import logging
 import os

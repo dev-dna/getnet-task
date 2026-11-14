@@ -66,6 +66,7 @@ class Health(BaseModel):
     status: str = Field(description="`ok`, or `degraded` when `llm_problem` is set.")
     llm_provider: str = Field(description="`anthropic`, `openrouter`, `claude_cli` (local, no API key) or `fake` (tests).")
     llm_problem: str | None = Field(default=None, description="Configuration problem found without calling the model (missing key, unknown provider). Null when none was found; a wrong key or model name only shows on the first call.")
+    last_error: str | None = Field(default=None, description="Last exception that turned a request into a handoff since the process started: provider down, account without credits (HTTP 402), wrong key or model name. Null when none happened.")
     router_fallback: str = Field(description="Who decides when the local classifier is unsure: `jev` or `llm`.")
     router_mode: str = Field(description="Classifiers in use: `letras+significado` (letters and meaning), or `letras` when the embedding model is not available.")
     corpus_chunks: int

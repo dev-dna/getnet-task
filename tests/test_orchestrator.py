@@ -217,3 +217,21 @@ def test_account_answer_is_kept_when_the_base_has_no_instruction(monkeypatch, me
     assert r.route == ["support", "knowledge"] and not r.handoff and r.ticket_id is None
     assert r.answer.endswith(guardrails.NO_INSTRUCTIONS[lang]) and "get_terminal_status" in r.tool_calls
     assert guardrails.wants_human(guardrails.normalize('quero falar com um atendente' if lang == "pt" else 'I want to talk to a human agent'))
+
+
+def test_provider_error_is_visible_in_health_and_metrics(monkeypatch):
+    """Rodada com chave real de 14/nov: a conta ficou sem crédito (HTTP 402) e 20 respostas viraram chamado humano;
+    o motivo só aparecia no log. Agora /health guarda o último erro e /metrics conta por tipo."""
+    monkeypatch.setattr(orchestrator, "METRICS", orchestrator.Counter())
+    monkeypatch.setattr(orchestrator, "LAST_ERROR", None)
+
+    def no_credits(*a, **k):
+        raise RuntimeError("Error code: 402 - This request would exceed your available credits")
+
+    monkeypatch.setattr(agents.llm, "complete", no_credits)
+    monkeypatch.setattr(agents.llm, "run_tools", no_credits)
+    r = chat("When will the money from yesterday's sales be deposited?")
+    assert r.handoff and r.decided_by == "error"
+    with TestClient(app) as client:
+        assert "402" in client.get("/health").json()["last_error"]
+        assert client.get("/metrics").json()["errors"] == {"RuntimeError": 1}

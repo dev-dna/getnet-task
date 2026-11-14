@@ -375,6 +375,18 @@
             "title": "Llm Problem",
             "description": "Configuration problem found without calling the model (missing key, unknown provider). Null when none was found; a wrong key or model name only shows on the first call."
           },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error",
+            "description": "Last exception that turned a request into a handoff since the process started: provider down, account without credits (HTTP 402), wrong key or model name. Null when none happened."
+          },
           "router_fallback": {
             "type": "string",
             "title": "Router Fallback",

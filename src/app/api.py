@@ -76,7 +76,7 @@ def root():
 @app.get("/health", response_model=Health, tags=["ops"], summary="Service status and configuration")
 def health() -> Health:
     problem = llm.config_problem()
-    return Health(status="degraded" if problem else "ok", llm_provider=llm.PROVIDER, llm_problem=problem,
+    return Health(status="degraded" if problem else "ok", llm_provider=llm.PROVIDER, llm_problem=problem, last_error=orchestrator.LAST_ERROR,
                   router_fallback=orchestrator.ROUTER_FALLBACK, router_mode=router_clf.mode(),
                   corpus_chunks=len(retriever.load()[1]), corpus_is_placeholder=retriever.is_placeholder())
 

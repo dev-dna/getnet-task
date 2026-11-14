@@ -17,6 +17,7 @@ from .schemas import AgentResult, ChatRequest, ChatResponse, Plan, Step
 log = logging.getLogger("orchestrator")
 METRICS: Counter = Counter()  # contadores do processo, lidos por GET /metrics
 _metrics_lock = threading.Lock()
+LAST_ERROR: str | None = None  # última exceção que virou chamado humano (provedor fora do ar, conta sem crédito); GET /health mostra
 
 # Quem decide quando o classificador local fica abaixo do limiar: "jev" (decisão barata e rápida) ou "llm".
 ROUTER_FALLBACK = os.getenv("ROUTER_FALLBACK", "llm")
@@ -124,7 +125,11 @@ def handle(req: ChatRequest) -> ChatResponse:
                 return hand_off(route, plan.source, plan.confidence, results, facts, f"agent_error:{r.error}")
             facts += r.facts
         return done(agents.write_final(msg, facts) + note, route, plan.source, plan.confidence, results)
-    except Exception:  # noqa: BLE001  # provedor fora do ar, tempo esgotado, erro nosso: nunca devolver 500 ao cliente
+    except Exception as e:  # noqa: BLE001  # provedor fora do ar, tempo esgotado, erro nosso: nunca devolver 500 ao cliente
+        global LAST_ERROR
+        LAST_ERROR = f"{type(e).__name__}: {str(e)[:200]}"
+        with _metrics_lock:
+            METRICS[f"error.{type(e).__name__}"] += 1
         log.exception("trace_id=%s falha no fluxo", trace)
         try:
             return hand_off([], "error", 0.0, [], [], "internal_error")

@@ -1,5 +1,5 @@
 export PYTHONPATH := src
-.PHONY: setup train jev-label ingest smoke test run eval compare openapi docker lock demo-setup demo run-cli eval-cli
+.PHONY: setup train jev-label ingest smoke test run eval compare openapi docker lock run-cli eval-cli
 # Sem chave de API: usa o Claude Code instalado e logado nesta máquina (não vale dentro do Docker).
 run-cli:  ; LLM_PROVIDER=claude_cli ROUTER_FALLBACK=llm uvicorn app.api:app --port 8000
 eval-cli: ; LLM_PROVIDER=claude_cli ROUTER_FALLBACK=llm EVAL_DIRECT=1 EVAL_WORKERS=6 python evals/run.py --answers
@@ -17,5 +17,3 @@ openapi: ; python scripts/export_openapi.py
 docker: ; docker compose up --build -d && sleep 10 && curl -s localhost:8000/health
 # Regrava as versões exatas da imagem recém-construída; o Dockerfile instala com esse arquivo como limite.
 lock:   ; (echo '# pip freeze da imagem Docker (Python 3.12, Linux); usado pelo Dockerfile como limite de versões' && docker compose run --rm -T api pip freeze) > requirements.lock
-demo-setup: ; pip install -r demo/requirements.txt && playwright install chromium && python .claude/skills/ffmpeg-skill/scripts/_contract.py doctor
-demo:   ; python demo/record.py

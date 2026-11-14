@@ -119,7 +119,7 @@ def main() -> int:
     ok = sum(v[0] for v in by_group.values())
     print("\n" + " | ".join(f"{g}: {v[0]}/{v[1]}" for g, v in sorted(by_group.items())))
     print(f"total: {ok}/{len(cases)} = {ok / len(cases):.0%} (meta {THRESHOLD:.0%})")
-    Path("evals/report.json").write_text(json.dumps({"info": info, "pass_rate": ok / len(cases), "by_group": by_group, "rows": rows,
+    Path(os.getenv("EVAL_REPORT", "evals/report.json")).write_text(json.dumps({"info": info, "pass_rate": ok / len(cases), "by_group": by_group, "rows": rows,
                                                      "answers": stored}, ensure_ascii=False, indent=2), encoding="utf-8")
     return 0 if ok / len(cases) >= THRESHOLD else 1
 

@@ -12,7 +12,7 @@ Sessão cronometrada de 60 minutos. As decisões abaixo já estão tomadas. Não
 ```
 specs/spec.md  specs/plan.md  specs/tasks.md
 src/app/schemas.py llm.py guardrails.py router_clf.py jev.py retriever.py tools.py agents.py orchestrator.py api.py
-scripts/ingest.py gen_router_data.py train_router.py smoke_llm.py smoke_jev.py smoke_tools.py
+scripts/ingest.py gen_router_data.py train_router.py jev_label.py (opcional: o Jev rotula mensagens e o classificador treina com elas) smoke_llm.py smoke_jev.py smoke_tools.py
 data/sources.txt  corpus.jsonl (gerado pelo ingest, vai para o git)  corpus_seed.jsonl (EXEMPLO, só para teste)
 data/merchants.json (simulado)  router_train.jsonl  router_report.json     # router.joblib e tickets.json NÃO vão para o git
 evals/dataset.jsonl  evals/run.py  evals/compare_routers.py (classificador × Jev × modelo × cascata)

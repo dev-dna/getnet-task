@@ -7,6 +7,8 @@ from app import router_clf as rc  # noqa: E402
 
 rep = rc.train()
 print(f"{rep['n']} frases, {rep['n_templates']} moldes | {rep['split']}")
+if rc.JEV_TRAIN_PATH.exists():
+    print(f"das quais {sum(1 for l in rc.JEV_TRAIN_PATH.read_text(encoding='utf-8').splitlines() if l.strip())} rotuladas pelo Jev ({rc.JEV_TRAIN_PATH})")
 print(f"acerto geral: {rep['accuracy_all']:.1%}")
 d = rep["decides_alone"]
 print(f"decide sozinho (p >= {rc.HIGH}): {d['share']:.1%} das frases, acerto {d['accuracy']:.1%}")

@@ -30,6 +30,8 @@ from .guardrails import normalize
 
 MODEL_PATH = Path("data/router.joblib")
 TRAIN_PATH = Path("data/router_train.jsonl")
+# Opcional: mensagens rotuladas pelo Jev (scripts/jev_label.py). Se o arquivo existir, entra no treino junto com os moldes.
+JEV_TRAIN_PATH = Path("data/router_train_jev.jsonl")
 REPORT_PATH = Path("data/router_report.json")
 CLASSES = ["knowledge", "support", "general", "escalate", "out_of_scope"]
 FORMAT = 2  # muda quando o conteúdo do .joblib muda: um arquivo de outra versão é refeito
@@ -62,13 +64,17 @@ def _threshold(both: bool) -> float:
 
 
 def _rows(path: Path) -> tuple[list[str], list[str], list[str]]:
-    rows = [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    lines = path.read_text(encoding="utf-8").splitlines()
+    if path == TRAIN_PATH and JEV_TRAIN_PATH.exists():
+        lines += JEV_TRAIN_PATH.read_text(encoding="utf-8").splitlines()
+    rows = [json.loads(l) for l in lines if l.strip()]
     return [r["text"] for r in rows], [r["label"] for r in rows], [r["group"] for r in rows]
 
 
 def _signature(path: Path) -> str:
     """Muda quando os dados de treino mudam: um .joblib treinado com outros dados é refeito em vez de reusado."""
-    return hashlib.sha1(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:16]
+    data = path.read_bytes() + (JEV_TRAIN_PATH.read_bytes() if path == TRAIN_PATH and JEV_TRAIN_PATH.exists() else b"")
+    return hashlib.sha1(data.replace(b"\r\n", b"\n")).hexdigest()[:16]
 
 
 def _splits(y, groups, n: int, seed: int):

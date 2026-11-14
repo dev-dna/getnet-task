@@ -6,7 +6,7 @@ O enunciado pede que o vídeo mostre três coisas: **seu raciocínio, as decisõ
 Regra: fale só o que é verdade no repositório. Cada número abaixo tem o arquivo de onde saiu; confira antes de gravar.
 
 ## Antes de gravar
-1. `make setup` e `make test` (156 testes passam).
+1. `make setup` e `make test` (158 testes passam).
 2. Suba a API com respostas de verdade: `make run-cli` (usa o Claude Code logado na máquina) ou Docker com chave real no `.env`.
 3. Abra `http://localhost:8000/docs` e rode um exemplo para aquecer.
 4. Leia as 10 respostas do grupo S (`make eval-cli` imprime; também estão em `evals/report_claude_cli.json`, campo `answers`). Só diga "eu li as respostas" se leu.
@@ -76,7 +76,7 @@ Em cada resposta, aponte `route`, `decided_by`, `tool_calls` e `sources`.
 "Se uma API externa cai, há novas tentativas; se todas falham, o caso vira chamado, não uma resposta sem dado."
 
 ## 12:30–13:30 — Testes e avaliação (`evals/report_claude_cli.json`)
-"São 156 testes que rodam sem chave, com um modelo falso que só confere o encanamento. A avaliação tem 30 casos em cinco grupos: os dez do enunciado, as mesmas perguntas com outra redação, ataques, perguntas legítimas que parecem ataque e usuário desconhecido."
+"São 158 testes que rodam sem chave, com um modelo falso que só confere o encanamento. A avaliação tem 30 casos em cinco grupos: os dez do enunciado, as mesmas perguntas com outra redação, ataques, perguntas legítimas que parecem ataque e usuário desconhecido."
 
 "Com modelo real, na execução guardada, passaram 30 de 30; execuções anteriores deram de 28 a 30, porque o resultado varia entre execuções. Num segundo conjunto, com 14 frases reescritas com sinônimos em português e inglês, 42 casos, passaram 41. A que falha é uma redação de 'minha maquininha não conecta': os agentes certos rodam, mas a resposta de conhecimento não é sustentada pela base e o caso vai para um humano." (`evals/report_variations_claude_cli.json`)
 
@@ -86,6 +86,8 @@ Em cada resposta, aponte `route`, `decided_by`, `tool_calls` e `sources`.
 "O que eu não verifiquei: a avaliação com modelo real rodou pelo Claude Code em linha de comando. Os provedores da Anthropic e do OpenRouter estão implementados, mas não foram executados com chave real, e o Jev também não. A busca web funcionou numa execução e falhou em outras: por isso o caminho da busca web no agente de conhecimento está coberto por testes com resultado simulado, e quando a busca falha o caso vai para um humano."
 
 "Limitações: os dados do lojista são simulados, os chamados ficam num arquivo e não há autenticação."
+
+"O próximo passo já tem o caminho pronto: o script `jev_label.py` usa o Jev como professor. Ele rotula mensagens reais sem rótulo, e o classificador local treina com as que o Jev rotulou com confiança. Assim o classificador, que é gratuito e determinístico, decide cada vez mais mensagens sozinho, e o custo com modelo cai. Isso eu não rodei com chave real."
 
 "Com mais tempo: rodar com chave real e comparar os roteadores, um provedor de busca web estável, interromper uma chamada de modelo em andamento quando o prazo estoura, e a especificação antes do primeiro commit. A busca por significado na base eu medi e não adotei: não achou mais páginas que a busca por palavras."
 
